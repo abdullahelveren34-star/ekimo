@@ -36,7 +36,7 @@ const departments = [
   { name: 'İnsan Kaynakları ve İdari İşler', icon: BookUser },
   { name: 'Mali İşler', icon: Landmark },
   { name: 'Modelhane', icon: Scissors },
-  { name 'Depolar', icon: Warehouse },
+  { name: 'Depolar', icon: Warehouse },
   { name: 'Kesimhane', icon: Scissors },
   { name: 'Marka', icon: Gem },
 ];
