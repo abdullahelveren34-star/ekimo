@@ -22,11 +22,12 @@ export default function HomePage() {
   const chairman = boardMembers.find(member => member.title === 'Yönetim Kurulu Başkanı');
   const [birthdayPersonnel, setBirthdayPersonnel] = useState<Employee[]>([]);
   const { toast } = useToast();
-  const [currentDateTime, setCurrentDateTime] = useState(new Date());
+  const [currentDateTime, setCurrentDateTime] = useState<Date | null>(null);
   const [userCity, setUserCity] = useState<string>('Yükleniyor...');
   const [weather, setWeather] = useState<string | null>(null);
 
   useEffect(() => {
+    setCurrentDateTime(new Date());
     const timer = setInterval(() => {
       setCurrentDateTime(new Date());
     }, 1000);
@@ -88,17 +89,21 @@ export default function HomePage() {
     });
   };
 
-  const formattedDate = currentDateTime.toLocaleDateString('tr-TR', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    weekday: 'long',
-  });
+  const formattedDate = currentDateTime
+    ? currentDateTime.toLocaleDateString('tr-TR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        weekday: 'long',
+      })
+    : 'Yükleniyor...';
 
-  const formattedTime = currentDateTime.toLocaleTimeString('tr-TR', {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+  const formattedTime = currentDateTime
+    ? currentDateTime.toLocaleTimeString('tr-TR', {
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+    : '...';
 
   return (
     <div className="flex flex-col gap-8">
