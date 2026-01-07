@@ -1,3 +1,4 @@
+'use client';
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -8,11 +9,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Briefcase, Car, FileText, HandCoins, Plane, Wrench } from "lucide-react"
-import { hotelsByCity } from "@/lib/data"
-import React from "react"
+import { hotelsByCity, allCities } from "@/lib/data"
+import React, { useState } from "react"
 
 export default function RequestsPage() {
-  const cities = Object.keys(hotelsByCity);
+  const [selectedCity, setSelectedCity] = useState('');
+  const hotelsForSelectedCity = selectedCity ? hotelsByCity[selectedCity as keyof typeof hotelsByCity] || [] : [];
 
   return (
     <div className="space-y-8">
@@ -215,29 +217,23 @@ export default function RequestsPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="travel-city">Şehir</Label>
-                  <Select>
+                  <Select onValueChange={setSelectedCity}>
                     <SelectTrigger id="travel-city">
                       <SelectValue placeholder="Seyahat edilecek şehri seçin..." />
                     </SelectTrigger>
                     <SelectContent>
-                      {cities.map(city => <SelectItem key={city} value={city}>{city}</SelectItem>)}
+                      {allCities.map(city => <SelectItem key={city} value={city}>{city}</SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="travel-hotel">Otel</Label>
-                  <Select>
+                  <Select disabled={!selectedCity || hotelsForSelectedCity.length === 0}>
                     <SelectTrigger id="travel-hotel">
-                      <SelectValue placeholder="Otel seçin (isteğe bağlı)..." />
+                      <SelectValue placeholder="Otel seçin..." />
                     </SelectTrigger>
                     <SelectContent>
-                      {/* Bu bölüm dinamik olarak seçilen şehre göre güncellenebilir. */}
-                      {Object.entries(hotelsByCity).map(([city, hotels]) => (
-                        <React.Fragment key={city}>
-                          <p className="px-2 py-1.5 text-sm font-semibold">{city}</p>
-                          {hotels.map(hotel => <SelectItem key={hotel} value={hotel}>{hotel}</SelectItem>)}
-                        </React.Fragment>
-                      ))}
+                      {hotelsForSelectedCity.map(hotel => <SelectItem key={hotel} value={hotel}>{hotel}</SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
