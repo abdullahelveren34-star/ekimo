@@ -113,8 +113,8 @@ export const departmentMembers = {
     { name: 'Ali Can', title: 'Pazarlama Asistanı', avatarUrl: 'https://picsum.photos/seed/m6/100/100' },
   ],
   'Bağımsız': [
-    { name: 'John Doe', title: 'Danışman', avatarUrl: 'https://picsum.photos/seed/m20/100/100' },
-    { name: 'Jane Smith', title: 'Dış Denetçi', avatarUrl: 'https://picsum.photos/seed/f20/100/100' },
+    { name: 'Veli Korkmaz', title: 'Danışman', avatarUrl: 'https://picsum.photos/seed/m20/100/100' },
+    { name: 'Sultan Güneş', title: 'Dış Denetçi', avatarUrl: 'https://picsum.photos/seed/f20/100/100' },
   ],
   'Tasarım': [
     { name: 'Ceren Güler', title: 'Tasarım Lideri', avatarUrl: 'https://picsum.photos/seed/f6/100/100' },
@@ -146,33 +146,33 @@ export const departmentMembers = {
   ],
   'Kalite ve Güvence': [
     { name: 'Nihan Atalay', title: 'Kalite Güvence Müdürü', avatarUrl: 'https://picsum.photos/seed/f23/100/100' },
-    { name: 'Cemal Hünal', title: 'Kalite Kontrol Teknisyeni', avatarUrl: 'https://picsum.photos/seed/m24/100/100' },
+    { name: 'Cemal Kaya', title: 'Kalite Kontrol Teknisyeni', avatarUrl: 'https://picsum.photos/seed/m24/100/100' },
   ],
   'Sosyal Uygunluk': [
-    { name: 'Derya Uluğ', title: 'Sosyal Uygunluk Uzmanı', avatarUrl: 'https://picsum.photos/seed/f24/100/100' },
+    { name: 'Derya Ulu', title: 'Sosyal Uygunluk Uzmanı', avatarUrl: 'https://picsum.photos/seed/f24/100/100' },
   ],
   'Mali İşler': [
-    { name: 'Kenan Doğulu', title: 'Finans Direktörü', avatarUrl: 'https://picsum.photos/seed/m16/100/100' },
-    { name: 'Sertap Erener', title: 'Muhasebe Müdürü', avatarUrl: 'https://picsum.photos/seed/f16/100/100' },
-    { name: 'Levent Yüksel', title: 'Finansal Analist', avatarUrl: 'https://picsum.photos/seed/m17/100/100' },
-    { name: 'Yıldız Tilbe', title: 'Muhasebe Uzmanı', avatarUrl: 'https://picsum.photos/seed/f17/100/100' },
-    { name: 'Sezen Aksu', title: 'Finans Stajyeri', avatarUrl: 'https://picsum.photos/seed/f18/100/100' },
-    { name: 'Ajda Pekkan', title: 'Muhasebe Stajyeri', avatarUrl: 'https://picsum.photos/seed/f19/100/100' },
+    { name: 'Kenan Işık', title: 'Finans Direktörü', avatarUrl: 'https://picsum.photos/seed/m16/100/100' },
+    { name: 'Songül Karlı', title: 'Muhasebe Müdürü', avatarUrl: 'https://picsum.photos/seed/f16/100/100' },
+    { name: 'Neşet Ertaş', title: 'Finansal Analist', avatarUrl: 'https://picsum.photos/seed/m17/100/100' },
+    { name: 'Zeki Müren', title: 'Muhasebe Uzmanı', avatarUrl: 'https://picsum.photos/seed/m18/100/100' },
+    { name: 'Safiye Soyman', title: 'Finans Stajyeri', avatarUrl: 'https://picsum.photos/seed/f18/100/100' },
+    { name: 'Bülent Serttaş', title: 'Muhasebe Stajyeri', avatarUrl: 'https://picsum.photos/seed/m19/100/100' },
   ],
   'Modelhane': [
-    { name: 'Bülent Ersoy', title: 'Modelist', avatarUrl: 'https://picsum.photos/seed/f25/100/100' },
-    { name: 'İzzet Yıldızhan', title: 'Modelist Yardımcısı', avatarUrl: 'https://picsum.photos/seed/m25/100/100' },
+    { name: 'Yıldız Aslan', title: 'Modelist', avatarUrl: 'https://picsum.photos/seed/f25/100/100' },
+    { name: 'İzzet Altın', title: 'Modelist Yardımcısı', avatarUrl: 'https://picsum.photos/seed/m25/100/100' },
   ],
   'Depolar': [
-    { name: 'Ferdi Tayfur', title: 'Depo Şefi', avatarUrl: 'https://picsum.photos/seed/m26/100/100' },
-    { name: 'Müslüm Gürses', title: 'Depo Elemanı', avatarUrl: 'https://picsum.photos/seed/m27/100/100' },
+    { name: 'Ferdi Gürses', title: 'Depo Şefi', avatarUrl: 'https://picsum.photos/seed/m26/100/100' },
+    { name: 'Müslüm Tayfur', title: 'Depo Elemanı', avatarUrl: 'https://picsum.photos/seed/m27/100/100' },
   ],
   'Kesimhane': [
-    { name: 'Orhan Gencebay', title: 'Kesimhane Sorumlusu', avatarUrl: 'https://picsum.photos/seed/m28/100/100' },
-    { name: 'İbrahim Tatlıses', title: 'Kesim Operatörü', avatarUrl: 'https://picsum.photos/seed/m29/100/100' },
+    { name: 'Orhan Gence', title: 'Kesimhane Sorumlusu', avatarUrl: 'https://picsum.photos/seed/m28/100/100' },
+    { name: 'İbrahim Erkal', title: 'Kesim Operatörü', avatarUrl: 'https://picsum.photos/seed/m29/100/100' },
   ],
   'Marka': [
-    { name: 'Tarkan Tevetoğlu', title: 'Marka Elçisi', avatarUrl: 'https://picsum.photos/seed/m30/100/100' },
+    { name: 'Tarkan Tevet', title: 'Marka Elçisi', avatarUrl: 'https://picsum.photos/seed/m30/100/100' },
   ],
   'İnsan Kaynakları': [
     { name: 'İzlem Manduz', title: 'İK Müdürü', avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
@@ -181,7 +181,7 @@ export const departmentMembers = {
     { name: 'Bahar Geldi', title: 'İK Stajyeri', avatarUrl: 'https://picsum.photos/seed/f15/100/100' },
   ],
   'İdari İşler': [
-      { name: 'Tarkan Tarkan', title: 'İdari İşler Sorumlusu', avatarUrl: 'https://picsum.photos/seed/m15/100/100' },
+      { name: 'Turan Kaya', title: 'İdari İşler Sorumlusu', avatarUrl: 'https://picsum.photos/seed/m15/100/100' },
   ],
 };
 
