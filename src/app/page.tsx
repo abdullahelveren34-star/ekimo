@@ -67,7 +67,7 @@ export default function HomePage() {
                 <div className="uppercase tracking-wide text-sm text-primary font-semibold">{chairman.title}</div>
                 <h2 className="mt-1 text-2xl font-bold text-foreground">{chairman.name}</h2>
                 <p className="mt-4 text-muted-foreground">
-                  "Sevgili E-Kimo ailesi,
+                  "Sevgili Kimo Tekstil ailesi,
                   <br/><br/>
                   Kurulduğumuz ilk günden beri en büyük gücümüz, yenilikçi ruhumuz ve birbirine kenetlenmiş ekibimiz oldu. Hep birlikte daha nice başarılara imza atacağımıza ve sektördeki öncü konumumuzu daha da güçlendireceğimize inancım tam. Katkılarınız ve bağlılığınız için her birinize ayrı ayrı teşekkür ederim."
                 </p>
