@@ -128,6 +128,16 @@ export default function RequestsPage() {
                 <Label htmlFor="requester-name">Ad Soyad</Label>
                 <Input id="requester-name" placeholder="Aracı talep eden kişinin adı ve soyadı..." />
               </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="vehicle-plate">Araç Plakası</Label>
+                  <Input id="vehicle-plate" placeholder="örn. 34 ABC 123" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="vehicle-km">Mevcut Km</Label>
+                  <Input id="vehicle-km" type="number" placeholder="örn. 125000" />
+                </div>
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="destination">Gidilecek Yer</Label>
                 <Input id="destination" placeholder="örn. Müşteri ziyareti, Fabrika" />
