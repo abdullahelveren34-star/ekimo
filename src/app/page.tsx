@@ -189,9 +189,9 @@ export default function HomePage() {
           </CardHeader>
           <CardContent>
             {birthdayPersonnel.length > 0 ? (
-              <ul className="space-y-4">
+              <ul className="space-y-6">
                 {birthdayPersonnel.map((person) => (
-                  <li key={person.name} className="flex items-center justify-between">
+                  <li key={person.name} className="flex flex-col items-start gap-4">
                     <div className="flex items-center gap-4">
                       <Avatar>
                         <AvatarImage src={person.avatarUrl} alt={person.name} />
@@ -202,7 +202,7 @@ export default function HomePage() {
                         <p className="text-sm text-muted-foreground">{person.title}</p>
                       </div>
                     </div>
-                    <Button onClick={() => handleCongratulate(person.name)} variant="outline" size="sm">
+                    <Button onClick={() => handleCongratulate(person.name)} variant="outline" size="sm" className="self-start">
                        <Gift className="mr-2 h-4 w-4 text-red-500" />
                        Tebrik Et
                     </Button>
