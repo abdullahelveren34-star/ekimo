@@ -1,6 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { boardMembers } from '@/lib/data';
+import { boardMembers, textileNews } from '@/lib/data';
+import Image from 'next/image';
 
 export default function HomePage() {
   const chairman = boardMembers.find(member => member.title === 'Yönetim Kurulu Başkanı');
@@ -36,8 +37,36 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* You can add other sections here if needed */}
-
+      <section className="space-y-6">
+        <header>
+          <h2 className="text-2xl font-bold text-foreground">Tekstil Dünyasından Haberler</h2>
+          <p className="text-muted-foreground">Sektördeki son gelişmeler ve trendler.</p>
+        </header>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {textileNews.map((news) => (
+            <Card key={news.id} className="flex flex-col overflow-hidden">
+              <div className="relative h-48 w-full">
+                <Image 
+                  src={news.imageUrl} 
+                  alt={news.title} 
+                  fill 
+                  className="object-cover" 
+                  data-ai-hint={news.imageHint}
+                />
+              </div>
+              <CardHeader>
+                <CardTitle>{news.title}</CardTitle>
+              </CardHeader>
+              <CardContent className="flex-grow">
+                <CardDescription>{news.description}</CardDescription>
+              </CardContent>
+              <CardFooter>
+                <p className="text-xs text-muted-foreground">{news.date}</p>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
