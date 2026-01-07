@@ -20,6 +20,7 @@ import {
   AtSign,
   Home,
   Building,
+  ClipboardList,
 } from 'lucide-react';
 
 const navItems = [
@@ -27,6 +28,7 @@ const navItems = [
   { href: '/', label: 'Ana Sayfa', icon: Home },
   { href: '/departments', label: 'Departmanlar', icon: Building },
   { href: '/ai-screener', label: 'AI Tarama', icon: Bot },
+  { href: '/requests', label: 'Talepler', icon: ClipboardList },
 ];
 
 export function SidebarNav() {
