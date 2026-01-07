@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Briefcase, Car, FileText, HandCoins, Plane, Wrench } from "lucide-react"
+import { Briefcase, Car, FileText, HandCoins, Plane, Wrench, BedDouble, PlaneTakeoff } from "lucide-react"
 import { hotelsByCity, allCities, airportsByCity } from "@/lib/data"
 import React, { useState } from "react"
 
@@ -226,15 +226,17 @@ export default function RequestsPage() {
             <CardContent className="space-y-6">
               <div className="space-y-2">
                 <Label>Talep Türü</Label>
-                <RadioGroup defaultValue={travelRequestType} onValueChange={setTravelRequestType} className="flex items-center gap-4">
-                  <div className="flex items-center space-x-2">
+                <RadioGroup defaultValue={travelRequestType} onValueChange={setTravelRequestType} className="flex items-center gap-6">
+                  <Label htmlFor="accommodation" className="flex items-center gap-2 cursor-pointer">
                     <RadioGroupItem value="accommodation" id="accommodation" />
-                    <Label htmlFor="accommodation">Konaklama</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
+                    <BedDouble className="h-4 w-4" />
+                    Konaklama
+                  </Label>
+                  <Label htmlFor="flight" className="flex items-center gap-2 cursor-pointer">
                     <RadioGroupItem value="flight" id="flight" />
-                    <Label htmlFor="flight">Uçak Bileti</Label>
-                  </div>
+                    <PlaneTakeoff className="h-4 w-4" />
+                    Uçak Bileti
+                  </Label>
                 </RadioGroup>
               </div>
 
