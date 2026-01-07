@@ -28,6 +28,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogDescription,
 } from "@/components/ui/dialog";
 
 const departments = [
@@ -97,22 +98,28 @@ export default function DepartmentsPage() {
                     </CardContent>
                   </Card>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
+                <DialogContent className="sm:max-w-md">
                   <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                       <dept.icon className="h-5 w-5" />
-                      {dept.name} Departmanı Üyeleri
+                      {dept.name} Departmanı
                     </DialogTitle>
+                    <DialogDescription>
+                      Bu departmanda görevli çalışanların listesi.
+                    </DialogDescription>
                   </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <ul className="space-y-3 max-h-80 overflow-y-auto">
+                  <div className="py-4">
+                    <ul className="space-y-4 max-h-[60vh] overflow-y-auto pr-4">
                       {members.map((member, index) => (
-                        <li key={index} className="flex items-center gap-3">
-                          <Avatar className="h-10 w-10">
+                        <li key={index} className="flex items-center gap-4">
+                          <Avatar className="h-12 w-12">
                             <AvatarImage src={member.avatarUrl} alt={member.name} />
                             <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                           </Avatar>
-                          <span className="font-medium">{member.name}</span>
+                          <div>
+                            <p className="font-semibold">{member.name}</p>
+                            <p className="text-sm text-muted-foreground">{member.title}</p>
+                          </div>
                         </li>
                       ))}
                     </ul>
@@ -126,3 +133,5 @@ export default function DepartmentsPage() {
     </TooltipProvider>
   );
 }
+
+    
