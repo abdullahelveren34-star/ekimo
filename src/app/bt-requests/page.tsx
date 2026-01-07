@@ -35,7 +35,7 @@ export default function BTRequestsPage() {
                   <SelectValue placeholder="Talebinizin türünü seçin..." />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="hardware">Donanım Talebi (Mouse, Klavye, Monitör vb.)</SelectItem>
+                  <SelectItem value="hardware">Donanım Talebi (Satın Alma, Yenileme, Arıza)</SelectItem>
                   <SelectItem value="software">Yazılım Talebi (Kurulum, Lisans vb.)</SelectItem>
                   <SelectItem value="access">Erişim Yetkisi Talebi</SelectItem>
                   <SelectItem value="support">Teknik Destek / Arıza Bildirimi</SelectItem>
