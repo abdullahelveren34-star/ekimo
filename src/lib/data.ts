@@ -210,11 +210,11 @@ export const departmentMembers: { [key: string]: Employee[] } = {
 export const allEmployees = Object.values(departmentMembers).flat();
 
 export const currentUser = {
-  id: 'abdullah-elveren-id',
-  name: 'Abdullah Elveren',
-  title: 'Grup Bilgi Teknolojileri Direktörü',
-  avatarUrl: 'https://images.unsplash.com/photo-1557862921-37829c790f19?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-  email: 'abdullah.elveren@e-kimo.com'
+  id: 'izlem-manduz-id',
+  name: 'İzlem Manduz',
+  title: 'İK Müdürü',
+  avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  email: 'izlem.manduz@e-kimo.com'
 };
 
 export const employeeOfTheMonth = {

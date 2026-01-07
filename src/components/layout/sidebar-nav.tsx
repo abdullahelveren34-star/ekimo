@@ -53,7 +53,11 @@ export function SidebarNav() {
 
   const pendingRequestsQuery = useMemoFirebase(() => {
     if (!firestore || !user) return null;
-    return query(collection(firestore, "approvalRequests"), where("approverId", "==", "izlem-manduz-id"), where("status", "==", "Beklemede"));
+    return query(
+      collection(firestore, 'approvalRequests'),
+      where('approverId', '==', 'izlem-manduz-id'),
+      where('status', '==', 'Beklemede')
+    );
   }, [firestore, user]);
 
   const { data: pendingRequests } = useCollection(pendingRequestsQuery);
