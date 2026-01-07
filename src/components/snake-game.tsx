@@ -20,6 +20,7 @@ const DIRECTIONS: { [key: string]: number[] } = {
 
 export function SnakeGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const gameContainerRef = useRef<HTMLDivElement>(null);
   const [snake, setSnake] = useState(SNAKE_START);
   const [food, setFood] = useState(FOOD_START);
   const [direction, setDirection] = useState(DIRECTIONS['ArrowRight']);
@@ -34,6 +35,7 @@ export function SnakeGame() {
     setSpeed(SPEED);
     setGameOver(false);
     setScore(0);
+    gameContainerRef.current?.focus();
   };
 
   const endGame = () => {
@@ -87,6 +89,10 @@ export function SnakeGame() {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    // prevent browser scroll
+    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+        e.preventDefault();
+    }
     const newDirection = DIRECTIONS[e.key];
     // prevent snake from going backwards
     if (newDirection) {
@@ -113,14 +119,20 @@ export function SnakeGame() {
 
 
   useEffect(() => {
-    if (speed !== null) {
+    if (speed !== null && !gameOver) {
       const interval = setInterval(gameLoop, speed);
       return () => clearInterval(interval);
     }
-  }, [snake, direction, speed]);
+  }, [snake, direction, speed, gameOver]);
+  
+  useEffect(() => {
+    if(!gameOver && speed !== null) {
+        gameContainerRef.current?.focus();
+    }
+  }, [gameOver, speed]);
 
   return (
-    <div onKeyDown={handleKeyDown} tabIndex={0} className="relative focus:outline-none">
+    <div ref={gameContainerRef} onKeyDown={handleKeyDown} tabIndex={0} className="relative focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-lg">
       <canvas
         ref={canvasRef}
         width={`${CANVAS_SIZE}px`}
