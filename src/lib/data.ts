@@ -19,33 +19,6 @@ export const employeeProfile = {
   ],
 };
 
-export const jobPostings = [
-  {
-    id: 'job-1',
-    title: 'Kıdemli Frontend Geliştirici',
-    department: 'Mühendislik',
-    location: 'Uzaktan',
-    type: 'Tam Zamanlı',
-    description: 'Deneyimli bir frontend geliştirici arıyoruz. React ve TypeScript konusundaki uzmanlığınızla ekibimize liderlik edin.',
-  },
-  {
-    id: 'job-2',
-    title: 'Ürün Müdürü',
-    department: 'Ürün',
-    location: 'İstanbul, Türkiye',
-    type: 'Tam Zamanlı',
-    description: 'Ürün yol haritamızı şekillendirecek ve ürün yaşam döngüsünü yönetecek vizyoner bir Ürün Müdürü arıyoruz.',
-  },
-  {
-    id: 'job-3',
-    title: 'UX/UI Tasarımcısı',
-    department: 'Tasarım',
-    location: 'Uzaktan',
-    type: 'Yarı Zamanlı',
-    description: 'Kullanıcı dostu ve estetik açıdan çekici arayüzler oluşturma tutkusuna sahip yetenekli bir tasarımcı arıyoruz.',
-  },
-];
-
 export const documents = [
     {
         id: 'doc-1',
