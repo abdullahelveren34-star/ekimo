@@ -14,18 +14,14 @@ import { currentUser } from '@/lib/data';
 
 export default function ManagementPage() {
   const { firestore } = useFirebase();
-  
-  // Using the hardcoded ID for the manager from data.ts
-  const approverId = 'izlem-manduz-id';
 
   const requestsQuery = useMemoFirebase(() => {
-    if (!firestore || !approverId) return null;
+    if (!firestore) return null;
     return query(
-      collection(firestore, "approvalRequests"), 
-      where("approverId", "==", approverId), 
+      collection(firestore, "approvalRequests"),
       where("status", "==", "Beklemede")
     );
-  }, [firestore, approverId]);
+  }, [firestore]);
 
   const { data: requests, isLoading, error } = useCollection<ApprovalRequest>(requestsQuery);
 
