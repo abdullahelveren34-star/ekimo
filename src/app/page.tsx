@@ -9,7 +9,8 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { Cake, Gift, Star, Send, Leaf, Clock, Calendar, MapPin, CloudSun } from 'lucide-react';
+import { Cake, Gift, Star, Send, Leaf, Clock, Calendar, MapPin, CloudSun, Gamepad2 } from 'lucide-react';
+import { CandyCrushGame } from '@/components/candy-crush-game';
 
 type Employee = {
   name: string;
@@ -136,6 +137,23 @@ export default function HomePage() {
         <h1 className="text-3xl font-bold text-foreground">Ana Sayfa</h1>
         <p className="text-muted-foreground mt-1">E-Kimo insan kaynakları merkezinize hoş geldiniz.</p>
       </header>
+      
+      <section>
+        <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                    <Gamepad2 className="text-primary" />
+                    Can Sıkıntısı İçin Bir Mola
+                </CardTitle>
+                <CardDescription>
+                    Biraz ara verip eğlenmek için basit bir oyun. Renkli blokları sürükleyerek 3 veya daha fazlasını eşleştirin.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <CandyCrushGame />
+            </CardContent>
+        </Card>
+      </section>
 
       {chairman && (
         <section>
