@@ -14,7 +14,6 @@ import {
 } from '@/components/ui/sidebar';
 import {
   Bot,
-  Folder,
   LayoutDashboard,
   Settings,
   LogOut,
@@ -26,7 +25,6 @@ import {
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/', label: 'Ana Sayfa', icon: Home },
-  { href: '/documents', label: 'Belgeler', icon: Folder },
   { href: '/departments', label: 'Departmanlar', icon: Building },
   { href: '/ai-screener', label: 'AI Tarama', icon: Bot },
 ];
