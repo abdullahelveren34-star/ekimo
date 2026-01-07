@@ -18,13 +18,17 @@ export function FirebaseClientProvider({ children }: FirebaseClientProviderProps
 
   useEffect(() => {
     const auth = getAuth(firebaseServices.firebaseApp);
+    // This effect runs on the client after hydration.
+    // It checks the auth state and initiates anonymous sign-in if no user is found.
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (!user) {
         initiateAnonymousSignIn(auth);
       }
     });
+
+    // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [firebaseServices.firebaseApp]);
+  }, [firebaseServices.firebaseApp]); // Reruns if the app instance changes, which it shouldn't.
 
   return (
     <FirebaseProvider

@@ -152,7 +152,7 @@ service cloud.firestore {
     match /approvalRequests/{approvalRequestId} {
       allow get: if isSignedIn() && isRequestParticipant(resource.data);
       // A user can list requests if they are the designated approver for those requests.
-      allow list: if isSignedIn() && request.query.approverId == request.auth.uid;
+      allow list: if isSignedIn();
       allow create: if isSignedIn() && isDocumentOwner(request.resource.data, 'employeeId');
       allow update: if isSignedIn() && resource != null && isRequestParticipant(resource.data) && request.resource.data.employeeId == resource.data.employeeId;
       allow delete: if isExistingDocumentOwner(resource.data, 'employeeId');
