@@ -68,3 +68,30 @@ export const textileNews = [
     imageHint: 'digital printing',
   },
 ];
+
+export const companyNews = [
+  {
+    id: 1,
+    title: 'Sürdürülebilirlik Belgesi',
+    description: 'Isparta\'daki fabrikamız, sürdürülebilirlik alanında uluslararası geçerliliğe sahip yeni bir belge daha almaya hak kazandı.',
+    category: 'Başarı',
+  },
+  {
+    id: 2,
+    title: 'Madrid\'de Yeni Mağaza',
+    description: 'İspanya\'daki büyümemiz devam ediyor! Barcelona\'dan sonra şimdi de Madrid\'de yeni ofis ve mağazamız açıldı.',
+    category: 'Genişleme',
+  },
+  {
+    id: 3,
+    title: 'Yeni Markamız: X',
+    description: 'E-Kimo ailesi olarak yeni markamız "X"i sizlere sunmaktan gurur duyarız. Yenilikçi ve modern tasarımlar çok yakında!',
+    category: 'Yeni Marka',
+  },
+  {
+    id: 4,
+    title: 'Teknoloji Yatırımı',
+    description: 'Üretim hattımızı en son teknolojiye sahip makinelerle yenileyerek verimliliğimizi %20 artırdık.',
+    category: 'İnovasyon',
+  },
+];

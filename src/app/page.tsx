@@ -1,7 +1,9 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { boardMembers, textileNews } from '@/lib/data';
+import { boardMembers, textileNews, companyNews } from '@/lib/data';
 import Image from 'next/image';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Badge } from '@/components/ui/badge';
 
 export default function HomePage() {
   const chairman = boardMembers.find(member => member.title === 'Yönetim Kurulu Başkanı');
@@ -12,6 +14,39 @@ export default function HomePage() {
         <h1 className="text-3xl font-bold text-foreground">Ana Sayfa</h1>
         <p className="text-muted-foreground mt-1">E-Kimo insan kaynakları merkezinize hoş geldiniz.</p>
       </header>
+
+      <section>
+        <h2 className="text-2xl font-bold text-foreground mb-4">Şirketten Haberler</h2>
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className="w-full"
+        >
+          <CarouselContent>
+            {companyNews.map((news) => (
+              <CarouselItem key={news.id} className="md:basis-1/2 lg:basis-1/3">
+                <div className="p-1 h-full">
+                  <Card className="h-full flex flex-col">
+                    <CardHeader>
+                      <div className="flex justify-between items-start">
+                        <CardTitle>{news.title}</CardTitle>
+                        <Badge variant="outline">{news.category}</Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="flex-grow">
+                      <p className="text-muted-foreground">{news.description}</p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="hidden sm:flex" />
+          <CarouselNext className="hidden sm:flex" />
+        </Carousel>
+      </section>
 
       {chairman && (
         <section>
