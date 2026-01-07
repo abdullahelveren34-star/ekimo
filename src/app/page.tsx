@@ -15,6 +15,30 @@ export default function HomePage() {
         <p className="text-muted-foreground mt-1">E-Kimo insan kaynakları merkezinize hoş geldiniz.</p>
       </header>
 
+      {chairman && (
+        <section>
+          <Card className="overflow-hidden">
+            <div className="md:flex">
+              <div className="md:flex-shrink-0">
+                <Avatar className="h-full w-full md:w-56 rounded-none">
+                  <AvatarImage src={chairman.avatarUrl} alt={chairman.name} className="object-cover h-full w-full" />
+                  <AvatarFallback>{chairman.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+              </div>
+              <div className="p-8">
+                <div className="uppercase tracking-wide text-sm text-primary font-semibold">{chairman.title}</div>
+                <h2 className="mt-1 text-2xl font-bold text-foreground">{chairman.name}</h2>
+                <p className="mt-4 text-muted-foreground">
+                  "Sevgili E-Kimo ailesi,
+                  <br/><br/>
+                  Kurulduğumuz ilk günden beri en büyük gücümüz, yenilikçi ruhumuz ve birbirine kenetlenmiş ekibimiz oldu. Hep birlikte daha nice başarılara imza atacağımıza ve sektördeki öncü konumumuzu daha da güçlendireceğimize inancım tam. Katkılarınız ve bağlılığınız için her birinize ayrı ayrı teşekkür ederim."
+                </p>
+              </div>
+            </div>
+          </Card>
+        </section>
+      )}
+
       <section>
         <h2 className="text-2xl font-bold text-foreground mb-4">Şirketten Haberler</h2>
         <Carousel
@@ -47,30 +71,6 @@ export default function HomePage() {
           <CarouselNext className="hidden sm:flex" />
         </Carousel>
       </section>
-
-      {chairman && (
-        <section>
-          <Card className="overflow-hidden">
-            <div className="md:flex">
-              <div className="md:flex-shrink-0">
-                <Avatar className="h-full w-full md:w-56 rounded-none">
-                  <AvatarImage src={chairman.avatarUrl} alt={chairman.name} className="object-cover h-full w-full" />
-                  <AvatarFallback>{chairman.name.charAt(0)}</AvatarFallback>
-                </Avatar>
-              </div>
-              <div className="p-8">
-                <div className="uppercase tracking-wide text-sm text-primary font-semibold">{chairman.title}</div>
-                <h2 className="mt-1 text-2xl font-bold text-foreground">{chairman.name}</h2>
-                <p className="mt-4 text-muted-foreground">
-                  "Sevgili E-Kimo ailesi,
-                  <br/><br/>
-                  Kurulduğumuz ilk günden beri en büyük gücümüz, yenilikçi ruhumuz ve birbirine kenetlenmiş ekibimiz oldu. Hep birlikte daha nice başarılara imza atacağımıza ve sektördeki öncü konumumuzu daha da güçlendireceğimize inancım tam. Katkılarınız ve bağlılığınız için her birinize ayrı ayrı teşekkür ederim."
-                </p>
-              </div>
-            </div>
-          </Card>
-        </section>
-      )}
 
       <section>
         <Card>
