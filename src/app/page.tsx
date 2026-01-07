@@ -9,7 +9,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { Cake, Gift, Star, Send, Leaf } from 'lucide-react';
+import { Cake, Gift, Star, Send, Leaf, Clock, Calendar, MapPin } from 'lucide-react';
 
 type Employee = {
   name: string;
@@ -22,6 +22,29 @@ export default function HomePage() {
   const chairman = boardMembers.find(member => member.title === 'Yönetim Kurulu Başkanı');
   const [birthdayPersonnel, setBirthdayPersonnel] = useState<Employee[]>([]);
   const { toast } = useToast();
+  const [currentDateTime, setCurrentDateTime] = useState(new Date());
+  const [userCity, setUserCity] = useState<string>('Yükleniyor...');
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentDateTime(new Date());
+    }, 1000);
+
+    const fetchCity = async () => {
+      try {
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+        setUserCity(data.city || 'Bilinmiyor');
+      } catch (error) {
+        console.error('Şehir bilgisi alınamadı:', error);
+        setUserCity('Bilinmiyor');
+      }
+    };
+    
+    fetchCity();
+
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     const today = new Date();
@@ -46,12 +69,45 @@ export default function HomePage() {
     });
   };
 
+  const formattedDate = currentDateTime.toLocaleDateString('tr-TR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    weekday: 'long',
+  });
+
+  const formattedTime = currentDateTime.toLocaleTimeString('tr-TR', {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
   return (
     <div className="flex flex-col gap-8">
       <header>
         <h1 className="text-3xl font-bold text-foreground">Ana Sayfa</h1>
         <p className="text-muted-foreground mt-1">E-Kimo insan kaynakları merkezinize hoş geldiniz.</p>
       </header>
+
+       <section>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                <Calendar className="h-5 w-5 text-primary" />
+                <span>{formattedDate}</span>
+              </div>
+              <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                <Clock className="h-5 w-5 text-primary" />
+                <span>{formattedTime}</span>
+              </div>
+              <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                <MapPin className="h-5 w-5 text-primary" />
+                <span>{userCity}</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </section>
 
       {chairman && (
         <section>
