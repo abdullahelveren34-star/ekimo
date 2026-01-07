@@ -25,6 +25,7 @@ import {
   Briefcase,
   Server,
   Users,
+  Shield,
 } from 'lucide-react';
 
 const navItems = [
@@ -36,6 +37,7 @@ const navItems = [
   { href: '/requests', label: 'Talepler', icon: ClipboardList },
   { href: '/bt-requests', label: 'BT Talepleri', icon: Server },
   { href: '/documents', label: 'Dokümanlar', icon: FileText },
+  { href: '/management', label: 'Yönetim', icon: Shield },
 ];
 
 const bottomNavItems = [
