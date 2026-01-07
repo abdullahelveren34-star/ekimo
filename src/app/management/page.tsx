@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { Shield } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { useFirebase } from '@/firebase';
-import { collection, query, where, onSnapshot, doc, updateDoc } from 'firebase/firestore';
+import { useFirebase, useMemoFirebase } from '@/firebase';
+import { collection, query, where, doc, updateDoc, onSnapshot } from 'firebase/firestore';
 import { toast } from '@/hooks/use-toast';
 import type { ApprovalRequest } from '@/lib/actions';
 
@@ -15,7 +15,7 @@ export default function ManagementPage() {
   const [requests, setRequests] = useState<ApprovalRequest[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const requestsQuery = useMemo(() => {
+  const requestsQuery = useMemoFirebase(() => {
     if (!firestore || !user) return null;
     // This query fetches requests where the current user is the designated approver.
     // In a real app, `approverId` would be dynamically set. We are using a hardcoded manager id for now.
@@ -28,6 +28,7 @@ export default function ManagementPage() {
       return;
     }
 
+    setLoading(true);
     const unsubscribe = onSnapshot(requestsQuery, (snapshot) => {
       const fetchedRequests = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as ApprovalRequest));
       setRequests(fetchedRequests);
