@@ -363,6 +363,7 @@ export const airportsByCity: { [key: string]: string[] } = {
   "Kütahya": ["Zafer Havalimanı (KZR)"],
   "Malatya": ["Malatya Havalimanı (MLX)"],
   "Mardin": ["Mardin Prof. Dr. Aziz Sancar Havalimanı (MQM)"],
+  "Muğla": ["Dalaman Havalimanı (DLM)", "Milas-Bodrum Havalimanı (BJV)"],
   "Muş": ["Muş Havalimanı (MSR)"],
   "Nevşehir": ["Nevşehir Kapadokya Havalimanı (NAV)"],
   "Ordu": ["Ordu-Giresun Havalimanı (OGU)"],
@@ -380,3 +381,4 @@ export const airportsByCity: { [key: string]: string[] } = {
   "Van": ["Van Ferit Melen Havalimanı (VAN)"],
   "Zonguldak": ["Zonguldak Çaycuma Havalimanı (ONQ)"]
 };
+
