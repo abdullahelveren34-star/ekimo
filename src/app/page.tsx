@@ -1,12 +1,41 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { boardMembers, textileNews, companyNews } from '@/lib/data';
+import { boardMembers, textileNews, companyNews, departmentMembers, employeeOfTheMonth } from '@/lib/data';
 import Image from 'next/image';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Badge } from '@/components/ui/badge';
+import { Cake, Gift, Star } from 'lucide-react';
+
+type Employee = {
+  name: string;
+  title: string;
+  avatarUrl: string;
+  birthDate: string;
+};
 
 export default function HomePage() {
   const chairman = boardMembers.find(member => member.title === 'Yönetim Kurulu Başkanı');
+  const [birthdayPersonnel, setBirthdayPersonnel] = useState<Employee[]>([]);
+
+  useEffect(() => {
+    const today = new Date();
+    const todayMonth = today.getMonth() + 1;
+    const todayDay = today.getDate();
+
+    const allEmployees = Object.values(departmentMembers).flat();
+    
+    const todaysBirthdays = allEmployees.filter(employee => {
+      if (!employee.birthDate) return false;
+      const [year, month, day] = employee.birthDate.split('-').map(Number);
+      return month === todayMonth && day === todayDay;
+    });
+
+    setBirthdayPersonnel(todaysBirthdays);
+  }, []);
+
 
   return (
     <div className="flex flex-col gap-8">
@@ -116,6 +145,58 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Star className="text-yellow-500" />
+              Ayın Personeli
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex items-center gap-6">
+            <Avatar className="h-24 w-24">
+              <AvatarImage src={employeeOfTheMonth.avatarUrl} alt={employeeOfTheMonth.name} />
+              <AvatarFallback>{employeeOfTheMonth.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+            </Avatar>
+            <div className="space-y-2">
+              <h3 className="text-xl font-bold">{employeeOfTheMonth.name}</h3>
+              <p className="text-muted-foreground">{employeeOfTheMonth.title}, {employeeOfTheMonth.department}</p>
+              <p className="text-sm italic">"{employeeOfTheMonth.reason}"</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Cake className="text-pink-500" />
+              Bugün Doğanlar
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {birthdayPersonnel.length > 0 ? (
+              <ul className="space-y-4">
+                {birthdayPersonnel.map((person) => (
+                  <li key={person.name} className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <Avatar>
+                        <AvatarImage src={person.avatarUrl} alt={person.name} />
+                        <AvatarFallback>{person.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="font-semibold">{person.name}</p>
+                        <p className="text-sm text-muted-foreground">{person.title}</p>
+                      </div>
+                    </div>
+                    <Gift className="text-red-500" />
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-muted-foreground text-center py-8">Bugün doğum günü olan çalışanımız bulunmamaktadır.</p>
+            )}
+          </CardContent>
+        </Card>
+      </section>
     </div>
   );
 }
