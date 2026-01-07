@@ -9,12 +9,22 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Briefcase, Car, FileText, HandCoins, Plane, Wrench } from "lucide-react"
-import { hotelsByCity, allCities } from "@/lib/data"
+import { hotelsByCity, allCities, airportsByCity } from "@/lib/data"
 import React, { useState } from "react"
 
 export default function RequestsPage() {
-  const [selectedCity, setSelectedCity] = useState('');
-  const hotelsForSelectedCity = selectedCity ? hotelsByCity[selectedCity as keyof typeof hotelsByCity] || [] : [];
+  const [travelRequestType, setTravelRequestType] = useState('accommodation');
+  
+  // Accommodation states
+  const [selectedAccommodationCity, setSelectedAccommodationCity] = useState('');
+  const hotelsForSelectedCity = selectedAccommodationCity ? hotelsByCity[selectedAccommodationCity as keyof typeof hotelsByCity] || [] : [];
+
+  // Flight states
+  const [departureCity, setDepartureCity] = useState('');
+  const airportsForDepartureCity = departureCity ? airportsByCity[departureCity as keyof typeof airportsByCity] || [] : [];
+  const [arrivalCity, setArrivalCity] = useState('');
+  const airportsForArrivalCity = arrivalCity ? airportsByCity[arrivalCity as keyof typeof airportsByCity] || [] : [];
+
 
   return (
     <div className="space-y-8">
@@ -202,7 +212,7 @@ export default function RequestsPage() {
             <CardContent className="space-y-6">
               <div className="space-y-2">
                 <Label>Talep Türü</Label>
-                <RadioGroup defaultValue="accommodation" className="flex items-center gap-4">
+                <RadioGroup defaultValue={travelRequestType} onValueChange={setTravelRequestType} className="flex items-center gap-4">
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="accommodation" id="accommodation" />
                     <Label htmlFor="accommodation">Konaklama</Label>
@@ -214,30 +224,86 @@ export default function RequestsPage() {
                 </RadioGroup>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="travel-city">Şehir</Label>
-                  <Select onValueChange={setSelectedCity}>
-                    <SelectTrigger id="travel-city">
-                      <SelectValue placeholder="Seyahat edilecek şehri seçin..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {allCities.map(city => <SelectItem key={city} value={city}>{city}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
+              {travelRequestType === 'accommodation' && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="travel-city">Şehir</Label>
+                    <Select onValueChange={setSelectedAccommodationCity}>
+                      <SelectTrigger id="travel-city">
+                        <SelectValue placeholder="Seyahat edilecek şehri seçin..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {allCities.map(city => <SelectItem key={city} value={city}>{city}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="travel-hotel">Otel</Label>
+                    <Select disabled={!selectedAccommodationCity || hotelsForSelectedCity.length === 0}>
+                      <SelectTrigger id="travel-hotel">
+                        <SelectValue placeholder={hotelsForSelectedCity.length > 0 ? "Otel seçin..." : "Bu şehirde otel bulunamadı"} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {hotelsForSelectedCity.map(hotel => <SelectItem key={hotel} value={hotel}>{hotel}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="travel-hotel">Otel</Label>
-                  <Select disabled={!selectedCity || hotelsForSelectedCity.length === 0}>
-                    <SelectTrigger id="travel-hotel">
-                      <SelectValue placeholder="Otel seçin..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {hotelsForSelectedCity.map(hotel => <SelectItem key={hotel} value={hotel}>{hotel}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
+              )}
+
+              {travelRequestType === 'flight' && (
+                <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="departure-city">Nereden (Şehir)</Label>
+                            <Select onValueChange={setDepartureCity}>
+                                <SelectTrigger id="departure-city">
+                                    <SelectValue placeholder="Kalkış şehri seçin..." />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {allCities.map(city => <SelectItem key={`dep-${city}`} value={city}>{city}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="departure-airport">Nereden (Havalimanı)</Label>
+                            <Select disabled={!departureCity || airportsForDepartureCity.length === 0}>
+                                <SelectTrigger id="departure-airport">
+                                    <SelectValue placeholder={airportsForDepartureCity.length > 0 ? "Havalimanı seçin..." : "Havalimanı bulunamadı"} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {airportsForDepartureCity.map(airport => <SelectItem key={`dep-airport-${airport}`} value={airport}>{airport}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="arrival-city">Nereye (Şehir)</Label>
+                            <Select onValueChange={setArrivalCity}>
+                                <SelectTrigger id="arrival-city">
+                                    <SelectValue placeholder="Varış şehri seçin..." />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {allCities.map(city => <SelectItem key={`arr-${city}`} value={city}>{city}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="arrival-airport">Nereye (Havalimanı)</Label>
+                            <Select disabled={!arrivalCity || airportsForArrivalCity.length === 0}>
+                                <SelectTrigger id="arrival-airport">
+                                    <SelectValue placeholder={airportsForArrivalCity.length > 0 ? "Havalimanı seçin..." : "Havalimanı bulunamadı"} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {airportsForArrivalCity.map(airport => <SelectItem key={`arr-airport-${airport}`} value={airport}>{airport}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
                 </div>
-              </div>
+              )}
+
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
