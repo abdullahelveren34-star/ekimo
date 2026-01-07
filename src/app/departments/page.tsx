@@ -30,6 +30,7 @@ import {
   DialogTrigger,
   DialogDescription,
 } from "@/components/ui/dialog";
+import Link from 'next/link';
 
 const departments = [
   { name: 'Satış', icon: TrendingUp, color: 'text-green-500' },
@@ -91,16 +92,18 @@ export default function DepartmentsPage() {
                   <div className="py-4">
                     <ul className="space-y-4 max-h-[60vh] overflow-y-auto pr-4">
                       {members.length > 0 ? (
-                        members.map((member, index) => (
-                          <li key={index} className="flex items-center gap-4">
-                            <Avatar className="h-12 w-12">
-                              <AvatarImage src={member.avatarUrl} alt={member.name} />
-                              <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                            </Avatar>
-                            <div>
-                              <p className="font-semibold">{member.name}</p>
-                              <p className="text-sm text-muted-foreground">{member.title}</p>
-                            </div>
+                        members.map((member) => (
+                          <li key={member.id}>
+                            <Link href={`/personnel/${member.id}`} className="flex items-center gap-4 p-2 rounded-md hover:bg-muted transition-colors">
+                              <Avatar className="h-12 w-12">
+                                <AvatarImage src={member.avatarUrl} alt={member.name} />
+                                <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <p className="font-semibold">{member.name}</p>
+                                <p className="text-sm text-muted-foreground">{member.title}</p>
+                              </div>
+                            </Link>
                           </li>
                         ))
                       ) : (

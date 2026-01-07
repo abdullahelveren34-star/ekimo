@@ -24,12 +24,14 @@ import {
   FileText,
   Briefcase,
   Server,
+  Users,
 } from 'lucide-react';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/', label: 'Ana Sayfa', icon: Home },
   { href: '/departments', label: 'Departmanlar', icon: Building },
+  { href: '/personnel', label: 'Personel', icon: Users },
   { href: '/jobs', label: 'İş İlanları', icon: Briefcase },
   { href: '/requests', label: 'Talepler', icon: ClipboardList },
   { href: '/bt-requests', label: 'BT Talepleri', icon: Server },
@@ -59,7 +61,7 @@ export function SidebarNav() {
             <SidebarMenuItem key={item.href}>
               <Link href={item.href}>
                 <SidebarMenuButton
-                  isActive={pathname === item.href}
+                  isActive={pathname.startsWith(item.href) && (item.href !== '/' || pathname === '/')}
                   tooltip={item.label}
                 >
                   <item.icon />

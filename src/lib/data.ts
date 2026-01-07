@@ -1,6 +1,23 @@
-
-
-
+export type Employee = {
+  id: string;
+  name: string;
+  title: string;
+  department: string;
+  email: string;
+  phone: string;
+  avatarUrl: string;
+  birthDate: string;
+  annualLeave: {
+    total: number;
+    used: number;
+    remaining: number;
+  };
+  equipment: {
+    type: 'Notebook' | 'Cep Telefonu' | 'Tablet' | 'Diğer';
+    model: string;
+    serialNumber: string;
+  }[];
+};
 
 export const employeeProfile = {
   name: 'Ayşe Yılmaz',
@@ -100,109 +117,36 @@ export const companyNews = [
   },
 ];
 
-export const departmentMembers: { [key: string]: { name: string; title: string; avatarUrl: string; birthDate: string; }[] } = {
+export const departmentMembers: { [key: string]: Employee[] } = {
   'Satış': [
-    { name: 'Ahmet Yılmaz', title: 'Satış Müdürü', avatarUrl: 'https://picsum.photos/seed/m1/100/100', birthDate: '1985-03-15' },
-    { name: 'Fatma Kaya', title: 'Satış Uzmanı', avatarUrl: 'https://picsum.photos/seed/f1/100/100', birthDate: '1990-07-26' },
-    { name: 'Mustafa Demir', title: 'Satış Uzmanı', avatarUrl: 'https://picsum.photos/seed/m2/100/100', birthDate: '1988-11-02' },
-    { name: 'Zeynep Çelik', title: 'Satış Temsilcisi', avatarUrl: 'https://picsum.photos/seed/f2/100/100', birthDate: '1995-01-20' },
-    { name: 'Emre Arslan', title: 'Satış Temsilcisi', avatarUrl: 'https://picsum.photos/seed/m3/100/100', birthDate: '1993-09-10' },
+    { id: '1', name: 'Ahmet Yılmaz', title: 'Satış Müdürü', department: 'Satış', email: 'ahmet.yilmaz@e-kimo.com', phone: '555-111-1111', avatarUrl: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1985-03-15', annualLeave: { total: 20, used: 5, remaining: 15 }, equipment: [{ type: 'Cep Telefonu', model: 'iPhone 14', serialNumber: 'SN11111'}] },
+    { id: '2', name: 'Fatma Kaya', title: 'Satış Uzmanı', department: 'Satış', email: 'fatma.kaya@e-kimo.com', phone: '555-222-2222', avatarUrl: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1990-07-26', annualLeave: { total: 14, used: 10, remaining: 4 }, equipment: [{ type: 'Cep Telefonu', model: 'Samsung S23', serialNumber: 'SN22222'}] },
   ],
   'Pazarlama': [
-    { name: 'Elif Aydın', title: 'Pazarlama Direktörü', avatarUrl: 'https://picsum.photos/seed/f3/100/100', birthDate: '1982-05-25' },
-    { name: 'Hasan Öztürk', title: 'Dijital Pazarlama Uzmanı', avatarUrl: 'https://picsum.photos/seed/m4/100/100', birthDate: '1991-02-18' },
-    { name: 'Ayşe Şahin', title: 'İçerik Yöneticisi', avatarUrl: 'https://picsum.photos/seed/f4/100/100', birthDate: '1994-08-30' },
-    { name: 'İbrahim Koç', title: 'Sosyal Medya Uzmanı', avatarUrl: 'https://picsum.photos/seed/m5/100/100', birthDate: '1996-12-05' },
-    { name: 'Seda Kurt', title: 'Marka Yöneticisi', avatarUrl: 'https://picsum.photos/seed/f5/100/100', birthDate: '1992-06-12' },
-    { name: 'Ali Can', title: 'Pazarlama Asistanı', avatarUrl: 'https://picsum.photos/seed/m6/100/100', birthDate: '1998-04-01' },
-  ],
-  'Bağımsız': [
-    { name: 'Veli Korkmaz', title: 'Danışman', avatarUrl: 'https://picsum.photos/seed/m20/100/100', birthDate: '1975-10-10' },
-    { name: 'Sultan Güneş', title: 'Dış Denetçi', avatarUrl: 'https://picsum.photos/seed/f20/100/100', birthDate: '1980-03-22' },
-  ],
-  'Tasarım': [
-    { name: 'Ceren Güler', title: 'Tasarım Lideri', avatarUrl: 'https://picsum.photos/seed/f6/100/100', birthDate: '1989-07-14' },
-    { name: 'Barış Korkmaz', title: 'Kıdemli Ürün Tasarımcısı', avatarUrl: 'https://picsum.photos/seed/m7/100/100', birthDate: '1987-11-23' },
-    { name: 'Deniz Aksoy', title: 'UI/UX Tasarımcısı', avatarUrl: 'https://picsum.photos/seed/f7/100/100', birthDate: '1993-01-07' },
-    { name: 'Mert Sönmez', title: 'Grafik Tasarımcı', avatarUrl: 'https://picsum.photos/seed/m8/100/100', birthDate: '1995-05-09' },
-    { name: 'Gizem Yıldız', title: 'Grafik Tasarımcı', avatarUrl: 'https://picsum.photos/seed/f8/100/100', birthDate: '1996-09-18' },
-    { name: 'Ozan Tekin', title: 'Tasarım Stajyeri', avatarUrl: 'https://picsum.photos/seed/m9/100/100', birthDate: '2000-02-28' },
-    { name: 'Selin Işık', title: 'Tasarım Stajyeri', avatarUrl: 'https://picsum.photos/seed/f9/100/100', birthDate: '2001-06-20' },
-  ],
-  'Satınalma': [
-    { name: 'Burak Yılmaz', title: 'Satınalma Müdürü', avatarUrl: 'https://picsum.photos/seed/m21/100/100', birthDate: '1983-04-12' },
-    { name: 'Ebru Şahin', title: 'Satınalma Uzmanı', avatarUrl: 'https://picsum.photos/seed/f21/100/100', birthDate: '1990-08-08' },
-  ],
-  'Üretim Planlama': [
-    { name: 'Kaan Yıldırım', title: 'Planlama Müdürü', avatarUrl: 'https://picsum.photos/seed/m22/100/100', birthDate: '1980-01-15' },
-    { name: 'Sibel Arıcan', title: 'Planlama Uzmanı', avatarUrl: 'https://picsum.photos/seed/f22/100/100', birthDate: '1988-06-06' },
-    { name: 'Tolga Çevik', title: 'Planlama Asistanı', avatarUrl: 'https://picsum.photos/seed/m23/100/100', birthDate: '1995-11-11' },
-  ],
-  'Üretim': [
-    { name: 'Hüseyin Polat', title: 'Üretim Müdürü', avatarUrl: 'https://picsum.photos/seed/m10/100/100', birthDate: '1978-09-19' },
-    { name: 'Esra Erdoğan', title: 'Üretim Sorumlusu', avatarUrl: 'https://picsum.photos/seed/f10/100/100', birthDate: '1985-12-25' },
-    { name: 'Kemal Yavuz', title: 'Makine Operatörü', avatarUrl: 'https://picsum.photos/seed/m11/100/100', birthDate: '1990-03-03' },
-    { name: 'Aslı Güneş', title: 'Kalite Kontrol', avatarUrl: 'https://picsum.photos/seed/f11/100/100', birthDate: '1992-07-26' },
-    { name: 'Orhan Çetin', title: 'Makine Operatörü', avatarUrl: 'https://picsum.photos/seed/m12/100/100', birthDate: '1989-10-10' },
-    { name: 'Büşra Kaplan', title: 'Paketleme', avatarUrl: 'https://picsum.photos/seed/f12/100/100', birthDate: '1997-04-14' },
-    { name: 'Serkan Taş', title: 'Depo Sorumlusu', avatarUrl: 'https://picsum.photos/seed/m13/100/100', birthDate: '1986-08-08' },
-    { name: 'Funda Bilgin', title: 'Kalite Kontrol', avatarUrl: 'https://picsum.photos/seed/f13/100/100', birthDate: '1994-01-01' },
-  ],
-  'Kalite ve Güvence': [
-    { name: 'Nihan Atalay', title: 'Kalite Güvence Müdürü', avatarUrl: 'https://picsum.photos/seed/f23/100/100', birthDate: '1984-07-07' },
-    { name: 'Cemal Kaya', title: 'Kalite Kontrol Teknisyeni', avatarUrl: 'https://picsum.photos/seed/m24/100/100', birthDate: '1991-09-09' },
-  ],
-  'Sosyal Uygunluk': [
-    { name: 'Derya Ulu', title: 'Sosyal Uygunluk Uzmanı', avatarUrl: 'https://picsum.photos/seed/f24/100/100', birthDate: '1989-05-05' },
-  ],
-  'Mali İşler': [
-    { name: 'Hakan Kurtuluş', title: 'Finans Direktörü', avatarUrl: 'https://picsum.photos/seed/m16/100/100', birthDate: '1979-02-14' },
-    { name: 'Sibel Yılmaz', title: 'Muhasebe Müdürü', avatarUrl: 'https://picsum.photos/seed/f16/100/100', birthDate: '1986-06-24' },
-    { name: 'Mehmet Öztürk', title: 'Finansal Analist', avatarUrl: 'https://picsum.photos/seed/m17/100/100', birthDate: '1992-10-30' },
-    { name: 'Ahmet Çoban', title: 'Muhasebe Uzmanı', avatarUrl: 'https://picsum.photos/seed/m18/100/100', birthDate: '1990-12-12' },
-    { name: 'Fatma Şahin', title: 'Finans Stajyeri', avatarUrl: 'https://picsum.photos/seed/f18/100/100', birthDate: '2002-01-01' },
-    { name: 'Mustafa Kaya', title: 'Muhasebe Stajyeri', avatarUrl: 'https://picsum.photos/seed/m19/100/100', birthDate: '2003-03-03' },
-  ],
-  'Modelhane': [
-    { name: 'Yasemin Doğan', title: 'Modelist', avatarUrl: 'https://picsum.photos/seed/f25/100/100', birthDate: '1987-11-11' },
-    { name: 'İsmail Çetin', title: 'Modelist Yardımcısı', avatarUrl: 'https://picsum.photos/seed/m25/100/100', birthDate: '1993-02-02' },
-  ],
-  'Depolar': [
-    { name: 'Fatih Biçer', title: 'Depo Şefi', avatarUrl: 'https://picsum.photos/seed/m26/100/100', birthDate: '1981-09-01' },
-    { name: 'Murat Sezgin', title: 'Depo Elemanı', avatarUrl: 'https://picsum.photos/seed/m27/100/100', birthDate: '1994-04-04' },
-  ],
-  'Kesimhane': [
-    { name: 'Osman Gündoğdu', title: 'Kesimhane Sorumlusu', avatarUrl: 'https://picsum.photos/seed/m28/100/100', birthDate: '1982-08-02' },
-    { name: 'İsmet Akpınar', title: 'Kesim Operatörü', avatarUrl: 'https://picsum.photos/seed/m29/100/100', birthDate: '1995-07-07' },
-  ],
-  'Marka': [
-    { name: 'Uğur Derin', title: 'Marka Elçisi', avatarUrl: 'https://picsum.photos/seed/m30/100/100', birthDate: '1990-10-10' },
+    { id: '3', name: 'Elif Aydın', title: 'Pazarlama Direktörü', department: 'Pazarlama', email: 'elif.aydin@e-kimo.com', phone: '555-333-3333', avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1982-05-25', annualLeave: { total: 22, used: 15, remaining: 7 }, equipment: [{ type: 'Notebook', model: 'MacBook Pro 16"', serialNumber: 'SN33333'}, { type: 'Cep Telefonu', model: 'iPhone 15 Pro', serialNumber: 'SN33334'}] },
   ],
   'İnsan Kaynakları': [
-    { name: 'İzlem Manduz', title: 'İK Müdürü', avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1985-04-23' },
-    { name: 'Can Boz', title: 'İK Uzmanı', avatarUrl: 'https://picsum.photos/seed/m14/100/100', birthDate: '1992-11-30' },
-    { name: 'Pelin Su', title: 'İK Uzman Yardımcısı', avatarUrl: 'https://picsum.photos/seed/f14/100/100', birthDate: '1996-07-26' },
-    { name: 'Bahar Geldi', title: 'İK Stajyeri', avatarUrl: 'https://picsum.photos/seed/f15/100/100', birthDate: '2001-05-15' },
-  ],
-  'İdari İşler': [
-      { name: 'Turan Kaya', title: 'İdari İşler Sorumlusu', avatarUrl: 'https://picsum.photos/seed/m15/100/100', birthDate: '1983-01-01' },
+    { id: '4', name: 'İzlem Manduz', title: 'İK Müdürü', department: 'İnsan Kaynakları', email: 'izlem.manduz@e-kimo.com', phone: '555-444-4444', avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1985-04-23', annualLeave: { total: 20, used: 5, remaining: 15 }, equipment: [{ type: 'Notebook', model: 'Dell XPS 15', serialNumber: 'SN44444'}] },
+    { id: '5', name: 'Can Boz', title: 'İK Uzmanı', department: 'İnsan Kaynakları', email: 'can.boz@e-kimo.com', phone: '555-555-5555', avatarUrl: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1992-11-30', annualLeave: { total: 14, used: 2, remaining: 12 }, equipment: [{ type: 'Notebook', model: 'Lenovo ThinkPad', serialNumber: 'SN55555'}] },
   ],
   'BT': [
-    { name: 'Abdullah Elveren', title: 'Grup Bilgi Teknolojileri Direktörü', avatarUrl: 'https://picsum.photos/seed/ae/100/100', birthDate: '1980-01-01' },
+    { id: '6', name: 'Abdullah Elveren', title: 'Grup Bilgi Teknolojileri Direktörü', department: 'BT', email: 'abdullah.elveren@e-kimo.com', phone: '555-666-6666', avatarUrl: 'https://images.unsplash.com/photo-1557862921-37829c790f19?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1980-01-01', annualLeave: { total: 25, used: 10, remaining: 15 }, equipment: [{ type: 'Notebook', model: 'MacBook Pro 14"', serialNumber: 'SN66666'}, { type: 'Cep Telefonu', model: 'iPhone 15 Pro Max', serialNumber: 'SN66667'}] },
   ]
 };
+
+export const allEmployees = Object.values(departmentMembers).flat();
 
 export const currentUser = {
   name: 'Abdullah Elveren',
   title: 'Grup Bilgi Teknolojileri Direktörü',
-  avatarUrl: 'https://picsum.photos/seed/ae/100/100',
+  avatarUrl: 'https://images.unsplash.com/photo-1557862921-37829c790f19?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   email: 'abdullah.elveren@e-kimo.com'
 };
 
 export const employeeOfTheMonth = {
   name: 'Elif Aydın',
   title: 'Pazarlama Direktörü',
-  avatarUrl: 'https://picsum.photos/seed/f3/100/100',
+  avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   department: 'Pazarlama',
   reason: 'Bu ay gösterdiği olağanüstü liderlik, yenilikçi pazarlama stratejileri ve ekibine ilham veren pozitif enerjisi sayesinde ayın personeli seçilmiştir. Özellikle yeni ürün lansmanındaki başarısı takdire şayandır.'
 };
@@ -393,7 +337,3 @@ export const airportsByCity: { [key: string]: string[] } = {
   "Van": ["Van Ferit Melen Havalimanı (VAN)"],
   "Zonguldak": ["Zonguldak Çaycuma Havalimanı (ONQ)"]
 };
-
-
-
-
