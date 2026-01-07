@@ -9,7 +9,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { Cake, Gift, Star, Send, Leaf, Clock, Calendar, MapPin } from 'lucide-react';
+import { Cake, Gift, Star, Send, Leaf, Clock, Calendar, MapPin, CloudSun } from 'lucide-react';
 
 type Employee = {
   name: string;
@@ -24,24 +24,43 @@ export default function HomePage() {
   const { toast } = useToast();
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
   const [userCity, setUserCity] = useState<string>('Yükleniyor...');
+  const [weather, setWeather] = useState<string | null>(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentDateTime(new Date());
     }, 1000);
 
-    const fetchCity = async () => {
+    const fetchLocationAndWeather = async () => {
       try {
-        const response = await fetch('https://ipapi.co/json/');
-        const data = await response.json();
-        setUserCity(data.city || 'Bilinmiyor');
+        // Fetch location
+        const locationResponse = await fetch('https://ipapi.co/json/');
+        const locationData = await locationResponse.json();
+        const city = locationData.city || 'Bilinmiyor';
+        setUserCity(city);
+
+        // Fetch weather if city is known
+        if (city !== 'Bilinmiyor') {
+          try {
+            const weatherResponse = await fetch(`https://wttr.in/${city}?format=j1`);
+            const weatherData = await weatherResponse.json();
+            const currentWeather = weatherData.current_condition[0];
+            setWeather(`${currentWeather.temp_C}°C, ${currentWeather.weatherDesc[0].value}`);
+          } catch (weatherError) {
+             console.error('Hava durumu bilgisi alınamadı:', weatherError);
+             setWeather('Alınamadı');
+          }
+        } else {
+            setWeather('Konum bulunamadı');
+        }
       } catch (error) {
-        console.error('Şehir bilgisi alınamadı:', error);
+        console.error('Konum bilgisi alınamadı:', error);
         setUserCity('Bilinmiyor');
+        setWeather('Alınamadı');
       }
     };
     
-    fetchCity();
+    fetchLocationAndWeather();
 
     return () => clearInterval(timer);
   }, []);
@@ -98,6 +117,10 @@ export default function HomePage() {
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 <MapPin className="h-5 w-5 text-primary" />
                 <span>{userCity}</span>
+              </div>
+               <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                <CloudSun className="h-5 w-5 text-primary" />
+                <span>{weather || 'Yükleniyor...'}</span>
               </div>
             </div>
           </CardContent>
