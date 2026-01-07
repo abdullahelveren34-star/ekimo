@@ -197,12 +197,13 @@
           "format": "date-time"
         },
         "details": {
-          "type": "string",
-          "description": "Detailed information about the request (e.g., expense details, leave dates, travel itinerary)."
+          "type": "object",
+          "description": "Detailed information about the request (e.g., expense details, leave dates, travel itinerary). This is a flexible object to accommodate different request types."
         },
         "status": {
           "type": "string",
-          "description": "Current status of the request (e.g., 'Pending', 'Approved', 'Rejected')."
+          "description": "Current status of the request (e.g., 'Beklemede', 'Onaylandı', 'Reddedildi').",
+          "enum": ["Beklemede", "Onaylandı", "Reddedildi"]
         },
         "approverId": {
           "type": "string",

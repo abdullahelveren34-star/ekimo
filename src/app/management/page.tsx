@@ -1,6 +1,74 @@
+'use client';
+
+import { useEffect, useState, useMemo } from 'react';
 import { Shield } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { useFirebase } from '@/firebase';
+import { collection, query, where, onSnapshot, doc, updateDoc } from 'firebase/firestore';
+import { toast } from '@/hooks/use-toast';
+import type { ApprovalRequest } from '@/lib/actions';
 
 export default function ManagementPage() {
+  const { firestore, user } = useFirebase();
+  const [requests, setRequests] = useState<ApprovalRequest[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const requestsQuery = useMemo(() => {
+    if (!firestore || !user) return null;
+    // This query fetches requests where the current user is the designated approver.
+    // In a real app, `approverId` would be dynamically set. We are using a hardcoded manager id for now.
+    return query(collection(firestore, "approvalRequests"), where("approverId", "==", "izlem-manduz-id"));
+  }, [firestore, user]);
+
+  useEffect(() => {
+    if (!requestsQuery) {
+      setLoading(false);
+      return;
+    }
+
+    const unsubscribe = onSnapshot(requestsQuery, (snapshot) => {
+      const fetchedRequests = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as ApprovalRequest));
+      setRequests(fetchedRequests);
+      setLoading(false);
+    }, (error) => {
+      console.error("Error fetching approval requests:", error);
+      toast({
+        variant: "destructive",
+        title: "Hata!",
+        description: "Talep verileri alınamadı.",
+      });
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [requestsQuery]);
+
+  const handleRequestStatusUpdate = async (requestId: string, newStatus: 'Onaylandı' | 'Reddedildi') => {
+    if (!firestore) return;
+    const requestRef = doc(firestore, "approvalRequests", requestId);
+    try {
+      await updateDoc(requestRef, {
+        status: newStatus,
+        approvalDate: new Date().toISOString(),
+      });
+      toast({
+        title: "Başarılı!",
+        description: `Talep başarıyla ${newStatus.toLowerCase()}.`
+      });
+    } catch (error) {
+      console.error("Error updating request status: ", error);
+      toast({
+        variant: "destructive",
+        title: "Hata!",
+        description: "Talep durumu güncellenemedi.",
+      });
+    }
+  };
+  
+  const pendingRequests = requests.filter(r => r.status === 'Beklemede');
+
   return (
     <div className="space-y-8">
       <header>
@@ -8,13 +76,53 @@ export default function ManagementPage() {
           <Shield className="h-8 w-8 text-primary" />
           <div>
             <h1 className="text-3xl font-bold text-foreground">Yönetim Paneli</h1>
-            <p className="text-muted-foreground mt-1">Genel sistem yönetimi ve ayarları.</p>
+            <p className="text-muted-foreground mt-1">Onay bekleyen talepleri yönetin.</p>
           </div>
         </div>
       </header>
-      <div className="flex items-center justify-center h-96 border-2 border-dashed rounded-lg">
-        <p className="text-muted-foreground">Yönetim paneli içeriği buraya gelecek.</p>
-      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Onay Bekleyen Talepler</CardTitle>
+          <CardDescription>
+            Aşağıda onayınızı bekleyen taleplerin bir listesi bulunmaktadır.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {loading ? (
+            <p className="text-muted-foreground">Talepler yükleniyor...</p>
+          ) : pendingRequests.length > 0 ? (
+            <div className="space-y-4">
+              {pendingRequests.map((request) => (
+                <Card key={request.id} className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                  <div className="flex-grow">
+                    <div className="flex items-center gap-3">
+                       <p className="font-semibold">{request.details.employeeName || 'Bilinmeyen Çalışan'}</p>
+                       <Badge variant="outline">{request.requestType}</Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {new Date(request.requestDate).toLocaleDateString('tr-TR')}
+                    </p>
+                     <p className="text-sm mt-2">{request.details.description || 'Açıklama yok'}</p>
+                  </div>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <Button variant="outline" size="sm" onClick={() => handleRequestStatusUpdate(request.id, 'Onaylandı')}>
+                      Onayla
+                    </Button>
+                    <Button variant="destructive" size="sm" onClick={() => handleRequestStatusUpdate(request.id, 'Reddedildi')}>
+                      Reddet
+                    </Button>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="flex items-center justify-center h-48 border-2 border-dashed rounded-lg">
+              <p className="text-muted-foreground">Onay bekleyen talep bulunmamaktadır.</p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

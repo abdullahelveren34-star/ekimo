@@ -9,21 +9,84 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Briefcase, Car, FileText, HandCoins, Plane, Wrench, BedDouble, PlaneTakeoff, CalendarPlus } from "lucide-react"
-import { hotelsByCity, allCities, airportsByCity } from "@/lib/data"
+import { hotelsByCity, allCities, airportsByCity, currentUser } from "@/lib/data"
 import React, { useState } from "react"
+import { useFirebase } from "@/firebase"
+import { createApprovalRequest } from "@/lib/actions"
+import { toast } from "@/hooks/use-toast"
 
 export default function RequestsPage() {
-  const [travelRequestType, setTravelRequestType] = useState('accommodation');
-  
-  // Accommodation states
-  const [selectedAccommodationCity, setSelectedAccommodationCity] = useState('');
-  const hotelsForSelectedCity = selectedAccommodationCity ? hotelsByCity[selectedAccommodationCity as keyof typeof hotelsByCity] || [] : [];
+  const { firestore } = useFirebase();
 
-  // Flight states
+  // Common state
+  const [employeeId] = useState(currentUser.email); // Assume current user is the employee
+  const [approverId] = useState("izlem-manduz-id"); // Hardcoded manager ID for demo
+
+  // HR Document State
+  const [documentType, setDocumentType] = useState('');
+  const [hrNotes, setHrNotes] = useState('');
+
+  // Leave Request State
+  const [leaveType, setLeaveType] = useState('');
+  const [leaveStartDate, setLeaveStartDate] = useState('');
+  const [leaveEndDate, setLeaveEndDate] = useState('');
+  const [leaveDescription, setLeaveDescription] = useState('');
+
+  // Expense State
+  const [expenseType, setExpenseType] = useState('');
+  const [expenseAmount, setExpenseAmount] = useState('');
+  const [expenseDescription, setExpenseDescription] = useState('');
+
+  // Vehicle State
+  const [requesterName, setRequesterName] = useState('');
+  const [vehiclePlate, setVehiclePlate] = useState('');
+  const [vehicleKm, setVehicleKm] = useState('');
+  const [destination, setDestination] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [vehicleNotes, setVehicleNotes] = useState('');
+
+
+  // Travel State
+  const [travelRequestType, setTravelRequestType] = useState('accommodation');
+  const [selectedAccommodationCity, setSelectedAccommodationCity] = useState('');
+  const [selectedHotel, setSelectedHotel] = useState('');
   const [departureCity, setDepartureCity] = useState('');
-  const airportsForDepartureCity = departureCity ? airportsByCity[departureCity as keyof typeof airportsByCity] || [] : [];
+  const [selectedDepartureAirport, setSelectedDepartureAirport] = useState('');
   const [arrivalCity, setArrivalCity] = useState('');
+  const [selectedArrivalAirport, setSelectedArrivalAirport] = useState('');
+  const [travelStartDate, setTravelStartDate] = useState('');
+  const [travelEndDate, setTravelEndDate] = useState('');
+  const [secondPassenger, setSecondPassenger] = useState('');
+  const [travelNotes, setTravelNotes] = useState('');
+
+  const hotelsForSelectedCity = selectedAccommodationCity ? hotelsByCity[selectedAccommodationCity as keyof typeof hotelsByCity] || [] : [];
+  const airportsForDepartureCity = departureCity ? airportsByCity[departureCity as keyof typeof airportsByCity] || [] : [];
   const airportsForArrivalCity = arrivalCity ? airportsByCity[arrivalCity as keyof typeof airportsByCity] || [] : [];
+
+  const handleSubmit = async (requestType: string, details: any) => {
+    if (!firestore) {
+      toast({ variant: "destructive", title: "Hata!", description: "Veritabanı bağlantısı kurulamadı." });
+      return;
+    }
+    
+    // Add employee name to details for easier display in management panel
+    details.employeeName = currentUser.name;
+
+    try {
+      await createApprovalRequest(firestore, {
+        employeeId,
+        approverId,
+        requestType,
+        details
+      });
+      toast({ title: "Başarılı!", description: "Talebiniz başarıyla oluşturuldu ve onaya gönderildi." });
+      // Reset form fields here if needed
+    } catch (error) {
+      console.error("Talep oluşturulurken hata:", error);
+      toast({ variant: "destructive", title: "Hata!", description: "Talep oluşturulurken bir sorun oluştu." });
+    }
+  };
 
 
   return (
@@ -67,7 +130,7 @@ export default function RequestsPage() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="document-type">Belge Türü</Label>
-                <Select>
+                <Select value={documentType} onValueChange={setDocumentType}>
                   <SelectTrigger id="document-type">
                     <SelectValue placeholder="Talep ettiğiniz belgeyi seçin..." />
                   </SelectTrigger>
@@ -81,11 +144,11 @@ export default function RequestsPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="hr-notes">Ek Notlar</Label>
-                <Textarea id="hr-notes" placeholder="Belgenin neden gerekli olduğu veya özel bir format gibi ek bilgileri buraya yazabilirsiniz..." />
+                <Textarea id="hr-notes" placeholder="Belgenin neden gerekli olduğu veya özel bir format gibi ek bilgileri buraya yazabilirsiniz..." value={hrNotes} onChange={(e) => setHrNotes(e.target.value)} />
               </div>
             </CardContent>
             <CardFooter>
-              <Button>Talep Oluştur</Button>
+              <Button onClick={() => handleSubmit('İK Evrak', { documentType, description: hrNotes })}>Talep Oluştur</Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -99,7 +162,7 @@ export default function RequestsPage() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="leave-type">İzin Türü</Label>
-                <Select>
+                <Select value={leaveType} onValueChange={setLeaveType}>
                   <SelectTrigger id="leave-type">
                     <SelectValue placeholder="İzin türünü seçiniz..." />
                   </SelectTrigger>
@@ -115,16 +178,16 @@ export default function RequestsPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                  <div className="space-y-2">
                   <Label htmlFor="leave-start-date">Başlangıç Tarihi</Label>
-                  <Input id="leave-start-date" type="date" />
+                  <Input id="leave-start-date" type="date" value={leaveStartDate} onChange={(e) => setLeaveStartDate(e.target.value)} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="leave-end-date">Bitiş Tarihi</Label>
-                  <Input id="leave-end-date" type="date" />
+                  <Input id="leave-end-date" type="date" value={leaveEndDate} onChange={(e) => setLeaveEndDate(e.target.value)} />
                 </div>
               </div>
                <div className="space-y-2">
                 <Label htmlFor="leave-description">Açıklama</Label>
-                <Textarea id="leave-description" placeholder="İzin talebinizin nedenini kısaca açıklayınız..." />
+                <Textarea id="leave-description" placeholder="İzin talebinizin nedenini kısaca açıklayınız..." value={leaveDescription} onChange={(e) => setLeaveDescription(e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="leave-attachment">Belge Eki (varsa)</Label>
@@ -133,7 +196,7 @@ export default function RequestsPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button>İzin Talebi Gönder</Button>
+              <Button onClick={() => handleSubmit('İzin', { leaveType, startDate: leaveStartDate, endDate: leaveEndDate, description: leaveDescription })}>İzin Talebi Gönder</Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -147,15 +210,15 @@ export default function RequestsPage() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="expense-type">Masraf Türü</Label>
-                <Input id="expense-type" placeholder="örn. Yemek, Ulaşım, Konaklama" />
+                <Input id="expense-type" placeholder="örn. Yemek, Ulaşım, Konaklama" value={expenseType} onChange={(e) => setExpenseType(e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="expense-amount">Tutar</Label>
-                <Input id="expense-amount" type="number" placeholder="0.00 TL" />
+                <Input id="expense-amount" type="number" placeholder="0.00 TL" value={expenseAmount} onChange={(e) => setExpenseAmount(e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="expense-description">Açıklama</Label>
-                <Textarea id="expense-description" placeholder="Masrafın detaylarını açıklayın..." />
+                <Textarea id="expense-description" placeholder="Masrafın detaylarını açıklayın..." value={expenseDescription} onChange={(e) => setExpenseDescription(e.target.value)} />
               </div>
                <div className="space-y-2">
                 <Label htmlFor="expense-file">Fatura/Fiş Eki</Label>
@@ -163,7 +226,7 @@ export default function RequestsPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button>Masraf Bildir</Button>
+              <Button onClick={() => handleSubmit('Masraf', { expenseType, amount: expenseAmount, description: expenseDescription })}>Masraf Bildir</Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -177,39 +240,41 @@ export default function RequestsPage() {
             <CardContent className="space-y-4">
                <div className="space-y-2">
                 <Label htmlFor="requester-name">Ad Soyad</Label>
-                <Input id="requester-name" placeholder="Aracı talep eden kişinin adı ve soyadı..." />
+                <Input id="requester-name" placeholder="Aracı talep eden kişinin adı ve soyadı..." value={requesterName} onChange={e => setRequesterName(e.target.value)}/>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="vehicle-plate">Araç Plakası</Label>
-                  <Input id="vehicle-plate" placeholder="örn. 34 ABC 123" />
+                  <Input id="vehicle-plate" placeholder="örn. 34 ABC 123" value={vehiclePlate} onChange={e => setVehiclePlate(e.target.value)}/>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="vehicle-km">Mevcut Km</Label>
-                  <Input id="vehicle-km" type="number" placeholder="örn. 125000" />
+                  <Input id="vehicle-km" type="number" placeholder="örn. 125000" value={vehicleKm} onChange={e => setVehicleKm(e.target.value)}/>
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="destination">Gidilecek Yer</Label>
-                <Input id="destination" placeholder="örn. Müşteri ziyareti, Fabrika" />
+                <Input id="destination" placeholder="örn. Müşteri ziyareti, Fabrika" value={destination} onChange={e => setDestination(e.target.value)}/>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="start-date">Gidiş Tarihi</Label>
-                  <Input id="start-date" type="date" />
+                  <Input id="start-date" type="date" value={startDate} onChange={e => setStartDate(e.target.value)}/>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="end-date">Dönüş Tarihi</Label>
-                  <Input id="end-date" type="date" />
+                  <Input id="end-date" type="date" value={endDate} onChange={e => setEndDate(e.target.value)}/>
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="vehicle-notes">Açıklama</Label>
-                <Textarea id="vehicle-notes" placeholder="Yolculuğun amacı ve diğer detayları belirtin..." />
+                <Textarea id="vehicle-notes" placeholder="Yolculuğun amacı ve diğer detayları belirtin..." value={vehicleNotes} onChange={e => setVehicleNotes(e.target.value)}/>
               </div>
             </CardContent>
             <CardFooter>
-              <Button>Araç Talep Et</Button>
+              <Button onClick={() => handleSubmit('Araç', { 
+                requesterName, vehiclePlate, vehicleKm, destination, startDate, endDate, description: vehicleNotes
+              })}>Araç Talep Et</Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -241,7 +306,7 @@ export default function RequestsPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button>Hizmet Talebi Gönder</Button>
+              <Button onClick={() => alert("Henüz entegre edilmedi.")}>Hizmet Talebi Gönder</Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -263,7 +328,7 @@ export default function RequestsPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button>Avans Talep Et</Button>
+              <Button onClick={() => alert("Henüz entegre edilmedi.")}>Avans Talep Et</Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -295,7 +360,7 @@ export default function RequestsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="travel-city">Şehir</Label>
-                    <Select onValueChange={setSelectedAccommodationCity}>
+                    <Select value={selectedAccommodationCity} onValueChange={setSelectedAccommodationCity}>
                       <SelectTrigger id="travel-city">
                         <SelectValue placeholder="Seyahat edilecek şehri seçin..." />
                       </SelectTrigger>
@@ -306,7 +371,7 @@ export default function RequestsPage() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="travel-hotel">Otel</Label>
-                    <Select disabled={!selectedAccommodationCity || hotelsForSelectedCity.length === 0}>
+                    <Select value={selectedHotel} onValueChange={setSelectedHotel} disabled={!selectedAccommodationCity || hotelsForSelectedCity.length === 0}>
                       <SelectTrigger id="travel-hotel">
                         <SelectValue placeholder={hotelsForSelectedCity.length > 0 ? "Otel seçin..." : "Bu şehirde otel bulunamadı"} />
                       </SelectTrigger>
@@ -323,7 +388,7 @@ export default function RequestsPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <Label htmlFor="departure-city">Nereden (Şehir)</Label>
-                            <Select onValueChange={setDepartureCity}>
+                            <Select value={departureCity} onValueChange={setDepartureCity}>
                                 <SelectTrigger id="departure-city">
                                     <SelectValue placeholder="Kalkış şehri seçin..." />
                                 </SelectTrigger>
@@ -334,7 +399,7 @@ export default function RequestsPage() {
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="departure-airport">Nereden (Havalimanı)</Label>
-                            <Select disabled={!departureCity || airportsForDepartureCity.length === 0}>
+                            <Select value={selectedDepartureAirport} onValueChange={setSelectedDepartureAirport} disabled={!departureCity || airportsForDepartureCity.length === 0}>
                                 <SelectTrigger id="departure-airport">
                                     <SelectValue placeholder={airportsForDepartureCity.length > 0 ? "Havalimanı seçin..." : "Havalimanı bulunamadı"} />
                                 </SelectTrigger>
@@ -347,7 +412,7 @@ export default function RequestsPage() {
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <Label htmlFor="arrival-city">Nereye (Şehir)</Label>
-                            <Select onValueChange={setArrivalCity}>
+                            <Select value={arrivalCity} onValueChange={setArrivalCity}>
                                 <SelectTrigger id="arrival-city">
                                     <SelectValue placeholder="Varış şehri seçin..." />
                                 </SelectTrigger>
@@ -358,7 +423,7 @@ export default function RequestsPage() {
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="arrival-airport">Nereye (Havalimanı)</Label>
-                            <Select disabled={!arrivalCity || airportsForArrivalCity.length === 0}>
+                            <Select value={selectedArrivalAirport} onValueChange={setSelectedArrivalAirport} disabled={!arrivalCity || airportsForArrivalCity.length === 0}>
                                 <SelectTrigger id="arrival-airport">
                                     <SelectValue placeholder={airportsForArrivalCity.length > 0 ? "Havalimanı seçin..." : "Havalimanı bulunamadı"} />
                                 </SelectTrigger>
@@ -375,27 +440,39 @@ export default function RequestsPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="travel-start-date">Gidiş Tarihi</Label>
-                  <Input id="travel-start-date" type="date" />
+                  <Input id="travel-start-date" type="date" value={travelStartDate} onChange={e => setTravelStartDate(e.target.value)} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="travel-end-date">Dönüş Tarihi</Label>
-                  <Input id="travel-end-date" type="date" />
+                  <Input id="travel-end-date" type="date" value={travelEndDate} onChange={e => setTravelEndDate(e.target.value)} />
                 </div>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="second-passenger">İkinci Yolcu Adı (varsa)</Label>
-                <Input id="second-passenger" placeholder="örn. Ali Veli" />
+                <Input id="second-passenger" placeholder="örn. Ali Veli" value={secondPassenger} onChange={e => setSecondPassenger(e.target.value)} />
               </div>
               
               <div className="space-y-2">
                 <Label htmlFor="travel-notes">Ek Notlar ve Açıklamalar</Label>
-                <Textarea id="travel-notes" placeholder="Uçuş tercihleri, konaklama detayları veya seyahat amacı gibi bilgileri ekleyebilirsiniz..." />
+                <Textarea id="travel-notes" placeholder="Uçuş tercihleri, konaklama detayları veya seyahat amacı gibi bilgileri ekleyebilirsiniz..." value={travelNotes} onChange={e => setTravelNotes(e.target.value)} />
               </div>
 
             </CardContent>
             <CardFooter>
-              <Button>Seyahat Talebi Oluştur</Button>
+              <Button onClick={() => handleSubmit('Seyahat', {
+                travelRequestType,
+                city: selectedAccommodationCity,
+                hotel: selectedHotel,
+                departureCity,
+                departureAirport: selectedDepartureAirport,
+                arrivalCity,
+                arrivalAirport: selectedArrivalAirport,
+                startDate: travelStartDate,
+                endDate: travelEndDate,
+                secondPassenger,
+                description: travelNotes,
+              })}>Seyahat Talebi Oluştur</Button>
             </CardFooter>
           </Card>
         </TabsContent>
