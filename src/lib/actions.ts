@@ -1,6 +1,9 @@
 'use server';
 
 import { collection, addDoc, serverTimestamp, Firestore } from 'firebase/firestore';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
+
 
 // Define a more specific type for the 'details' object
 export type RequestDetails = {
@@ -59,21 +62,26 @@ interface CreateApprovalRequestInput {
  * @param firestore - The Firestore instance.
  * @param requestData - The data for the new request.
  */
-export async function createApprovalRequest(
+export function createApprovalRequest(
   firestore: Firestore,
   requestData: CreateApprovalRequestInput
-): Promise<void> {
-  try {
-    const requestsCollection = collection(firestore, 'approvalRequests');
-    await addDoc(requestsCollection, {
+): void {
+  const requestsCollection = collection(firestore, 'approvalRequests');
+  const data = {
       ...requestData,
       requestDate: new Date().toISOString(),
       status: 'Beklemede',
-      // serverTimestamp() is better for distributed systems but ISO string is fine for this demo
-    });
-  } catch (error) {
+  };
+
+  addDoc(requestsCollection, data).catch(error => {
     console.error('Error creating approval request:', error);
-    // Re-throw the error to be handled by the caller
+    const permissionError = new FirestorePermissionError({
+        path: requestsCollection.path,
+        operation: 'create',
+        requestResourceData: data,
+    });
+    errorEmitter.emit('permission-error', permissionError);
+    // Re-throw a more generic error for the UI if needed
     throw new Error('Failed to create approval request in Firestore.');
-  }
+  });
 }

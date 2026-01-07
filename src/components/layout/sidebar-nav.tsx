@@ -11,6 +11,7 @@ import {
   SidebarMenuButton,
   SidebarTrigger,
   SidebarFooter,
+  SidebarMenuBadge,
 } from '@/components/ui/sidebar';
 import {
   Bot,
@@ -27,6 +28,8 @@ import {
   Users,
   Shield,
 } from 'lucide-react';
+import { useFirebase, useCollection, useMemoFirebase } from '@/firebase';
+import { collection, query, where } from 'firebase/firestore';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -37,7 +40,7 @@ const navItems = [
   { href: '/requests', label: 'Talepler', icon: ClipboardList },
   { href: '/bt-requests', label: 'BT Talepleri', icon: Server },
   { href: '/documents', label: 'Dokümanlar', icon: FileText },
-  { href: '/management', label: 'Yönetim', icon: Shield },
+  { href: '/management', label: 'Yönetim', icon: Shield, id: 'management' },
 ];
 
 const bottomNavItems = [
@@ -46,6 +49,14 @@ const bottomNavItems = [
 
 export function SidebarNav() {
   const pathname = usePathname();
+  const { firestore, user } = useFirebase();
+
+  const pendingRequestsQuery = useMemoFirebase(() => {
+    if (!firestore || !user) return null;
+    return query(collection(firestore, "approvalRequests"), where("approverId", "==", "izlem-manduz-id"), where("status", "==", "Beklemede"));
+  }, [firestore, user]);
+
+  const { data: pendingRequests } = useCollection(pendingRequestsQuery);
 
   return (
     <>
@@ -68,6 +79,9 @@ export function SidebarNav() {
                 >
                   <item.icon />
                   <span>{item.label}</span>
+                  {item.id === 'management' && pendingRequests && pendingRequests.length > 0 && (
+                    <SidebarMenuBadge>{pendingRequests.length}</SidebarMenuBadge>
+                  )}
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>

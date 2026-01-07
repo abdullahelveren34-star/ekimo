@@ -64,7 +64,7 @@ export default function RequestsPage() {
   const airportsForDepartureCity = departureCity ? airportsByCity[departureCity as keyof typeof airportsByCity] || [] : [];
   const airportsForArrivalCity = arrivalCity ? airportsByCity[arrivalCity as keyof typeof airportsByCity] || [] : [];
 
-  const handleSubmit = async (requestType: string, details: any) => {
+  const handleSubmit = (requestType: string, details: any) => {
     if (!firestore) {
       toast({ variant: "destructive", title: "Hata!", description: "Veritabanı bağlantısı kurulamadı." });
       return;
@@ -74,7 +74,7 @@ export default function RequestsPage() {
     details.employeeName = currentUser.name;
 
     try {
-      await createApprovalRequest(firestore, {
+      createApprovalRequest(firestore, {
         employeeId,
         approverId,
         requestType,
