@@ -37,6 +37,19 @@ export default function HomePage() {
         </section>
       )}
 
+      <section>
+        <Card>
+          <CardHeader>
+            <CardTitle>Şirketimiz Hakkında</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-muted-foreground">
+              E-Kimo, 1990 yılında kurulmuş olup, tekstil sektöründe yenilikçi ve sürdürülebilir çözümler sunan lider bir şirkettir. Müşteri memnuniyetini en üst düzeyde tutarak, kaliteli ve çevre dostu ürünler üretmekteyiz. Global pazarda Türkiye'yi gururla temsil etmeye devam ediyoruz.
+            </p>
+          </CardContent>
+        </Card>
+      </section>
+
       <section className="space-y-6">
         <header>
           <h2 className="text-2xl font-bold text-foreground">Tekstil Dünyasından Haberler</h2>
