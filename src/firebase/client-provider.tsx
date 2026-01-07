@@ -5,6 +5,7 @@ import { FirebaseProvider } from '@/firebase/provider';
 import { initializeFirebase } from '@/firebase';
 import { getAuth } from 'firebase/auth';
 import { initiateAnonymousSignIn } from './non-blocking-login';
+import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
 
 interface FirebaseClientProviderProps {
   children: ReactNode;
@@ -36,6 +37,7 @@ export function FirebaseClientProvider({ children }: FirebaseClientProviderProps
       auth={firebaseServices.auth}
       firestore={firebaseServices.firestore}
     >
+      <FirebaseErrorListener />
       {children}
     </FirebaseProvider>
   );
