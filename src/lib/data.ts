@@ -131,12 +131,14 @@ export const departmentMembers = {
     { name: 'Serkan Taş', title: 'Depo Sorumlusu', avatarUrl: 'https://picsum.photos/seed/m13/100/100' },
     { name: 'Funda Bilgin', title: 'Kalite Kontrol', avatarUrl: 'https://picsum.photos/seed/f13/100/100' },
   ],
-  'İnsan Kaynakları ve İdari İşler': [
+  'İnsan Kaynakları': [
     { name: 'İzlem Manduz', title: 'İK Müdürü', avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
     { name: 'Can Boz', title: 'İK Uzmanı', avatarUrl: 'https://picsum.photos/seed/m14/100/100' },
     { name: 'Pelin Su', title: 'İK Uzman Yardımcısı', avatarUrl: 'https://picsum.photos/seed/f14/100/100' },
-    { name: 'Tarkan Tarkan', title: 'İdari İşler Sorumlusu', avatarUrl: 'https://picsum.photos/seed/m15/100/100' },
     { name: 'Bahar Geldi', title: 'İK Stajyeri', avatarUrl: 'https://picsum.photos/seed/f15/100/100' },
+  ],
+  'İdari İşler': [
+      { name: 'Tarkan Tarkan', title: 'İdari İşler Sorumlusu', avatarUrl: 'https://picsum.photos/seed/m15/100/100' },
   ],
   'Mali İşler': [
     { name: 'Kenan Doğulu', title: 'Finans Direktörü', avatarUrl: 'https://picsum.photos/seed/m16/100/100' },
@@ -182,5 +184,3 @@ export const jobPostings = [
     description: 'İşe alım, performans yönetimi ve çalışan ilişkileri süreçlerinde görev alacak deneyimli bir İK uzmanı arıyoruz.',
   },
 ];
-
-    

@@ -18,6 +18,7 @@ import {
   Warehouse,
   Gem,
   BookUser,
+  DraftingCompass,
 } from 'lucide-react';
 import React from 'react';
 import { departmentMembers } from '@/lib/data';
@@ -40,12 +41,13 @@ const departments = [
   { name: 'Üretim', icon: Factory },
   { name: 'Kalite ve Güvence', icon: BadgeCheck },
   { name: 'Sosyal Uygunluk', icon: HeartHandshake },
-  { name: 'İnsan Kaynakları ve İdari İşler', icon: BookUser },
   { name: 'Mali İşler', icon: Landmark },
-  { name: 'Modelhane', icon: Scissors },
+  { name: 'Modelhane', icon: DraftingCompass },
   { name: 'Depolar', icon: Warehouse },
   { name: 'Kesimhane', icon: Scissors },
   { name: 'Marka', icon: Gem },
+  { name: 'İnsan Kaynakları', icon: BookUser },
+  { name: 'İdari İşler', icon: Briefcase },
 ];
 
 export default function DepartmentsPage() {
