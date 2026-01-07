@@ -27,9 +27,12 @@ const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/', label: 'Ana Sayfa', icon: Home },
   { href: '/departments', label: 'Departmanlar', icon: Building },
-  { href: '/ai-screener', label: 'AI Tarama', icon: Bot },
   { href: '/requests', label: 'Talepler', icon: ClipboardList },
 ];
+
+const bottomNavItems = [
+    { href: '/ai-screener', label: 'AI Tarama', icon: Bot },
+]
 
 export function SidebarNav() {
   const pathname = usePathname();
@@ -57,6 +60,22 @@ export function SidebarNav() {
                   <span>{item.label}</span>
                 </SidebarMenuButton>
               </Link>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+        <div className="grow" />
+        <SidebarMenu>
+          {bottomNavItems.map((item) => (
+            <SidebarMenuItem key={item.href}>
+                <Link href={item.href} legacyBehavior passHref>
+                    <SidebarMenuButton
+                    isActive={pathname === item.href}
+                    tooltip={item.label}
+                    >
+                    <item.icon />
+                    <span>{item.label}</span>
+                    </SidebarMenuButton>
+                </Link>
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
