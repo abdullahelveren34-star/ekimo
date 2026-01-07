@@ -71,7 +71,7 @@ export default function DepartmentsPage() {
                     <CardContent>
                       <div className="text-sm text-muted-foreground mt-3 flex items-center">
                         <Users className="h-4 w-4 mr-2" />
-                        {members.length} Üye
+                        {members.length} Çalışan
                       </div>
                     </CardContent>
                   </Card>
