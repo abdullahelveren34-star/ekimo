@@ -9,7 +9,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { Cake, Gift, Star, Send } from 'lucide-react';
+import { Cake, Gift, Star, Send, Leaf } from 'lucide-react';
 
 type Employee = {
   name: string;
@@ -85,6 +85,22 @@ export default function HomePage() {
           <CardContent>
             <p className="text-muted-foreground">
               E-Kimo, 1990 yılında kurulmuş olup, tekstil sektöründe yenilikçi ve sürdürülebilir çözümler sunan lider bir şirkettir. Müşteri memnuniyetini en üst düzeyde tutarak, kaliteli ve çevre dostu ürünler üretmekteyiz. Global pazarda Türkiye'yi gururla temsil etmeye devam ediyoruz.
+            </p>
+          </CardContent>
+        </Card>
+      </section>
+
+      <section>
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+                <Leaf className="text-green-500" />
+                Sürdürülebilirlik Vizyonumuz
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-muted-foreground">
+              E-Kimo olarak, geleceğe karşı sorumluluklarımızın bilincindeyiz. Üretim süreçlerimizin her aşamasında çevresel etkiyi en aza indirmeyi hedefliyoruz. Bu doğrultuda, su ve enerji tüketimini azaltan teknolojilere yatırım yapıyor, atık yönetimini önemsiyor ve tedarik zincirimizde sürdürülebilir kaynakları tercih ediyoruz. Amacımız, sadece bugünün değil, gelecek nesillerin de ihtiyaçlarını gözeten bir üretim anlayışını benimsemektir.
             </p>
           </CardContent>
         </Card>
