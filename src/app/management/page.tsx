@@ -55,6 +55,8 @@ export default function ManagementPage() {
     return query(
       collection(firestore, "approvalRequests"),
       where("status", "==", "Beklemede")
+      // Uncomment and use the line below to only show requests for the logged-in approver
+      // where("approverId", "==", user.uid)
     );
   }, [firestore, user]);
 
@@ -89,9 +91,9 @@ export default function ManagementPage() {
   const renderDetail = (label: string, value: any) => {
     if (!value) return null;
     return (
-      <div className="flex justify-between text-sm">
+      <div className="flex justify-between text-sm py-2 border-b border-border/50">
         <span className="text-muted-foreground">{label}:</span>
-        <span className="font-medium text-right">{value}</span>
+        <span className="font-medium text-right">{String(value)}</span>
       </div>
     );
   };
@@ -114,8 +116,8 @@ export default function ManagementPage() {
         return <>
           {commonDetails}
           {renderDetail('İzin Türü', details.leaveType)}
-          {renderDetail('Başlangıç', details.startDate ? new Date(details.startDate).toLocaleDateString('tr-TR') : null)}
-          {renderDetail('Bitiş', details.endDate ? new Date(details.endDate).toLocaleDateString('tr-TR') : null)}
+          {renderDetail('Başlangıç Tarihi', details.startDate ? new Date(details.startDate).toLocaleDateString('tr-TR') : null)}
+          {renderDetail('Bitiş Tarihi', details.endDate ? new Date(details.endDate).toLocaleDateString('tr-TR') : null)}
         </>;
       case 'Masraf':
         return <>
@@ -126,7 +128,7 @@ export default function ManagementPage() {
       case 'Seyahat':
         return <>
           {commonDetails}
-          {renderDetail('Seyahat Tipi', details.travelRequestType)}
+          {renderDetail('Seyahat Tipi', details.travelRequestType === 'accommodation' ? 'Konaklama' : 'Uçak Bileti')}
           {details.travelRequestType === 'accommodation' && renderDetail('Şehir', details.city)}
           {details.travelRequestType === 'accommodation' && renderDetail('Otel', details.hotel)}
           {details.travelRequestType === 'flight' && renderDetail('Kalkış', `${details.departureCity} - ${details.departureAirport}`)}
@@ -139,11 +141,11 @@ export default function ManagementPage() {
         return <>
           {commonDetails}
           {renderDetail('Talep Eden', details.requesterName)}
-          {renderDetail('Plaka', details.vehiclePlate)}
+          {renderDetail('Araç Plakası', details.vehiclePlate)}
           {renderDetail('Gidilecek Yer', details.destination)}
-          {renderDetail('Başlangıç', details.startDate ? new Date(details.startDate).toLocaleDateString('tr-TR') : null)}
-          {renderDetail('Dönüş', details.endDate ? new Date(details.endDate).toLocaleDateString('tr-TR') : null)}
-        </>
+          {renderDetail('Gidiş Tarihi', details.startDate ? new Date(details.startDate).toLocaleDateString('tr-TR') : null)}
+          {renderDetail('Dönüş Tarihi', details.endDate ? new Date(details.endDate).toLocaleDateString('tr-TR') : null)}
+        </>;
       default:
         return commonDetails;
     }
@@ -167,7 +169,7 @@ export default function ManagementPage() {
         <CardHeader>
           <CardTitle>Onay Bekleyen Talepler</CardTitle>
           <CardDescription>
-            Aşağıdaki talepleri onaylayabilir veya reddedebilirsiniz.
+            Aşağıdaki talepleri onaylayabilir veya reddedebilirsiniz. Detayları görmek için talep türü üzerine tıklayın.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -175,7 +177,7 @@ export default function ManagementPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[300px]">Çalışan</TableHead>
+                  <TableHead className="w-[250px]">Çalışan</TableHead>
                   <TableHead>Talep Türü</TableHead>
                   <TableHead>Tarih</TableHead>
                   <TableHead className="text-right">İşlemler</TableHead>
@@ -201,7 +203,7 @@ export default function ManagementPage() {
                             <div className="flex items-center gap-3">
                               <Avatar>
                                 <AvatarImage src={employee?.avatarUrl} alt={employee?.name} />
-                                <AvatarFallback>{employee?.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                                <AvatarFallback>{employee?.name ? employee.name.split(' ').map(n => n[0]).join('') : '?'}</AvatarFallback>
                               </Avatar>
                               <div>
                                 <p className="font-medium">{employee?.name || 'Bilinmeyen Çalışan'}</p>
@@ -211,7 +213,7 @@ export default function ManagementPage() {
                           </TableCell>
                           <TableCell>
                             <DialogTrigger asChild>
-                              <Button variant="outline" size="sm" className={`flex w-fit items-center gap-2 ${requestTypeColors[request.requestType] || requestTypeColors.default}`}>
+                              <Button variant="outline" size="sm" className={`flex w-fit items-center gap-2 cursor-pointer transition-opacity hover:opacity-80 ${requestTypeColors[request.requestType] || requestTypeColors.default}`}>
                                 {requestTypeIcons[request.requestType as keyof typeof requestTypeIcons] || requestTypeIcons.default}
                                 {request.requestType}
                               </Button>
@@ -231,9 +233,9 @@ export default function ManagementPage() {
                             </div>
                           </TableCell>
                         </TableRow>
-                        <DialogContent>
+                        <DialogContent className="sm:max-w-md">
                           <DialogHeader>
-                            <DialogTitle className="flex items-center gap-2">
+                            <DialogTitle className="flex items-center gap-3">
                                 <div className={`p-2 rounded-full ${requestTypeColors[request.requestType] || requestTypeColors.default}`}>
                                   {requestTypeIcons[request.requestType as keyof typeof requestTypeIcons] || requestTypeIcons.default}
                                 </div>
@@ -243,7 +245,7 @@ export default function ManagementPage() {
                               {new Date(request.requestDate).toLocaleString('tr-TR', { dateStyle: 'long', timeStyle: 'short' })} tarihinde oluşturuldu.
                             </DialogDescription>
                           </DialogHeader>
-                          <div className="space-y-2 py-4">
+                          <div className="space-y-1 pt-4">
                             {renderRequestDetails(request.details, request.requestType)}
                           </div>
                         </DialogContent>
