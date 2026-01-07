@@ -23,6 +23,7 @@ import {
   ClipboardList,
   FileText,
   Briefcase,
+  Server,
 } from 'lucide-react';
 
 const navItems = [
@@ -31,6 +32,7 @@ const navItems = [
   { href: '/departments', label: 'Departmanlar', icon: Building },
   { href: '/jobs', label: 'İş İlanları', icon: Briefcase },
   { href: '/requests', label: 'Talepler', icon: ClipboardList },
+  { href: '/bt-requests', label: 'BT Talepleri', icon: Server },
   { href: '/documents', label: 'Dokümanlar', icon: FileText },
 ];
 
@@ -105,5 +107,3 @@ export function SidebarNav() {
     </>
   );
 }
-
-    

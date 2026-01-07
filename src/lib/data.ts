@@ -98,7 +98,7 @@ export const companyNews = [
   },
 ];
 
-export const departmentMembers = {
+export const departmentMembers: { [key: string]: { name: string; title: string; avatarUrl: string; birthDate: string; }[] } = {
   'Satış': [
     { name: 'Ahmet Yılmaz', title: 'Satış Müdürü', avatarUrl: 'https://picsum.photos/seed/m1/100/100', birthDate: '1985-03-15' },
     { name: 'Fatma Kaya', title: 'Satış Uzmanı', avatarUrl: 'https://picsum.photos/seed/f1/100/100', birthDate: '1990-07-26' },
@@ -381,4 +381,5 @@ export const airportsByCity: { [key: string]: string[] } = {
   "Van": ["Van Ferit Melen Havalimanı (VAN)"],
   "Zonguldak": ["Zonguldak Çaycuma Havalimanı (ONQ)"]
 };
+
 
