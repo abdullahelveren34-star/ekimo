@@ -54,6 +54,41 @@ const departments = [
 ];
 
 export default function DepartmentsPage() {
+  const [members, setMembers] = React.useState<typeof departmentMembers | null>(null);
+
+  React.useEffect(() => {
+    setMembers(departmentMembers);
+  }, []);
+
+  if (!members) {
+    return (
+      <div className="space-y-8">
+        <header>
+          <h1 className="text-3xl font-bold text-foreground">Departmanlar</h1>
+          <p className="text-muted-foreground mt-1">Şirket departmanlarını yönetin.</p>
+        </header>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {departments.map((dept) => (
+            <Card key={dept.name}>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg font-medium">{dept.name}</CardTitle>
+                  <dept.icon className={`h-5 w-5 ${dept.color}`} />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="text-sm text-muted-foreground mt-3 flex items-center">
+                  <Users className="h-4 w-4 mr-2" />
+                  Yükleniyor...
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
       <div className="space-y-8">
         <header>
@@ -62,7 +97,7 @@ export default function DepartmentsPage() {
         </header>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {departments.map((dept) => {
-            const members = departmentMembers[dept.name as keyof typeof departmentMembers] || [];
+            const deptMembers = members[dept.name as keyof typeof members] || [];
             return (
               <Dialog key={dept.name}>
                 <DialogTrigger asChild>
@@ -76,7 +111,7 @@ export default function DepartmentsPage() {
                     <CardContent>
                       <div className="text-sm text-muted-foreground mt-3 flex items-center">
                         <Users className="h-4 w-4 mr-2" />
-                        {members.length} Çalışan
+                        {deptMembers.length} Çalışan
                       </div>
                     </CardContent>
                   </Card>
@@ -93,8 +128,8 @@ export default function DepartmentsPage() {
                   </DialogHeader>
                   <div className="py-4">
                     <ul className="space-y-4 max-h-[60vh] overflow-y-auto pr-4">
-                      {members.length > 0 ? (
-                        members.map((member) => (
+                      {deptMembers.length > 0 ? (
+                        deptMembers.map((member) => (
                           <li key={member.id}>
                             <Link href={`/personnel/${member.id}`} className="flex items-center gap-4 p-2 rounded-md hover:bg-muted transition-colors">
                               <Avatar className="h-12 w-12">
