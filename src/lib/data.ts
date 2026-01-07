@@ -1,3 +1,4 @@
+
 export const employeeProfile = {
   name: 'Ayşe Yılmaz',
   title: 'Kıdemli İK Uzmanı',
@@ -21,17 +22,17 @@ export const employeeProfile = {
 
 export const boardMembers = [
   {
-    name: 'Ali Veli',
+    name: 'Zübeyir Dilek',
     title: 'Yönetim Kurulu Başkanı',
     avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
   {
-    name: 'Ayşe Kaya',
+    name: 'Neşe Ulu',
     title: 'Yönetim Kurulu Başkan Yrd.',
     avatarUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
   {
-    name: 'Mehmet Yılmaz',
+    name: 'Mahmut Yılmaz',
     title: 'Genel Müdür',
     avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
