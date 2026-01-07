@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Briefcase, FilePlus, Users } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export default function Dashboard() {
   return (
@@ -8,6 +9,28 @@ export default function Dashboard() {
         <h1 className="text-3xl font-bold text-foreground">Hoş Geldiniz, İK Ekibi!</h1>
         <p className="text-muted-foreground mt-1">E-Kimo insan kaynakları merkezinize genel bakış.</p>
       </header>
+
+      <section>
+        <Card className="overflow-hidden">
+          <div className="md:flex">
+            <div className="md:flex-shrink-0">
+              <Avatar className="h-full w-full md:w-48 rounded-none">
+                <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="İzlem Manduz" className="object-cover h-full w-full" />
+                <AvatarFallback>İM</AvatarFallback>
+              </Avatar>
+            </div>
+            <div className="p-8">
+              <div className="uppercase tracking-wide text-sm text-primary font-semibold">İnsan Kaynakları Müdürü</div>
+              <h2 className="mt-1 text-2xl font-bold text-foreground">İzlem Manduz</h2>
+              <p className="mt-4 text-muted-foreground">
+                "Değerli ekip arkadaşlarım,
+                <br/><br/>
+                İnsan kaynakları olarak en büyük hedefimiz, E-Kimo'yu her bir çalışanımız için daha değerli, adil ve motive edici bir çalışma ortamı haline getirmektir. Bu portal, süreçlerimizi kolaylaştırmak ve sizlere daha iyi hizmet vermek için tasarlandı. Tüm öneri ve geri bildirimlerinize açığız."
+              </p>
+            </div>
+          </div>
+        </Card>
+      </section>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card>
