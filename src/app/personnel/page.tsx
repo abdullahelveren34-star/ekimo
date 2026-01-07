@@ -85,20 +85,18 @@ export default function PersonnelPage() {
         <CardContent>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredEmployees.map(employee => (
-              <Link key={employee.id} href={`/personnel/${employee.id}`} legacyBehavior>
-                <a className="block">
-                  <Card className="text-center hover:shadow-lg hover:border-primary transition-all">
-                    <CardContent className="p-6">
-                      <Avatar className="h-24 w-24 mx-auto mb-4">
-                        <AvatarImage src={employee.avatarUrl} alt={employee.name} />
-                        <AvatarFallback>{employee.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                      </Avatar>
-                      <h3 className="font-semibold text-lg">{employee.name}</h3>
-                      <p className="text-muted-foreground text-sm">{employee.title}</p>
-                      <p className="text-primary text-xs mt-1">{employee.department}</p>
-                    </CardContent>
-                  </Card>
-                </a>
+              <Link key={employee.id} href={`/personnel/${employee.id}`} className="block">
+                <Card className="text-center h-full hover:shadow-lg hover:border-primary transition-all">
+                  <CardContent className="p-6 flex flex-col items-center justify-center">
+                    <Avatar className="h-24 w-24 mx-auto mb-4">
+                      <AvatarImage src={employee.avatarUrl} alt={employee.name} />
+                      <AvatarFallback>{employee.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                    </Avatar>
+                    <h3 className="font-semibold text-lg">{employee.name}</h3>
+                    <p className="text-muted-foreground text-sm">{employee.title}</p>
+                    <p className="text-primary text-xs mt-1">{employee.department}</p>
+                  </CardContent>
+                </Card>
               </Link>
             ))}
           </div>
