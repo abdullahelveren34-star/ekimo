@@ -9,8 +9,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { Cake, Gift, Star, Send, Leaf, Clock, Calendar, MapPin, CloudSun, BrainCircuit } from 'lucide-react';
-import { RubiksCubeGame } from '@/components/rubiks-cube-game';
+import { Cake, Gift, Star, Send, Leaf, Clock, Calendar, MapPin, CloudSun } from 'lucide-react';
 
 type Employee = {
   name: string;
@@ -314,23 +313,6 @@ export default function HomePage() {
               <p className="text-muted-foreground text-center py-8">Bugün doğum günü olan çalışanımız bulunmamaktadır.</p>
             )}
           </CardContent>
-        </Card>
-      </section>
-
-      <section>
-        <Card>
-            <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                    <BrainCircuit className="text-primary" />
-                    Zeka Küpü Mücadelesi
-                </CardTitle>
-                <CardDescription>
-                    Satırları ve sütunları döndürmek için butonları kullanın. Amacınız her yüzeyi tek bir renge getirmek.
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
-                <RubiksCubeGame />
-            </CardContent>
         </Card>
       </section>
     </div>
