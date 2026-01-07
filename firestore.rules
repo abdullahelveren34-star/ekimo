@@ -28,19 +28,35 @@ service cloud.firestore {
     function isSignedIn() {
       return request.auth != null;
     }
+    
+    // -----------------------------------------------------------------
+    // Collection-Specific Rules
+    // -----------------------------------------------------------------
+
+    /**
+      * @description Allows authenticated users to read, list, and update approval requests.
+      * This rule is essential for the management panel to function correctly, allowing
+      * managers to view and process pending requests.
+      * @path /approvalRequests/{requestId}
+      * @allow Authenticated users can read, list, and update.
+      */
+    match /approvalRequests/{requestId} {
+      allow read, list, update: if isSignedIn();
+    }
 
     // -----------------------------------------------------------------
-    // Generic Rule for All Collections
+    // Generic Rule for All Other Collections
     // -----------------------------------------------------------------
     
     /**
       * @description Allows any signed-in user to perform any action on any document.
+      * This serves as a fallback to unblock UI/feature development for other collections.
       * @path /{document=**}
       * @allow Any authenticated user can read, write, create, and delete any document.
-      * @principle Development-first approach to unblock UI/feature development.
+      * @principle Development-first approach.
       */
     match /{document=**} {
-      allow read, write, list: if isSignedIn();
+      allow read, write: if isSignedIn();
     }
   }
 }
