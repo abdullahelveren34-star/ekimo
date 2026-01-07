@@ -1,6 +1,7 @@
 
 
 
+
 export const employeeProfile = {
   name: 'Ayşe Yılmaz',
   title: 'Kıdemli İK Uzmanı',
@@ -187,14 +188,15 @@ export const departmentMembers: { [key: string]: { name: string; title: string; 
       { name: 'Turan Kaya', title: 'İdari İşler Sorumlusu', avatarUrl: 'https://picsum.photos/seed/m15/100/100', birthDate: '1983-01-01' },
   ],
   'BT': [
-    { name: 'Abdullah Elveren', title: 'Bilgi Teknolojileri Müdürü', avatarUrl: 'https://picsum.photos/seed/ae/100/100', birthDate: '1980-01-01' },
+    { name: 'Abdullah Elveren', title: 'Grup Bilgi Teknolojileri Direktörü', avatarUrl: 'https://picsum.photos/seed/ae/100/100', birthDate: '1980-01-01' },
   ]
 };
 
 export const currentUser = {
   name: 'Abdullah Elveren',
   title: 'Grup Bilgi Teknolojileri Direktörü',
-  avatarUrl: 'https://picsum.photos/seed/ae/100/100'
+  avatarUrl: 'https://picsum.photos/seed/ae/100/100',
+  email: 'abdullah.elveren@e-kimo.com'
 };
 
 export const employeeOfTheMonth = {
@@ -391,6 +393,7 @@ export const airportsByCity: { [key: string]: string[] } = {
   "Van": ["Van Ferit Melen Havalimanı (VAN)"],
   "Zonguldak": ["Zonguldak Çaycuma Havalimanı (ONQ)"]
 };
+
 
 
 

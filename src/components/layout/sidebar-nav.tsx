@@ -86,6 +86,8 @@ export function SidebarNav() {
           ))}
         </SidebarMenu>
       </SidebarContent>
+      {/* 
+      This is commented out as per the new implementation where the logout and settings are in a dropdown menu in the user profile.
       <SidebarFooter>
         <div className="flex flex-col gap-2 p-2">
             <SidebarMenu>
@@ -103,7 +105,8 @@ export function SidebarNav() {
                 </SidebarMenuItem>
             </SidebarMenu>
         </div>
-      </SidebarFooter>
+      </SidebarFooter> 
+      */}
     </>
   );
 }
