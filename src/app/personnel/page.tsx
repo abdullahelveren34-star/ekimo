@@ -5,15 +5,36 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { allEmployees, departmentMembers } from '@/lib/data';
+import { allEmployees } from '@/lib/data';
 import { Users, Search } from 'lucide-react';
 import Link from 'next/link';
+
+const departmentList = [
+  'Satış',
+  'Pazarlama',
+  'Bağımsız',
+  'Tasarım',
+  'Satınalma',
+  'Üretim Planlama',
+  'Üretim',
+  'Kalite ve Güvence',
+  'Sosyal Uygunluk',
+  'Mali İşler',
+  'Modelhane',
+  'Depolar',
+  'Kesimhane',
+  'Marka',
+  'İnsan Kaynakları',
+  'İdari İşler',
+  'BT',
+];
+
 
 export default function PersonnelPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('all');
 
-  const departments = ['all', ...Object.keys(departmentMembers)];
+  const departments = ['all', ...departmentList];
 
   const filteredEmployees = useMemo(() => {
     return allEmployees.filter(employee => {
