@@ -59,42 +59,41 @@ export const RubiksCubeGame = () => {
         setCube(newCube);
     };
 
-    const shuffleCube = () => {
-        let shuffledCube = initialCubeState.map(face => [...face]);
-        for (let i = 0; i < 30; i++) {
-            const faceIndex = Math.floor(Math.random() * 6);
-            const isClockwise = Math.random() > 0.5;
-            
-            // This is a simplified rotation for shuffling, not a full cube rotation algorithm
-            const face = shuffledCube[faceIndex];
-            const temp = [...face];
-            const indices = isClockwise
-                ? [6, 3, 0, 7, 4, 1, 8, 5, 2]
-                : [2, 5, 8, 1, 4, 7, 0, 3, 6];
-            for (let j = 0; j < 9; j++) {
-                face[j] = temp[indices[j]];
+    const shuffleCube = useCallback(() => {
+        let shuffledCube;
+        do {
+            shuffledCube = initialCubeState.map(face => [...face]);
+            for (let i = 0; i < 30; i++) {
+                const faceIndex = Math.floor(Math.random() * 6);
+                const isClockwise = Math.random() > 0.5;
+
+                const face = shuffledCube[faceIndex];
+                const temp = [...face];
+                const indices = isClockwise
+                    ? [6, 3, 0, 7, 4, 1, 8, 5, 2]
+                    : [2, 5, 8, 1, 4, 7, 0, 3, 6];
+                for (let j = 0; j < 9; j++) {
+                    face[j] = temp[indices[j]];
+                }
             }
-        }
-        // Ensure the shuffled cube is not solved
-        if (isSolved(shuffledCube)) {
-            shuffleCube();
-        } else {
-            setCube(shuffledCube);
-        }
-    };
+        } while (isSolved(shuffledCube));
+        setCube(shuffledCube);
+    }, [isSolved]);
     
     useEffect(() => {
         shuffleCube();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [shuffleCube]);
 
 
     useEffect(() => {
         if (isSolved(cube)) {
-            toast({
-                title: 'Tebrikler!',
-                description: 'Zeka küpünü başarıyla çözdünüz!',
-            });
+            // Avoid toast on initial load if the cube is somehow solved initially
+            if (JSON.stringify(cube) !== JSON.stringify(initialCubeState)) {
+                 toast({
+                    title: 'Tebrikler!',
+                    description: 'Zeka küpünü başarıyla çözdünüz!',
+                });
+            }
         }
     }, [cube, isSolved, toast]);
     
