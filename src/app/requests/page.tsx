@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Briefcase, Car, FileText, HandCoins, Plane, Wrench, BedDouble, PlaneTakeoff } from "lucide-react"
+import { Briefcase, Car, FileText, HandCoins, Plane, Wrench, BedDouble, PlaneTakeoff, CalendarPlus } from "lucide-react"
 import { hotelsByCity, allCities, airportsByCity } from "@/lib/data"
 import React, { useState } from "react"
 
@@ -34,9 +34,12 @@ export default function RequestsPage() {
       </header>
 
       <Tabs defaultValue="hr_document" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-6 h-auto">
+        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-7 h-auto">
           <TabsTrigger value="hr_document">
             <FileText className="mr-2 text-blue-500" /> İK Evrak
+          </TabsTrigger>
+           <TabsTrigger value="leave">
+            <CalendarPlus className="mr-2 text-orange-500" /> İzin Talebi
           </TabsTrigger>
           <TabsTrigger value="expenses">
             <HandCoins className="mr-2 text-green-500" /> Masraf
@@ -83,6 +86,54 @@ export default function RequestsPage() {
             </CardContent>
             <CardFooter>
               <Button>Talep Oluştur</Button>
+            </CardFooter>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="leave">
+          <Card>
+            <CardHeader>
+              <CardTitle>İzin Talep Formu</CardTitle>
+              <CardDescription>Lütfen izin talebinizin detaylarını eksiksiz olarak doldurun.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="leave-type">İzin Türü</Label>
+                <Select>
+                  <SelectTrigger id="leave-type">
+                    <SelectValue placeholder="İzin türünü seçiniz..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="annual">Yıllık İzin</SelectItem>
+                    <SelectItem value="excuse">Mazeret İzni (Evlilik, Doğum, Ölüm vb.)</SelectItem>
+                    <SelectItem value="sick">Raporlu İzin</SelectItem>
+                    <SelectItem value="unpaid">Ücretsiz İzin</SelectItem>
+                    <SelectItem value="other">Diğer</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                 <div className="space-y-2">
+                  <Label htmlFor="leave-start-date">Başlangıç Tarihi</Label>
+                  <Input id="leave-start-date" type="date" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="leave-end-date">Bitiş Tarihi</Label>
+                  <Input id="leave-end-date" type="date" />
+                </div>
+              </div>
+               <div className="space-y-2">
+                <Label htmlFor="leave-description">Açıklama</Label>
+                <Textarea id="leave-description" placeholder="İzin talebinizin nedenini kısaca açıklayınız..." />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="leave-attachment">Belge Eki (varsa)</Label>
+                <Input id="leave-attachment" type="file" />
+                 <p className="text-xs text-muted-foreground">Mazeret veya raporlu izinler için ilgili belgeyi ekleyebilirsiniz.</p>
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Button>İzin Talebi Gönder</Button>
             </CardFooter>
           </Card>
         </TabsContent>
