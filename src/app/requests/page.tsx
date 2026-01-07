@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Briefcase, Car, FileText, HandCoins, Plane, Wrench } from "lucide-react"
 import { hotelsByCity } from "@/lib/data"
+import React from "react"
 
 export default function RequestsPage() {
   const cities = Object.keys(hotelsByCity);
@@ -274,5 +275,3 @@ export default function RequestsPage() {
     </div>
   );
 }
-
-    
