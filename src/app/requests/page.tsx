@@ -36,22 +36,22 @@ export default function RequestsPage() {
       <Tabs defaultValue="hr_document" className="w-full">
         <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-6 h-auto">
           <TabsTrigger value="hr_document">
-            <FileText className="mr-2" /> İK Evrak
+            <FileText className="mr-2 text-blue-500" /> İK Evrak
           </TabsTrigger>
           <TabsTrigger value="expenses">
-            <HandCoins className="mr-2" /> Masraf
+            <HandCoins className="mr-2 text-green-500" /> Masraf
           </TabsTrigger>
           <TabsTrigger value="vehicle">
-            <Car className="mr-2" /> Araç
+            <Car className="mr-2 text-red-500" /> Araç
           </TabsTrigger>
           <TabsTrigger value="service">
-            <Wrench className="mr-2" /> Hizmet
+            <Wrench className="mr-2 text-yellow-500" /> Hizmet
           </TabsTrigger>
           <TabsTrigger value="advance">
-            <Briefcase className="mr-2" /> Avans
+            <Briefcase className="mr-2 text-purple-500" /> Avans
           </TabsTrigger>
           <TabsTrigger value="travel">
-            <Plane className="mr-2" /> Seyahat
+            <Plane className="mr-2 text-cyan-500" /> Seyahat
           </TabsTrigger>
         </TabsList>
 
