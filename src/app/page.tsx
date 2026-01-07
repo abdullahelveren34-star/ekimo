@@ -138,23 +138,6 @@ export default function HomePage() {
         <p className="text-muted-foreground mt-1">E-Kimo insan kaynakları merkezinize hoş geldiniz.</p>
       </header>
       
-      <section>
-        <Card>
-            <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                    <Gamepad2 className="text-primary" />
-                    Can Sıkıntısı İçin Bir Mola
-                </CardTitle>
-                <CardDescription>
-                    Biraz ara verip eğlenmek için basit bir oyun. Renkli blokları sürükleyerek 3 veya daha fazlasını eşleştirin.
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
-                <CandyCrushGame />
-            </CardContent>
-        </Card>
-      </section>
-
       {chairman && (
         <section>
           <Card className="overflow-hidden">
@@ -331,6 +314,23 @@ export default function HomePage() {
               <p className="text-muted-foreground text-center py-8">Bugün doğum günü olan çalışanımız bulunmamaktadır.</p>
             )}
           </CardContent>
+        </Card>
+      </section>
+
+      <section>
+        <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                    <Gamepad2 className="text-primary" />
+                    Can Sıkıntısı İçin Bir Mola
+                </CardTitle>
+                <CardDescription>
+                    Biraz ara verip eğlenmek için basit bir oyun. Renkli blokları sürükleyerek 3 veya daha fazlasını eşleştirin.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <CandyCrushGame />
+            </CardContent>
         </Card>
       </section>
     </div>

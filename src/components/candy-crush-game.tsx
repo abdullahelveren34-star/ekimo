@@ -178,11 +178,11 @@ export const CandyCrushGame = () => {
 
     return (
         <div className="flex flex-col items-center gap-4 p-4 rounded-lg bg-card-foreground/5">
-            <div className="flex items-center justify-between w-full max-w-md">
+            <div className="flex items-center justify-between w-full max-w-sm">
                 <div className="text-lg font-bold">Skor: <span className="text-primary">{scoreDisplay}</span></div>
                 <Button onClick={createBoard}>Yeni Oyun</Button>
             </div>
-            <div className="grid grid-cols-8 grid-rows-8 gap-1 p-2 bg-muted rounded-lg candy-crush-board" style={{width: 8 * 60, height: 8 * 60}}>
+            <div className="grid grid-cols-8 grid-rows-8 gap-1 p-2 bg-muted rounded-lg candy-crush-board" style={{width: 8 * 44, height: 8 * 44}}>
                 {currentColorArrangement.map((candyColor, index) => (
                     <div
                         key={index}
@@ -196,8 +196,8 @@ export const CandyCrushGame = () => {
                         onDrop={dragDrop}
                         onDragEnd={dragEnd}
                         style={{
-                            width: '56px',
-                            height: '56px',
+                            width: '40px',
+                            height: '40px',
                         }}
                     />
                 ))}
