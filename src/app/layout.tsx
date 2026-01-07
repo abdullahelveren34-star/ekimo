@@ -3,6 +3,7 @@ import './globals.css';
 import { SidebarProvider, Sidebar, SidebarInset } from '@/components/ui/sidebar';
 import { SidebarNav } from '@/components/layout/sidebar-nav';
 import { Toaster } from '@/components/ui/toaster';
+import { UserProfile } from '@/components/layout/user-profile';
 
 export const metadata: Metadata = {
   title: 'E-Kimo',
@@ -27,9 +28,14 @@ export default function RootLayout({
             <SidebarNav />
           </Sidebar>
           <SidebarInset>
-            <main className="min-h-screen p-4 sm:p-6 lg:p-8">
-              {children}
-            </main>
+            <div className="flex flex-col min-h-screen">
+              <header className="flex items-center justify-end p-4 border-b">
+                  <UserProfile />
+              </header>
+              <main className="flex-grow p-4 sm:p-6 lg:p-8">
+                {children}
+              </main>
+            </div>
           </SidebarInset>
         </SidebarProvider>
         <Toaster />
