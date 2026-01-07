@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Firestore } from 'firebase/firestore';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -17,15 +16,7 @@ import { createApprovalRequest } from "@/lib/actions"
 import { toast } from "@/hooks/use-toast"
 
 export default function RequestsPage() {
-  const { firestore: fs } = useFirebase();
-  const [firestore, setFirestore] = useState<Firestore | null>(null);
-
-  useEffect(() => {
-    if (fs) {
-      setFirestore(fs);
-    }
-  }, [fs]);
-
+  const { firestore } = useFirebase();
 
   // Common state - Using IDs from data.ts
   const [employeeId] = useState(currentUser.id); 
@@ -61,7 +52,7 @@ export default function RequestsPage() {
   const [selectedAccommodationCity, setSelectedAccommodationCity] = useState('');
   const [selectedHotel, setSelectedHotel] = useState('');
   const [departureCity, setDepartureCity] = useState('');
-  const [selectedDepartureAirport, setSelectedDepartureAirport] useState('');
+  const [selectedDepartureAirport, setSelectedDepartureAirport] = useState('');
   const [arrivalCity, setArrivalCity] = useState('');
   const [selectedArrivalAirport, setSelectedArrivalAirport] = useState('');
   const [travelStartDate, setTravelStartDate] = useState('');
@@ -75,7 +66,7 @@ export default function RequestsPage() {
 
   const handleSubmit = (requestType: string, details: any) => {
     if (!firestore) {
-      toast({ variant: "destructive", title: "Hata!", description: "Veritabanı bağlantısı kurulamadı. Lütfen sayfayı yenileyip tekrar deneyin." });
+      toast({ variant: "destructive", title: "Hata!", description: "Veritabanı bağlantısı henüz hazır değil. Lütfen bir kaç saniye bekleyip tekrar deneyin." });
       return;
     }
     
@@ -314,7 +305,7 @@ export default function RequestsPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button disabled={!firestore}>Hizmet Talebi Gönder</Button>
+              <Button onClick={() => toast({variant: 'destructive', title: 'Henüz entegre edilmedi.'})} disabled={!firestore}>Hizmet Talebi Gönder</Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -336,7 +327,7 @@ export default function RequestsPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button disabled={!firestore}>Avans Talep Et</Button>
+              <Button onClick={() => toast({variant: 'destructive', title: 'Henüz entegre edilmedi.'})} disabled={!firestore}>Avans Talep Et</Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -489,5 +480,3 @@ export default function RequestsPage() {
     </div>
   );
 }
-
-    
