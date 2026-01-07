@@ -18,18 +18,15 @@ import {
   FileText,
   Folder,
   LayoutDashboard,
-  User,
   Settings,
   LogOut,
   AtSign,
   Home,
 } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/', label: 'Ana Sayfa', icon: Home },
-  { href: '/profile', label: 'Profil', icon: User },
   { href: '/jobs', label: 'İş İlanları', icon: Briefcase },
   { href: '/applications', label: 'Başvurular', icon: FileText },
   { href: '/documents', label: 'Belgeler', icon: Folder },
