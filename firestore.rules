@@ -1,0 +1,160 @@
+/**
+ * Core Philosophy:
+ * This ruleset enforces a security model based on explicit user roles and relationships defined within the data itself.
+ * The primary principle is to grant access only to the users directly involved in a data record, such as the creator of a request ('employeeId')
+ * and the designated approver ('approverId'). This avoids the need for complex lookups or administrative roles, making the rules fast, secure, and testable.
+ *
+ * Data Structure:
+ * The data is organized into flat, top-level collections (e.g., /userProfiles, /jobPostings, /approvalRequests).
+ * This structure promotes clear separation of concerns and allows for distinct security rules for each data type.
+ * There are no user-nested subcollections; ownership and access are determined by UID fields within each document.
+ *
+ * Key Security Decisions:
+ * - User data in /userProfiles is strictly private to the owner. User enumeration (listing) is disabled.
+ * - Job postings are public to read for all users, but writing is disabled until a proper authorization mechanism (like an HR role) is implemented.
+ * - Approval Requests can be read and updated by either the employee who submitted the request or the designated approver.
+ * - Creation of documents is always restricted to the authenticated user submitting on their own behalf (e.g., an employee creates their own approval request).
+ * - Deletion is generally restricted to the original creator of the document.
+ *
+ * Denormalization for Authorization:
+ * Authorization decisions rely heavily on denormalized user IDs stored directly on documents. For example, the /approvalRequests/{id}
+ * document contains both an `employeeId` and an `approverId`. This allows a security rule to grant access to both users with a simple check on the
+ * document's data, which is highly performant and secure.
+ *
+ * Structural Segregation:
+ * Each major entity type (UserProfile, JobPosting, Application, etc.) is stored in its own top-level collection. This prevents data leakage
+ * and allows for simple, powerful list queries on public collections like /jobPostings while completely locking down listing on private collections like /userProfiles.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // -----------------------------------------------------------------
+    // Helper Functions
+    // -----------------------------------------------------------------
+
+    /**
+     * Checks if a user is authenticated.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * Checks if the currently authenticated user's UID matches the provided userId.
+     * This is the primary mechanism for verifying ownership based on a path parameter.
+     */
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    /**
+     * Checks for ownership on an existing document. Used for safe updates and deletes.
+     */
+    function isExistingOwner(userId) {
+      return isOwner(userId) && resource != null;
+    }
+
+    /**
+     * Checks if the authenticated user's UID matches an owner field within a document.
+     * @param doc The document data (resource.data or request.resource.data).
+     * @param key The name of the field containing the owner's UID (e.g., 'employeeId', 'candidateId').
+     */
+    function isDocumentOwner(doc, key) {
+      return request.auth.uid == doc[key];
+    }
+    
+    /**
+     * Verifies a user is an owner of a document that already exists.
+     */
+    function isExistingDocumentOwner(doc, key) {
+      return resource != null && isDocumentOwner(doc, key);
+    }
+    
+    /**
+     * Checks if a user is either the creator or the approver of a request.
+     */
+    function isRequestParticipant(doc) {
+      return request.auth.uid == doc.employeeId || request.auth.uid == doc.approverId;
+    }
+
+    // -----------------------------------------------------------------
+    // Collection Rules
+    // -----------------------------------------------------------------
+
+    /**
+     * @description Manages private user profiles. Only the owner of a profile can read, create, update, or delete it.
+     * @path /userProfiles/{userProfileId}
+     * @allow A signed-in user (auth.uid: 'user123') can (get) their own profile at /userProfiles/user123.
+     * @deny A signed-in user (auth.uid: 'user456') cannot (get) another user's profile at /userProfiles/user123.
+     * @principle Restricts access to a user's own data tree.
+     */
+    match /userProfiles/{userProfileId} {
+      allow get: if isOwner(userProfileId);
+      allow list: if false;
+      allow create: if isOwner(userProfileId) && request.resource.data.id == userProfileId;
+      allow update: if isExistingOwner(userProfileId) && request.resource.data.id == resource.data.id;
+      allow delete: if isExistingOwner(userProfileId);
+    }
+
+    /**
+     * @description Manages public job postings. Anyone can read job postings. Writing is disabled.
+     * @path /jobPostings/{jobPostingId}
+     * @allow Any user, including unauthenticated ones, can (get) or (list) all job postings.
+     * @deny A signed-in user cannot (create) a new job posting.
+     * @principle Public read with owner-only writes. NOTE: Writes are disabled pending schema update.
+     */
+    match /jobPostings/{jobPostingId} {
+      allow get: if true;
+      allow list: if true;
+      // CRITICAL: Cannot implement owner-only writes. The 'JobPosting' entity is missing an 'ownerId' or 'creatorId' field.
+      // This prevents validation that the user creating the document is authorized to do so.
+      allow create, update, delete: if false; // TODO: Add owner validation once the schema is updated with an ownership field (e.g., `creatorId`).
+    }
+
+    /**
+     * @description Manages job applications. Only the candidate who submitted an application can access it.
+     * @path /applications/{applicationId}
+     * @allow A signed-in user (auth.uid: 'user123') can (create) an application where `candidateId` is 'user123'.
+     * @deny A signed-in user (auth.uid: 'user456') cannot (get) an application where `candidateId` is 'user123'.
+     * @principle Enforces document ownership for all operations based on the `candidateId` field.
+     */
+    match /applications/{applicationId} {
+      allow get: if isSignedIn() && isDocumentOwner(resource.data, 'candidateId');
+      allow list: if false;
+      allow create: if isSignedIn() && isDocumentOwner(request.resource.data, 'candidateId');
+      allow update: if isExistingDocumentOwner(resource.data, 'candidateId') && request.resource.data.candidateId == resource.data.candidateId;
+      allow delete: if isExistingDocumentOwner(resource.data, 'candidateId');
+    }
+
+    /**
+     * @description Manages sensitive employee documents. Only the associated employee can manage their own documents.
+     * @path /employeeDocuments/{employeeDocumentId}
+     * @allow A signed-in user (auth.uid: 'user123') can (create) a document where `employeeId` is 'user123'.
+     * @deny A signed-in user (auth.uid: 'user456') cannot (delete) a document where `employeeId` is 'user123'.
+     * @principle Enforces document ownership for all operations based on the `employeeId` field.
+     */
+    match /employeeDocuments/{employeeDocumentId} {
+      allow get: if isSignedIn() && isDocumentOwner(resource.data, 'employeeId');
+      allow list: if false;
+      allow create: if isSignedIn() && isDocumentOwner(request.resource.data, 'employeeId');
+      allow update: if isExistingDocumentOwner(resource.data, 'employeeId') && request.resource.data.employeeId == resource.data.employeeId;
+      allow delete: if isExistingDocumentOwner(resource.data, 'employeeId');
+    }
+
+    /**
+     * @description Manages approval requests. Access is granted to the employee who created it and the designated approver.
+     * @path /approvalRequests/{approvalRequestId}
+     * @allow The user designated as `approverId` can (get) the request to review it.
+     * @deny A random signed-in user cannot (update) a request they are not a participant in.
+     * @principle Implements a shared access model based on denormalized UIDs in the document.
+     */
+    match /approvalRequests/{approvalRequestId} {
+      allow get: if isSignedIn() && isRequestParticipant(resource.data);
+      allow list: if false;
+      allow create: if isSignedIn() && isDocumentOwner(request.resource.data, 'employeeId');
+      allow update: if isSignedIn() && resource != null && isRequestParticipant(resource.data) && request.resource.data.employeeId == resource.data.employeeId;
+      allow delete: if isExistingDocumentOwner(resource.data, 'employeeId');
+    }
+  }
+}
