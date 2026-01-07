@@ -19,6 +19,7 @@ import {
   Gem,
   BookUser,
   DraftingCompass,
+  Server,
 } from 'lucide-react';
 import React from 'react';
 import { departmentMembers } from '@/lib/data';
@@ -48,6 +49,7 @@ const departments = [
   { name: 'Marka', icon: Gem, color: 'text-violet-500' },
   { name: 'İnsan Kaynakları', icon: BookUser, color: 'text-lime-500' },
   { name: 'İdari İşler', icon: Briefcase, color: 'text-sky-500' },
+  { name: 'BT Talepleri', icon: Server, color: 'text-gray-500' },
 ];
 
 export default function DepartmentsPage() {
