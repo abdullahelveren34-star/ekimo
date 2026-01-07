@@ -44,7 +44,7 @@ export function SidebarNav() {
                 <path d="M12.378 1.602a.75.75 0 0 0-.756 0L3.366 6.136A.75.75 0 0 0 3 6.82v10.36a.75.75 0 0 0 .366.685l8.256 4.536a.75.75 0 0 0 .756 0l8.256-4.536A.75.75 0 0 0 21 17.18V6.82a.75.75 0 0 0-.366-.685L12.378 1.602ZM12 15.195a4.502 4.502 0 0 0-4.5 4.5v.09a.75.75 0 0 0 .75.75h7.5a.75.75 0 0 0 .75-.75v-.09a4.502 4.502 0 0 0-4.5-4.5Z" />
                 <path d="M12 3.824a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
             </svg>
-            <span className="text-lg font-semibold text-sidebar-foreground">İK Merkezi</span>
+            <span className="text-lg font-semibold text-sidebar-foreground">E-Kimo</span>
             <div className="grow" />
             <SidebarTrigger className="hidden md:flex" />
         </div>
