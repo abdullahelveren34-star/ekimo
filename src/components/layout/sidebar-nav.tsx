@@ -22,12 +22,14 @@ import {
   Building,
   ClipboardList,
   FileText,
+  Briefcase,
 } from 'lucide-react';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/', label: 'Ana Sayfa', icon: Home },
   { href: '/departments', label: 'Departmanlar', icon: Building },
+  { href: '/jobs', label: 'İş İlanları', icon: Briefcase },
   { href: '/requests', label: 'Talepler', icon: ClipboardList },
   { href: '/documents', label: 'Dokümanlar', icon: FileText },
 ];
@@ -53,7 +55,7 @@ export function SidebarNav() {
         <SidebarMenu>
           {navItems.map((item) => (
             <SidebarMenuItem key={item.href}>
-              <Link href={item.href} legacyBehavior passHref>
+              <Link href={item.href}>
                 <SidebarMenuButton
                   isActive={pathname === item.href}
                   tooltip={item.label}
@@ -69,7 +71,7 @@ export function SidebarNav() {
         <SidebarMenu>
           {bottomNavItems.map((item) => (
             <SidebarMenuItem key={item.href}>
-                <Link href={item.href} legacyBehavior passHref>
+                <Link href={item.href}>
                     <SidebarMenuButton
                     isActive={pathname === item.href}
                     tooltip={item.label}
@@ -103,3 +105,5 @@ export function SidebarNav() {
     </>
   );
 }
+
+    

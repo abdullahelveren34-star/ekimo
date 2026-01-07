@@ -1,4 +1,5 @@
 
+
 export const employeeProfile = {
   name: 'Ayşe Yılmaz',
   title: 'Kıdemli İK Uzmanı',
@@ -228,3 +229,13 @@ export const jobPostings = [
     description: 'İşe alım, performans yönetimi ve çalışan ilişkileri süreçlerinde görev alacak deneyimli bir İK uzmanı arıyoruz.',
   },
 ];
+
+export const hotelsByCity: { [key: string]: string[] } = {
+  "İstanbul": ["Hilton Bosphorus", "Swissôtel The Bosphorus", "The Ritz-Carlton, Istanbul", "CVK Park Bosphorus Hotel"],
+  "Ankara": ["JW Marriott Hotel Ankara", "Sheraton Ankara Hotel & Convention Center", "HiltonSA Ankara", "Wyndham Ankara"],
+  "İzmir": ["Swissôtel Büyük Efes, İzmir", "Mövenpick Hotel Izmir", "Renaissance Izmir Hotel", "Wyndham Grand Izmir Ozdilek"],
+  "Antalya": ["Rixos Downtown Antalya", "Akra Hotel", "The Marmara Antalya", "Titanic Mardan Palace"],
+  "Bursa": ["Hilton Bursa Convention Center & Spa", "Crowne Plaza Bursa", "Almira Hotel Thermal Spa & Convention Center"],
+};
+
+    

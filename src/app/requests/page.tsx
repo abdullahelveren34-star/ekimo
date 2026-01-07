@@ -6,9 +6,13 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
-import { Briefcase, Car, FileText, HandCoins, Wrench } from "lucide-react"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Briefcase, Car, FileText, HandCoins, Plane, Wrench } from "lucide-react"
+import { hotelsByCity } from "@/lib/data"
 
 export default function RequestsPage() {
+  const cities = Object.keys(hotelsByCity);
+
   return (
     <div className="space-y-8">
       <header>
@@ -17,7 +21,7 @@ export default function RequestsPage() {
       </header>
 
       <Tabs defaultValue="hr_document" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-5 h-auto">
+        <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-6 h-auto">
           <TabsTrigger value="hr_document">
             <FileText className="mr-2" /> İK Evrak
           </TabsTrigger>
@@ -32,6 +36,9 @@ export default function RequestsPage() {
           </TabsTrigger>
           <TabsTrigger value="advance">
             <Briefcase className="mr-2" /> Avans
+          </TabsTrigger>
+          <TabsTrigger value="travel">
+            <Plane className="mr-2" /> Seyahat
           </TabsTrigger>
         </TabsList>
 
@@ -182,7 +189,90 @@ export default function RequestsPage() {
             </CardFooter>
           </Card>
         </TabsContent>
+
+        <TabsContent value="travel">
+          <Card>
+            <CardHeader>
+              <CardTitle>Seyahat Talep Formu</CardTitle>
+              <CardDescription>Konaklama ve uçak bileti gibi seyahat ihtiyaçlarınız için talep oluşturun.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label>Talep Türü</Label>
+                <RadioGroup defaultValue="accommodation" className="flex items-center gap-4">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="accommodation" id="accommodation" />
+                    <Label htmlFor="accommodation">Konaklama</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="flight" id="flight" />
+                    <Label htmlFor="flight">Uçak Bileti</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="travel-city">Şehir</Label>
+                  <Select>
+                    <SelectTrigger id="travel-city">
+                      <SelectValue placeholder="Seyahat edilecek şehri seçin..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {cities.map(city => <SelectItem key={city} value={city}>{city}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="travel-hotel">Otel</Label>
+                  <Select>
+                    <SelectTrigger id="travel-hotel">
+                      <SelectValue placeholder="Otel seçin (isteğe bağlı)..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {/* Bu bölüm dinamik olarak seçilen şehre göre güncellenebilir. */}
+                      {Object.entries(hotelsByCity).map(([city, hotels]) => (
+                        <React.Fragment key={city}>
+                          <p className="px-2 py-1.5 text-sm font-semibold">{city}</p>
+                          {hotels.map(hotel => <SelectItem key={hotel} value={hotel}>{hotel}</SelectItem>)}
+                        </React.Fragment>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="travel-start-date">Gidiş Tarihi</Label>
+                  <Input id="travel-start-date" type="date" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="travel-end-date">Dönüş Tarihi</Label>
+                  <Input id="travel-end-date" type="date" />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="second-passenger">İkinci Yolcu Adı (varsa)</Label>
+                <Input id="second-passenger" placeholder="örn. Ali Veli" />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="travel-notes">Ek Notlar ve Açıklamalar</Label>
+                <Textarea id="travel-notes" placeholder="Uçuş tercihleri, konaklama detayları veya seyahat amacı gibi bilgileri ekleyebilirsiniz..." />
+              </div>
+
+            </CardContent>
+            <CardFooter>
+              <Button>Seyahat Talebi Oluştur</Button>
+            </CardFooter>
+          </Card>
+        </TabsContent>
+
       </Tabs>
     </div>
   );
 }
+
+    
