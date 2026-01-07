@@ -30,6 +30,7 @@ import {
 } from 'lucide-react';
 import { useFirebase, useCollection, useMemoFirebase } from '@/firebase';
 import { collection, query, where } from 'firebase/firestore';
+import { approverUser } from '@/lib/data';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -55,7 +56,7 @@ export function SidebarNav() {
     if (!firestore || !user) return null;
     return query(
       collection(firestore, 'approvalRequests'),
-      where('approverId', '==', 'izlem-manduz-id'),
+      where('approverId', '==', approverUser.id),
       where('status', '==', 'Beklemede')
     );
   }, [firestore, user]);

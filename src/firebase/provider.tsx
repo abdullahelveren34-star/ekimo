@@ -150,11 +150,20 @@ export const useFirebaseApp = (): FirebaseApp | null => {
 
 type MemoFirebase <T> = T & {__memo?: boolean};
 
-export function useMemoFirebase<T>(factory: () => T, deps: DependencyList): T | (MemoFirebase<T>) {
+export function useMemoFirebase<T>(factory: () => T, deps: DependencyList): T {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const memoized = useMemo(factory, deps);
   
   if(typeof memoized !== 'object' || memoized === null) return memoized;
-  (memoized as MemoFirebase<T>).__memo = true;
+
+  // Add a non-enumerable property to mark the object as memoized.
+  // This is a "secret" handshake between useMemoFirebase and useCollection/useDoc.
+  Object.defineProperty(memoized, '__memo', {
+    value: true,
+    enumerable: false,
+    configurable: false,
+    writable: false,
+  });
   
   return memoized;
 }

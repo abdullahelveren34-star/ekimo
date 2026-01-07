@@ -31,7 +31,7 @@ export default function ManagementPage() {
       toast({
         variant: "destructive",
         title: "Hata!",
-        description: error.message || "Talep verileri alınamadı.",
+        description: "Talep verileri alınamadı.",
       });
     }
   }, [error]);

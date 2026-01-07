@@ -5,6 +5,7 @@ import { SidebarNav } from '@/components/layout/sidebar-nav';
 import { Toaster } from '@/components/ui/toaster';
 import { UserProfile } from '@/components/layout/user-profile';
 import { FirebaseClientProvider } from '@/firebase';
+import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
 
 export const metadata: Metadata = {
   title: 'E-Kimo',
@@ -25,6 +26,7 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <FirebaseClientProvider>
+          <FirebaseErrorListener />
           <SidebarProvider>
             <Sidebar>
               <SidebarNav />

@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Briefcase, Car, FileText, HandCoins, Plane, Wrench, BedDouble, PlaneTakeoff, CalendarPlus } from "lucide-react"
-import { hotelsByCity, allCities, airportsByCity, currentUser } from "@/lib/data"
+import { hotelsByCity, allCities, airportsByCity, currentUser, approverUser } from "@/lib/data"
 import { useFirebase } from "@/firebase"
 import { createApprovalRequest } from "@/lib/actions"
 import { toast } from "@/hooks/use-toast"
@@ -20,7 +20,7 @@ export default function RequestsPage() {
 
   // Common state - Using IDs from data.ts
   const [employeeId] = useState(currentUser.id); 
-  const [approverId] = useState("izlem-manduz-id");
+  const [approverId] = useState(approverUser.id);
 
   // HR Document State
   const [documentType, setDocumentType] = useState('');
@@ -305,7 +305,7 @@ export default function RequestsPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={() => toast({variant: 'destructive', title: 'Henüz entegre edilmedi.'})} disabled={!firestore}>Hizmet Talebi Gönder</Button>
+              <Button disabled={!firestore}>Hizmet Talebi Gönder</Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -327,7 +327,7 @@ export default function RequestsPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={() => toast({variant: 'destructive', title: 'Henüz entegre edilmedi.'})} disabled={!firestore}>Avans Talep Et</Button>
+              <Button disabled={!firestore}>Avans Talep Et</Button>
             </CardFooter>
           </Card>
         </TabsContent>
