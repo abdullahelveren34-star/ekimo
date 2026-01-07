@@ -178,7 +178,6 @@ export default function ManagementPage() {
                   <TableHead className="w-[300px]">Çalışan</TableHead>
                   <TableHead>Talep Türü</TableHead>
                   <TableHead>Tarih</TableHead>
-                  <TableHead>Detaylar</TableHead>
                   <TableHead className="text-right">İşlemler</TableHead>
                 </TableRow>
               </TableHeader>
@@ -190,74 +189,70 @@ export default function ManagementPage() {
                       <TableCell><Skeleton className="h-10 w-full" /></TableCell>
                       <TableCell><Skeleton className="h-10 w-full" /></TableCell>
                       <TableCell><Skeleton className="h-10 w-full" /></TableCell>
-                      <TableCell><Skeleton className="h-10 w-full" /></TableCell>
                     </TableRow>
                   ))
                 ) : requests && requests.length > 0 ? (
                   requests.map((request) => {
                     const employee = getEmployeeById(request.employeeId);
                     return (
-                      <TableRow key={request.id}>
-                        <TableCell>
-                          <div className="flex items-center gap-3">
-                            <Avatar>
-                              <AvatarImage src={employee?.avatarUrl} alt={employee?.name} />
-                              <AvatarFallback>{employee?.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                            </Avatar>
-                            <div>
-                              <p className="font-medium">{employee?.name || 'Bilinmeyen Çalışan'}</p>
-                              <p className="text-xs text-muted-foreground">{employee?.title}</p>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline" className={`flex w-fit items-center gap-2 ${requestTypeColors[request.requestType] || requestTypeColors.default}`}>
-                            {requestTypeIcons[request.requestType as keyof typeof requestTypeIcons] || requestTypeIcons.default}
-                            {request.requestType}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          {new Date(request.requestDate).toLocaleDateString('tr-TR')}
-                        </TableCell>
-                        <TableCell>
-                          <Dialog>
-                            <DialogTrigger asChild>
-                              <Button variant="ghost" size="sm">Detayları Görüntüle</Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                              <DialogHeader>
-                                <DialogTitle className="flex items-center gap-2">
-                                   <div className={`p-2 rounded-full ${requestTypeColors[request.requestType] || requestTypeColors.default}`}>
-                                     {requestTypeIcons[request.requestType as keyof typeof requestTypeIcons] || requestTypeIcons.default}
-                                   </div>
-                                   {request.requestType} Talep Detayları
-                                </DialogTitle>
-                                <DialogDescription>
-                                  {new Date(request.requestDate).toLocaleString('tr-TR', { dateStyle: 'long', timeStyle: 'short' })} tarihinde oluşturuldu.
-                                </DialogDescription>
-                              </DialogHeader>
-                              <div className="space-y-2 py-4">
-                                {renderRequestDetails(request.details, request.requestType)}
+                      <Dialog key={request.id}>
+                        <TableRow>
+                          <TableCell>
+                            <div className="flex items-center gap-3">
+                              <Avatar>
+                                <AvatarImage src={employee?.avatarUrl} alt={employee?.name} />
+                                <AvatarFallback>{employee?.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <p className="font-medium">{employee?.name || 'Bilinmeyen Çalışan'}</p>
+                                <p className="text-xs text-muted-foreground">{employee?.title}</p>
                               </div>
-                            </DialogContent>
-                          </Dialog>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex items-center justify-end gap-2">
-                            <Button variant="outline" size="sm" onClick={() => handleRequestStatusUpdate(request.id, 'Onaylandı')}>
-                              Onayla
-                            </Button>
-                            <Button variant="destructive" size="sm" onClick={() => handleRequestStatusUpdate(request.id, 'Reddedildi')}>
-                              Reddet
-                            </Button>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <DialogTrigger asChild>
+                              <Button variant="outline" size="sm" className={`flex w-fit items-center gap-2 ${requestTypeColors[request.requestType] || requestTypeColors.default}`}>
+                                {requestTypeIcons[request.requestType as keyof typeof requestTypeIcons] || requestTypeIcons.default}
+                                {request.requestType}
+                              </Button>
+                            </DialogTrigger>
+                          </TableCell>
+                          <TableCell>
+                            {new Date(request.requestDate).toLocaleDateString('tr-TR')}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <div className="flex items-center justify-end gap-2">
+                              <Button variant="outline" size="sm" onClick={() => handleRequestStatusUpdate(request.id, 'Onaylandı')}>
+                                Onayla
+                              </Button>
+                              <Button variant="destructive" size="sm" onClick={() => handleRequestStatusUpdate(request.id, 'Reddedildi')}>
+                                Reddet
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle className="flex items-center gap-2">
+                                <div className={`p-2 rounded-full ${requestTypeColors[request.requestType] || requestTypeColors.default}`}>
+                                  {requestTypeIcons[request.requestType as keyof typeof requestTypeIcons] || requestTypeIcons.default}
+                                </div>
+                                {request.requestType} Talep Detayları
+                            </DialogTitle>
+                            <DialogDescription>
+                              {new Date(request.requestDate).toLocaleString('tr-TR', { dateStyle: 'long', timeStyle: 'short' })} tarihinde oluşturuldu.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="space-y-2 py-4">
+                            {renderRequestDetails(request.details, request.requestType)}
                           </div>
-                        </TableCell>
-                      </TableRow>
+                        </DialogContent>
+                      </Dialog>
                     );
                   })
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={5} className="h-48 text-center">
+                    <TableCell colSpan={4} className="h-48 text-center">
                       <div className="flex flex-col items-center justify-center gap-3">
                          <Shield className="h-12 w-12 text-muted-foreground/50" />
                          <p className="text-muted-foreground">Onay bekleyen talep bulunmamaktadır.</p>
