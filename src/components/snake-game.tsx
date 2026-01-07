@@ -110,9 +110,9 @@ export function SnakeGame() {
     if (context) {
       context.setTransform(SCALE, 0, 0, SCALE, 0, 0);
       context.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-      context.fillStyle = "hsl(var(--primary))";
+      context.fillStyle = "darkgreen";
       snake.forEach(([x, y]) => context.fillRect(x, y, 1, 1));
-      context.fillStyle = "hsl(var(--accent))";
+      context.fillStyle = "red";
       context.fillRect(food[0], food[1], 1, 1);
     }
   }, [snake, food, gameOver]);
@@ -137,10 +137,10 @@ export function SnakeGame() {
         ref={canvasRef}
         width={`${CANVAS_SIZE}px`}
         height={`${CANVAS_SIZE}px`}
-        className="bg-secondary rounded-md mx-auto"
+        className="bg-green-100 rounded-md mx-auto"
       />
        <div className="absolute top-2 left-1/2 -translate-x-1/2 text-center w-full">
-            <p className="text-lg font-bold">Skor: {score}</p>
+            <p className="text-lg font-bold text-foreground">Skor: {score}</p>
         </div>
       {gameOver && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/80 rounded-md">
