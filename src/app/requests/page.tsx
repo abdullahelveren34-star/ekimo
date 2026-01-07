@@ -124,6 +124,10 @@ export default function RequestsPage() {
               <CardDescription>Şirket aracı kullanım taleplerinizi buradan oluşturabilirsiniz.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
+               <div className="space-y-2">
+                <Label htmlFor="requester-name">Ad Soyad</Label>
+                <Input id="requester-name" placeholder="Aracı talep eden kişinin adı ve soyadı..." />
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="destination">Gidilecek Yer</Label>
                 <Input id="destination" placeholder="örn. Müşteri ziyareti, Fabrika" />
