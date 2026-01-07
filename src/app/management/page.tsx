@@ -1,27 +1,28 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Shield } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { useFirebase, useMemoFirebase, useCollection } from '@/firebase';
+import { useFirebase, useCollection } from '@/firebase';
 import { collection, query, where, doc } from 'firebase/firestore';
 import { toast } from '@/hooks/use-toast';
 import type { ApprovalRequest } from '@/lib/actions';
 import { updateDocumentNonBlocking } from '@/firebase/non-blocking-updates';
-import { currentUser } from '@/lib/data';
+import { approverUser } from '@/lib/data';
 
 export default function ManagementPage() {
-  const { firestore } = useFirebase();
+  const { firestore, user } = useFirebase();
 
-  const requestsQuery = useMemoFirebase(() => {
-    if (!firestore) return null;
+  const requestsQuery = useMemo(() => {
+    if (!firestore || !user) return null;
+    // This query now fetches all pending requests regardless of approver, as per the simplified rules.
     return query(
       collection(firestore, "approvalRequests"),
       where("status", "==", "Beklemede")
     );
-  }, [firestore]);
+  }, [firestore, user]);
 
   const { data: requests, isLoading, error } = useCollection<ApprovalRequest>(requestsQuery);
 

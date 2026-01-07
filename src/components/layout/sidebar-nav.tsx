@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useMemo } from 'react';
 import {
   Sidebar,
   SidebarContent,
@@ -28,7 +29,7 @@ import {
   Users,
   Shield,
 } from 'lucide-react';
-import { useFirebase, useCollection, useMemoFirebase } from '@/firebase';
+import { useFirebase, useCollection } from '@/firebase';
 import { collection, query, where } from 'firebase/firestore';
 import { approverUser } from '@/lib/data';
 
@@ -52,11 +53,11 @@ export function SidebarNav() {
   const pathname = usePathname();
   const { firestore, user } = useFirebase();
 
-  const pendingRequestsQuery = useMemoFirebase(() => {
+  const pendingRequestsQuery = useMemo(() => {
     if (!firestore || !user) return null;
     return query(
       collection(firestore, 'approvalRequests'),
-      where('approverId', '==', approverUser.id),
+      // This can be adjusted to be more specific if needed, e.g., by approverId
       where('status', '==', 'Beklemede')
     );
   }, [firestore, user]);
