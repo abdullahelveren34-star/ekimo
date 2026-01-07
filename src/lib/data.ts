@@ -46,41 +46,6 @@ export const jobPostings = [
   },
 ];
 
-export const applications = [
-  {
-    id: 'app-1',
-    candidateName: 'Ahmet Çelik',
-    jobTitle: 'Kıdemli Frontend Geliştirici',
-    appliedDate: '2024-07-20',
-    status: 'Değerlendirme',
-    avatarUrl: 'https://picsum.photos/seed/2/100/100',
-  },
-  {
-    id: 'app-2',
-    candidateName: 'Fatma Kaya',
-    jobTitle: 'Ürün Müdürü',
-    appliedDate: '2024-07-19',
-    status: 'Mülakat',
-    avatarUrl: 'https://picsum.photos/seed/3/100/100',
-  },
-  {
-    id: 'app-3',
-    candidateName: 'Mehmet Aydın',
-    jobTitle: 'Kıdemli Frontend Geliştirici',
-    appliedDate: '2024-07-18',
-    status: 'Teklif',
-    avatarUrl: 'https://picsum.photos/seed/4/100/100',
-  },
-  {
-    id: 'app-4',
-    candidateName: 'Zeynep Şahin',
-    jobTitle: 'UX/UI Tasarımcısı',
-    appliedDate: '2024-07-21',
-    status: 'Yeni',
-    avatarUrl: 'https://picsum.photos/seed/5/100/100',
-  },
-];
-
 export const documents = [
     {
         id: 'doc-1',

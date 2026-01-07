@@ -29,7 +29,6 @@ const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/', label: 'Ana Sayfa', icon: Home },
   { href: '/jobs', label: 'İş İlanları', icon: Briefcase },
-  { href: '/applications', label: 'Başvurular', icon: FileText },
   { href: '/documents', label: 'Belgeler', icon: Folder },
   { href: '/departments', label: 'Departmanlar', icon: Building },
   { href: '/ai-screener', label: 'AI Tarama', icon: Bot },
