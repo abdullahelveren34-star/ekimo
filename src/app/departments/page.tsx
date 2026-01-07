@@ -32,22 +32,22 @@ import {
 } from "@/components/ui/dialog";
 
 const departments = [
-  { name: 'Satış', icon: TrendingUp },
-  { name: 'Pazarlama', icon: Megaphone },
-  { name: 'Bağımsız', icon: Briefcase },
-  { name: 'Tasarım', icon: Palette },
-  { name: 'Satınalma', icon: ShoppingCart },
-  { name: 'Üretim Planlama', icon: CalendarCog },
-  { name: 'Üretim', icon: Factory },
-  { name: 'Kalite ve Güvence', icon: BadgeCheck },
-  { name: 'Sosyal Uygunluk', icon: HeartHandshake },
-  { name: 'Mali İşler', icon: Landmark },
-  { name: 'Modelhane', icon: DraftingCompass },
-  { name: 'Depolar', icon: Warehouse },
-  { name: 'Kesimhane', icon: Scissors },
-  { name: 'Marka', icon: Gem },
-  { name: 'İnsan Kaynakları', icon: BookUser },
-  { name: 'İdari İşler', icon: Briefcase },
+  { name: 'Satış', icon: TrendingUp, color: 'text-green-500' },
+  { name: 'Pazarlama', icon: Megaphone, color: 'text-blue-500' },
+  { name: 'Bağımsız', icon: Briefcase, color: 'text-gray-500' },
+  { name: 'Tasarım', icon: Palette, color: 'text-purple-500' },
+  { name: 'Satınalma', icon: ShoppingCart, color: 'text-orange-500' },
+  { name: 'Üretim Planlama', icon: CalendarCog, color: 'text-cyan-500' },
+  { name: 'Üretim', icon: Factory, color: 'text-yellow-500' },
+  { name: 'Kalite ve Güvence', icon: BadgeCheck, color: 'text-teal-500' },
+  { name: 'Sosyal Uygunluk', icon: HeartHandshake, color: 'text-red-500' },
+  { name: 'Mali İşler', icon: Landmark, color: 'text-indigo-500' },
+  { name: 'Modelhane', icon: DraftingCompass, color: 'text-pink-500' },
+  { name: 'Depolar', icon: Warehouse, color: 'text-amber-500' },
+  { name: 'Kesimhane', icon: Scissors, color: 'text-rose-500' },
+  { name: 'Marka', icon: Gem, color: 'text-violet-500' },
+  { name: 'İnsan Kaynakları', icon: BookUser, color: 'text-lime-500' },
+  { name: 'İdari İşler', icon: Briefcase, color: 'text-sky-500' },
 ];
 
 export default function DepartmentsPage() {
@@ -67,7 +67,7 @@ export default function DepartmentsPage() {
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <CardTitle className="text-lg font-medium">{dept.name}</CardTitle>
-                        <dept.icon className="h-5 w-5 text-muted-foreground" />
+                        <dept.icon className={`h-5 w-5 ${dept.color}`} />
                       </div>
                     </CardHeader>
                     <CardContent>
@@ -81,7 +81,7 @@ export default function DepartmentsPage() {
                 <DialogContent className="sm:max-w-md">
                   <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
-                      <dept.icon className="h-5 w-5" />
+                      <dept.icon className={`h-5 w-5 ${dept.color}`} />
                       {dept.name} Departmanı
                     </DialogTitle>
                     <DialogDescription>
@@ -90,18 +90,22 @@ export default function DepartmentsPage() {
                   </DialogHeader>
                   <div className="py-4">
                     <ul className="space-y-4 max-h-[60vh] overflow-y-auto pr-4">
-                      {members.map((member, index) => (
-                        <li key={index} className="flex items-center gap-4">
-                          <Avatar className="h-12 w-12">
-                            <AvatarImage src={member.avatarUrl} alt={member.name} />
-                            <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <p className="font-semibold">{member.name}</p>
-                            <p className="text-sm text-muted-foreground">{member.title}</p>
-                          </div>
-                        </li>
-                      ))}
+                      {members.length > 0 ? (
+                        members.map((member, index) => (
+                          <li key={index} className="flex items-center gap-4">
+                            <Avatar className="h-12 w-12">
+                              <AvatarImage src={member.avatarUrl} alt={member.name} />
+                              <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <p className="font-semibold">{member.name}</p>
+                              <p className="text-sm text-muted-foreground">{member.title}</p>
+                            </div>
+                          </li>
+                        ))
+                      ) : (
+                        <p className="text-sm text-muted-foreground">Bu departmanda henüz çalışan bulunmuyor.</p>
+                      )}
                     </ul>
                   </div>
                 </DialogContent>
