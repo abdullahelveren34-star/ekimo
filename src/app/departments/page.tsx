@@ -21,7 +21,6 @@ import {
 } from 'lucide-react';
 import React from 'react';
 import { departmentMembers } from '@/lib/data';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import {
   Dialog,
   DialogContent,
@@ -51,7 +50,6 @@ const departments = [
 
 export default function DepartmentsPage() {
   return (
-    <TooltipProvider>
       <div className="space-y-8">
         <header>
           <h1 className="text-3xl font-bold text-foreground">Departmanlar</h1>
@@ -71,28 +69,8 @@ export default function DepartmentsPage() {
                       </div>
                     </CardHeader>
                     <CardContent>
-                      <div className="flex -space-x-2 overflow-hidden">
-                        {members.slice(0, 5).map((member, index) => (
-                          <Tooltip key={index}>
-                            <TooltipTrigger asChild>
-                              <Avatar className="h-8 w-8 border-2 border-card">
-                                <AvatarImage src={member.avatarUrl} alt={member.name} />
-                                <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
-                              </Avatar>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>{member.name}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        ))}
-                        {members.length > 5 && (
-                           <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-card bg-muted text-xs font-medium text-muted-foreground">
-                             +{members.length - 5}
-                           </div>
-                        )}
-                      </div>
-                      <div className="text-xs text-muted-foreground mt-3 flex items-center">
-                        <Users className="h-3 w-3 mr-1" />
+                      <div className="text-sm text-muted-foreground mt-3 flex items-center">
+                        <Users className="h-4 w-4 mr-2" />
                         {members.length} Üye
                       </div>
                     </CardContent>
@@ -130,8 +108,5 @@ export default function DepartmentsPage() {
           })}
         </div>
       </div>
-    </TooltipProvider>
   );
 }
-
-    
