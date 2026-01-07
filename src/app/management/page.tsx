@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { useFirebase } from '@/firebase';
 import { doc } from 'firebase/firestore';
-import { toast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import type { ApprovalRequest, RequestDetails } from '@/lib/actions';
 import { updateDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -50,6 +50,7 @@ const getEmployeeById = (id: string) => allEmployees.find(e => e.id === id);
 export default function ManagementPage() {
   const { firestore, user } = useFirebase();
   const [requests, setRequests] = useState<ApprovalRequest[]>(mockApprovalRequests);
+  const { toast } = useToast();
   const isLoading = false; // Mock loading state
 
   const handleRequestStatusUpdate = (requestId: string, newStatus: 'Onaylandı' | 'Reddedildi') => {
@@ -84,33 +85,32 @@ export default function ManagementPage() {
   const renderRequestDetails = (details: RequestDetails, requestType: string) => {
     const commonDetails = (
       <>
-        {renderDetail('Çalışan', details.employeeName)}
-        {renderDetail('Açıklama', details.description)}
+        {renderDetail('Talep Eden', details.employeeName)}
+        {renderDetail('Açıklama / Gerekçe', details.description)}
       </>
     );
 
     switch (requestType) {
       case 'İK Evrak':
         return <>
-          {commonDetails}
           {renderDetail('Belge Türü', details.documentType)}
+          {commonDetails}
         </>;
       case 'İzin':
         return <>
-          {commonDetails}
           {renderDetail('İzin Türü', details.leaveType)}
           {renderDetail('Başlangıç Tarihi', details.startDate ? new Date(details.startDate).toLocaleDateString('tr-TR') : null)}
           {renderDetail('Bitiş Tarihi', details.endDate ? new Date(details.endDate).toLocaleDateString('tr-TR') : null)}
+          {commonDetails}
         </>;
       case 'Masraf':
         return <>
-          {commonDetails}
           {renderDetail('Masraf Türü', details.expenseType)}
           {renderDetail('Tutar', details.amount ? `${details.amount} TL` : null)}
+          {commonDetails}
         </>;
       case 'Seyahat':
         return <>
-          {commonDetails}
           {renderDetail('Seyahat Tipi', details.travelRequestType === 'accommodation' ? 'Konaklama' : 'Uçak Bileti')}
           {details.travelRequestType === 'accommodation' && renderDetail('Şehir', details.city)}
           {details.travelRequestType === 'accommodation' && renderDetail('Otel', details.hotel)}
@@ -119,15 +119,15 @@ export default function ManagementPage() {
           {renderDetail('Gidiş Tarihi', details.startDate ? new Date(details.startDate).toLocaleDateString('tr-TR') : null)}
           {renderDetail('Dönüş Tarihi', details.endDate ? new Date(details.endDate).toLocaleDateString('tr-TR') : null)}
           {renderDetail('İkinci Yolcu', details.secondPassenger)}
+          {commonDetails}
         </>;
       case 'Araç':
         return <>
-          {commonDetails}
-          {renderDetail('Talep Eden', details.requesterName)}
           {renderDetail('Araç Plakası', details.vehiclePlate)}
           {renderDetail('Gidilecek Yer', details.destination)}
           {renderDetail('Gidiş Tarihi', details.startDate ? new Date(details.startDate).toLocaleDateString('tr-TR') : null)}
           {renderDetail('Dönüş Tarihi', details.endDate ? new Date(details.endDate).toLocaleDateString('tr-TR') : null)}
+          {commonDetails}
         </>;
       default:
         return commonDetails;
