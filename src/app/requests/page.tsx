@@ -1,5 +1,7 @@
 'use client';
 
+import React, { useState, useEffect } from 'react';
+import { Firestore } from 'firebase/firestore';
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -10,13 +12,20 @@ import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Briefcase, Car, FileText, HandCoins, Plane, Wrench, BedDouble, PlaneTakeoff, CalendarPlus } from "lucide-react"
 import { hotelsByCity, allCities, airportsByCity, currentUser } from "@/lib/data"
-import React, { useState } from "react"
 import { useFirebase } from "@/firebase"
 import { createApprovalRequest } from "@/lib/actions"
 import { toast } from "@/hooks/use-toast"
 
 export default function RequestsPage() {
-  const { firestore } = useFirebase();
+  const { firestore: fs } = useFirebase();
+  const [firestore, setFirestore] = useState<Firestore | null>(null);
+
+  useEffect(() => {
+    if (fs) {
+      setFirestore(fs);
+    }
+  }, [fs]);
+
 
   // Common state - Using IDs from data.ts
   const [employeeId] = useState(currentUser.id); 
@@ -66,7 +75,7 @@ export default function RequestsPage() {
 
   const handleSubmit = (requestType: string, details: any) => {
     if (!firestore) {
-      toast({ variant: "destructive", title: "Hata!", description: "Veritabanı bağlantısı kurulamadı." });
+      toast({ variant: "destructive", title: "Hata!", description: "Veritabanı bağlantısı kurulamadı. Lütfen sayfayı yenileyip tekrar deneyin." });
       return;
     }
     
@@ -147,7 +156,7 @@ export default function RequestsPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={() => handleSubmit('İK Evrak', { documentType, description: hrNotes })}>Talep Oluştur</Button>
+              <Button onClick={() => handleSubmit('İK Evrak', { documentType, description: hrNotes })} disabled={!firestore}>Talep Oluştur</Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -195,7 +204,7 @@ export default function RequestsPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={() => handleSubmit('İzin', { leaveType, startDate: leaveStartDate, endDate: leaveEndDate, description: leaveDescription })}>İzin Talebi Gönder</Button>
+              <Button onClick={() => handleSubmit('İzin', { leaveType, startDate: leaveStartDate, endDate: leaveEndDate, description: leaveDescription })} disabled={!firestore}>İzin Talebi Gönder</Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -225,7 +234,7 @@ export default function RequestsPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={() => handleSubmit('Masraf', { expenseType, amount: expenseAmount, description: expenseDescription })}>Masraf Bildir</Button>
+              <Button onClick={() => handleSubmit('Masraf', { expenseType, amount: expenseAmount, description: expenseDescription })} disabled={!firestore}>Masraf Bildir</Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -273,7 +282,7 @@ export default function RequestsPage() {
             <CardFooter>
               <Button onClick={() => handleSubmit('Araç', { 
                 requesterName, vehiclePlate, vehicleKm, destination, startDate, endDate, description: vehicleNotes
-              })}>Araç Talep Et</Button>
+              })} disabled={!firestore}>Araç Talep Et</Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -305,7 +314,7 @@ export default function RequestsPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={() => alert("Henüz entegre edilmedi.")}>Hizmet Talebi Gönder</Button>
+              <Button disabled={!firestore}>Hizmet Talebi Gönder</Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -327,7 +336,7 @@ export default function RequestsPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={() => alert("Henüz entegre edilmedi.")}>Avans Talep Et</Button>
+              <Button disabled={!firestore}>Avans Talep Et</Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -471,7 +480,7 @@ export default function RequestsPage() {
                 endDate: travelEndDate,
                 secondPassenger,
                 description: travelNotes,
-              })}>Seyahat Talebi Oluştur</Button>
+              })} disabled={!firestore}>Seyahat Talebi Oluştur</Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -480,3 +489,5 @@ export default function RequestsPage() {
     </div>
   );
 }
+
+    
