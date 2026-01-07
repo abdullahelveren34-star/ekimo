@@ -1,22 +1,31 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Shield } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useFirebase, useMemoFirebase, useCollection } from '@/firebase';
-import { collection, query, where, doc, updateDoc } from 'firebase/firestore';
+import { collection, query, where, doc } from 'firebase/firestore';
 import { toast } from '@/hooks/use-toast';
 import type { ApprovalRequest } from '@/lib/actions';
+import { updateDocumentNonBlocking } from '@/firebase/non-blocking-updates';
+import { currentUser } from '@/lib/data';
 
 export default function ManagementPage() {
-  const { firestore, user } = useFirebase();
+  const { firestore } = useFirebase();
   
+  // Using the hardcoded ID for the manager from data.ts
+  const approverId = 'izlem-manduz-id';
+
   const requestsQuery = useMemoFirebase(() => {
-    if (!firestore || !user) return null;
-    return query(collection(firestore, "approvalRequests"), where("approverId", "==", "izlem-manduz-id"), where("status", "==", "Beklemede"));
-  }, [firestore, user]);
+    if (!firestore || !approverId) return null;
+    return query(
+      collection(firestore, "approvalRequests"), 
+      where("approverId", "==", approverId), 
+      where("status", "==", "Beklemede")
+    );
+  }, [firestore, approverId]);
 
   const { data: requests, isLoading, error } = useCollection<ApprovalRequest>(requestsQuery);
 
@@ -26,31 +35,24 @@ export default function ManagementPage() {
       toast({
         variant: "destructive",
         title: "Hata!",
-        description: "Talep verileri alınamadı.",
+        description: error.message || "Talep verileri alınamadı.",
       });
     }
   }, [error]);
 
-  const handleRequestStatusUpdate = async (requestId: string, newStatus: 'Onaylandı' | 'Reddedildi') => {
+  const handleRequestStatusUpdate = (requestId: string, newStatus: 'Onaylandı' | 'Reddedildi') => {
     if (!firestore) return;
     const requestRef = doc(firestore, "approvalRequests", requestId);
-    try {
-      await updateDoc(requestRef, {
-        status: newStatus,
-        approvalDate: new Date().toISOString(),
-      });
-      toast({
-        title: "Başarılı!",
-        description: `Talep başarıyla ${newStatus.toLowerCase()}.`
-      });
-    } catch (error) {
-      console.error("Error updating request status: ", error);
-      toast({
-        variant: "destructive",
-        title: "Hata!",
-        description: "Talep durumu güncellenemedi.",
-      });
-    }
+    
+    updateDocumentNonBlocking(requestRef, {
+      status: newStatus,
+      approvalDate: new Date().toISOString(),
+    });
+
+    toast({
+      title: "Başarılı!",
+      description: `Talep başarıyla ${newStatus.toLowerCase()} olarak güncellendi.`
+    });
   };
 
   return (

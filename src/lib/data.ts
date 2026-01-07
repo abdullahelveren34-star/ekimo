@@ -190,7 +190,7 @@ export const departmentMembers: { [key: string]: Employee[] } = {
     { id: '47', name: 'Leyla Gencer', title: 'Marka Direktörü', department: 'Marka', email: 'leyla.gencer@e-kimo.com', phone: '555-567-8901', avatarUrl: 'https://images.unsplash.com/photo-1621784563330-42DC568403a3?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1980-12-12', annualLeave: { total: 26, used: 6, remaining: 20 }, equipment: [] },
   ],
   'İnsan Kaynakları': [
-    { id: '4', name: 'İzlem Manduz', title: 'İK Müdürü', department: 'İnsan Kaynakları', email: 'izlem.manduz-id@e-kimo.com', phone: '555-444-4444', avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1985-04-23', annualLeave: { total: 20, used: 5, remaining: 15 }, equipment: [{ type: 'Notebook', model: 'Dell XPS 15', serialNumber: 'SN44444'}] },
+    { id: 'izlem-manduz-id', name: 'İzlem Manduz', title: 'İK Müdürü', department: 'İnsan Kaynakları', email: 'izlem.manduz@e-kimo.com', phone: '555-444-4444', avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1985-04-23', annualLeave: { total: 20, used: 5, remaining: 15 }, equipment: [{ type: 'Notebook', model: 'Dell XPS 15', serialNumber: 'SN44444'}] },
     { id: '5', name: 'Can Boz', title: 'İK Uzmanı', department: 'İnsan Kaynakları', email: 'can.boz@e-kimo.com', phone: '555-555-5555', avatarUrl: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1992-11-30', annualLeave: { total: 14, used: 2, remaining: 12 }, equipment: [{ type: 'Notebook', model: 'Lenovo ThinkPad', serialNumber: 'SN55555'}] },
     { id: '48', name: 'Merve Çetin', title: 'İşe Alım Uzmanı', department: 'İnsan Kaynakları', email: 'merve.cetin@e-kimo.com', phone: '555-444-4446', avatarUrl: 'https://images.unsplash.com/photo-1532074205216-d0e1f4b87368?q=80&w=1941&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1993-07-19', annualLeave: { total: 14, used: 11, remaining: 3 }, equipment: [] },
     { id: '49', name: 'Nazlı Özer', title: 'Bordro ve Özlük İşleri Uzmanı', department: 'İnsan Kaynakları', email: 'nazli.ozer@e-kimo.com', phone: '555-444-4447', avatarUrl: 'https://images.unsplash.com/photo-1599842057874-37393e9342df?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1990-01-05', annualLeave: { total: 16, used: 10, remaining: 6 }, equipment: [] },
@@ -200,7 +200,7 @@ export const departmentMembers: { [key: string]: Employee[] } = {
     { id: '51', name: 'Peri Tozu', title: 'Resepsiyonist', department: 'İdari İşler', email: 'peri.tozu@e-kimo.com', phone: '555-678-9013', avatarUrl: 'https://images.unsplash.com/photo-1601288496920-b6154fe3626a?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1999-03-03', annualLeave: { total: 14, used: 1, remaining: 13 }, equipment: [] },
   ],
   'BT': [
-    { id: '6', name: 'Abdullah Elveren', title: 'Grup Bilgi Teknolojileri Direktörü', department: 'BT', email: 'abdullah.elveren@e-kimo.com', phone: '555-666-6666', avatarUrl: 'https://images.unsplash.com/photo-1557862921-37829c790f19?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1980-01-01', annualLeave: { total: 25, used: 10, remaining: 15 }, equipment: [{ type: 'Notebook', model: 'MacBook Pro 14"', serialNumber: 'SN66666'}, { type: 'Cep Telefonu', model: 'iPhone 15 Pro Max', serialNumber: 'SN66667'}] },
+    { id: 'abdullah-elveren-id', name: 'Abdullah Elveren', title: 'Grup Bilgi Teknolojileri Direktörü', department: 'BT', email: 'abdullah.elveren@e-kimo.com', phone: '555-666-6666', avatarUrl: 'https://images.unsplash.com/photo-1557862921-37829c790f19?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1980-01-01', annualLeave: { total: 25, used: 10, remaining: 15 }, equipment: [{ type: 'Notebook', model: 'MacBook Pro 14"', serialNumber: 'SN66666'}, { type: 'Cep Telefonu', model: 'iPhone 15 Pro Max', serialNumber: 'SN66667'}] },
     { id: '52', name: 'Rana Kaplan', title: 'Yazılım Geliştirme Uzmanı', department: 'BT', email: 'rana.kaplan@e-kimo.com', phone: '555-666-6667', avatarUrl: 'https://images.unsplash.com/photo-1542103749-8ef59b94f47e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1992-06-11', annualLeave: { total: 14, used: 7, remaining: 7 }, equipment: [{ type: 'Notebook', model: 'Dell Alienware', serialNumber: 'SN52525'}] },
     { id: '53', name: 'Salih Eren', title: 'Sistem ve Ağ Uzmanı', department: 'BT', email: 'salih.eren@e-kimo.com', phone: '555-666-6668', avatarUrl: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1988-10-02', annualLeave: { total: 18, used: 8, remaining: 10 }, equipment: [{ type: 'Notebook', model: 'Asus ROG', serialNumber: 'SN53535'}] },
     { id: '54', name: 'Tuba Dal', title: 'BT Destek Uzmanı', department: 'BT', email: 'tuba.dal@e-kimo.com', phone: '555-666-6669', avatarUrl: 'https://images.unsplash.com/photo-1629425733761-caae3b5f2e50?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1996-05-16', annualLeave: { total: 14, used: 14, remaining: 0 }, equipment: [] },
@@ -210,7 +210,7 @@ export const departmentMembers: { [key: string]: Employee[] } = {
 export const allEmployees = Object.values(departmentMembers).flat();
 
 export const currentUser = {
-  id: '6',
+  id: 'abdullah-elveren-id',
   name: 'Abdullah Elveren',
   title: 'Grup Bilgi Teknolojileri Direktörü',
   avatarUrl: 'https://images.unsplash.com/photo-1557862921-37829c790f19?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -407,6 +407,7 @@ export const airportsByCity: { [key: string]: string[] } = {
   "Tekirdağ": ["Tekirdağ Çorlu Atatürk Havalimanı (TEQ)"],
   "Tokat": ["Tokat Havalimanı (TJK)"],
   "Trabzon": ["Trabzon Havalimanı (TZX)"],
+  "Tunceli": ["Royal Tunceli Hotel", "Grand Sahin Hotel"],
   "Uşak": ["Uşak Havalimanı (USQ)"],
   "Van": ["Van Ferit Melen Havalimanı (VAN)"],
   "Zonguldak": ["Zonguldak Çaycuma Havalimanı (ONQ)"]

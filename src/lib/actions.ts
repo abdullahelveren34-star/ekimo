@@ -1,8 +1,9 @@
 'use server';
 
-import { collection, addDoc, serverTimestamp, Firestore } from 'firebase/firestore';
+import { collection, addDoc, Firestore } from 'firebase/firestore';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
+import { addDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 
 
 // Define a more specific type for the 'details' object
@@ -73,15 +74,6 @@ export async function createApprovalRequest(
       status: 'Beklemede',
   };
 
-  addDoc(requestsCollection, data).catch(error => {
-    console.error('Error creating approval request:', error);
-    const permissionError = new FirestorePermissionError({
-        path: requestsCollection.path,
-        operation: 'create',
-        requestResourceData: data,
-    });
-    errorEmitter.emit('permission-error', permissionError);
-    // Re-throw a more generic error for the UI if needed
-    throw new Error('Failed to create approval request in Firestore.');
-  });
+  // Use the non-blocking function to add the document
+  addDocumentNonBlocking(requestsCollection, data);
 }

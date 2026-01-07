@@ -18,9 +18,9 @@ import { toast } from "@/hooks/use-toast"
 export default function RequestsPage() {
   const { firestore } = useFirebase();
 
-  // Common state
-  const [employeeId] = useState(currentUser.email); // Assume current user is the employee
-  const [approverId] = useState("izlem-manduz-id"); // Hardcoded manager ID for demo
+  // Common state - Using IDs from data.ts
+  const [employeeId] = useState(currentUser.id); 
+  const [approverId] = useState("izlem-manduz-id");
 
   // HR Document State
   const [documentType, setDocumentType] = useState('');
@@ -52,7 +52,7 @@ export default function RequestsPage() {
   const [selectedAccommodationCity, setSelectedAccommodationCity] = useState('');
   const [selectedHotel, setSelectedHotel] = useState('');
   const [departureCity, setDepartureCity] = useState('');
-  const [selectedDepartureAirport, setSelectedDepartureAirport] = useState('');
+  const [selectedDepartureAirport, setSelectedDepartureAirport] useState('');
   const [arrivalCity, setArrivalCity] = useState('');
   const [selectedArrivalAirport, setSelectedArrivalAirport] = useState('');
   const [travelStartDate, setTravelStartDate] = useState('');
@@ -73,19 +73,18 @@ export default function RequestsPage() {
     // Add employee name to details for easier display in management panel
     details.employeeName = currentUser.name;
 
-    try {
-      createApprovalRequest(firestore, {
-        employeeId,
-        approverId,
-        requestType,
-        details
-      });
-      toast({ title: "Başarılı!", description: "Talebiniz başarıyla oluşturuldu ve onaya gönderildi." });
-      // Reset form fields here if needed
-    } catch (error) {
-      console.error("Talep oluşturulurken hata:", error);
-      toast({ variant: "destructive", title: "Hata!", description: "Talep oluşturulurken bir sorun oluştu." });
-    }
+    createApprovalRequest(firestore, {
+      employeeId,
+      approverId,
+      requestType,
+      details
+    }).then(() => {
+        toast({ title: "Başarılı!", description: "Talebiniz başarıyla oluşturuldu ve onaya gönderildi." });
+        // Optionally reset form fields here
+    }).catch(error => {
+        console.error("Talep oluşturulurken hata:", error);
+        toast({ variant: "destructive", title: "Hata!", description: error.message || "Talep oluşturulurken bir sorun oluştu." });
+    });
   };
 
 
