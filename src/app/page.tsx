@@ -9,8 +9,8 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { Cake, Gift, Star, Send, Leaf, Clock, Calendar, MapPin, CloudSun, Gamepad2 } from 'lucide-react';
-import { CandyCrushGame } from '@/components/candy-crush-game';
+import { Cake, Gift, Star, Send, Leaf, Clock, Calendar, MapPin, CloudSun, BrainCircuit } from 'lucide-react';
+import { RubiksCubeGame } from '@/components/rubiks-cube-game';
 
 type Employee = {
   name: string;
@@ -321,15 +321,15 @@ export default function HomePage() {
         <Card>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                    <Gamepad2 className="text-primary" />
-                    Can Sıkıntısı İçin Bir Mola
+                    <BrainCircuit className="text-primary" />
+                    Zeka Küpü Mücadelesi
                 </CardTitle>
                 <CardDescription>
-                    Biraz ara verip eğlenmek için basit bir oyun. Renkli blokları sürükleyerek 3 veya daha fazlasını eşleştirin.
+                    Satırları ve sütunları döndürmek için butonları kullanın. Amacınız her yüzeyi tek bir renge getirmek.
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <CandyCrushGame />
+                <RubiksCubeGame />
             </CardContent>
         </Card>
       </section>
