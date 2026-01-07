@@ -21,6 +21,7 @@ import {
   Home,
   Building,
   ClipboardList,
+  FileText,
 } from 'lucide-react';
 
 const navItems = [
@@ -28,6 +29,7 @@ const navItems = [
   { href: '/', label: 'Ana Sayfa', icon: Home },
   { href: '/departments', label: 'Departmanlar', icon: Building },
   { href: '/requests', label: 'Talepler', icon: ClipboardList },
+  { href: '/documents', label: 'Dokümanlar', icon: FileText },
 ];
 
 const bottomNavItems = [
