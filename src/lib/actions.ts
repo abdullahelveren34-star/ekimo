@@ -62,10 +62,10 @@ interface CreateApprovalRequestInput {
  * @param firestore - The Firestore instance.
  * @param requestData - The data for the new request.
  */
-export function createApprovalRequest(
+export async function createApprovalRequest(
   firestore: Firestore,
   requestData: CreateApprovalRequestInput
-): void {
+): Promise<void> {
   const requestsCollection = collection(firestore, 'approvalRequests');
   const data = {
       ...requestData,
