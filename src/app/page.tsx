@@ -7,7 +7,9 @@ import { boardMembers, textileNews, companyNews, departmentMembers, employeeOfTh
 import Image from 'next/image';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Badge } from '@/components/ui/badge';
-import { Cake, Gift, Star } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+import { Cake, Gift, Star, Send } from 'lucide-react';
 
 type Employee = {
   name: string;
@@ -19,6 +21,7 @@ type Employee = {
 export default function HomePage() {
   const chairman = boardMembers.find(member => member.title === 'Yönetim Kurulu Başkanı');
   const [birthdayPersonnel, setBirthdayPersonnel] = useState<Employee[]>([]);
+  const { toast } = useToast();
 
   useEffect(() => {
     const today = new Date();
@@ -35,7 +38,13 @@ export default function HomePage() {
 
     setBirthdayPersonnel(todaysBirthdays);
   }, []);
-
+  
+  const handleCongratulate = (name: string) => {
+    toast({
+      title: 'Başarılı!',
+      description: `${name} için tebrik mesajı gönderildi.`,
+    });
+  };
 
   return (
     <div className="flex flex-col gap-8">
@@ -153,16 +162,22 @@ export default function HomePage() {
               Ayın Personeli
             </CardTitle>
           </CardHeader>
-          <CardContent className="flex items-center gap-6">
-            <Avatar className="h-24 w-24">
-              <AvatarImage src={employeeOfTheMonth.avatarUrl} alt={employeeOfTheMonth.name} />
-              <AvatarFallback>{employeeOfTheMonth.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-            </Avatar>
-            <div className="space-y-2">
-              <h3 className="text-xl font-bold">{employeeOfTheMonth.name}</h3>
-              <p className="text-muted-foreground">{employeeOfTheMonth.title}, {employeeOfTheMonth.department}</p>
-              <p className="text-sm italic">"{employeeOfTheMonth.reason}"</p>
+          <CardContent className="flex flex-col gap-4">
+            <div className="flex items-center gap-6">
+              <Avatar className="h-24 w-24">
+                <AvatarImage src={employeeOfTheMonth.avatarUrl} alt={employeeOfTheMonth.name} />
+                <AvatarFallback>{employeeOfTheMonth.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+              </Avatar>
+              <div className="space-y-2">
+                <h3 className="text-xl font-bold">{employeeOfTheMonth.name}</h3>
+                <p className="text-muted-foreground">{employeeOfTheMonth.title}, {employeeOfTheMonth.department}</p>
+                <p className="text-sm italic">"{employeeOfTheMonth.reason}"</p>
+              </div>
             </div>
+            <Button onClick={() => handleCongratulate(employeeOfTheMonth.name)} size="sm" className="self-start">
+              <Send className="mr-2 h-4 w-4" />
+              Tebrik Et
+            </Button>
           </CardContent>
         </Card>
         <Card>
@@ -187,7 +202,10 @@ export default function HomePage() {
                         <p className="text-sm text-muted-foreground">{person.title}</p>
                       </div>
                     </div>
-                    <Gift className="text-red-500" />
+                    <Button onClick={() => handleCongratulate(person.name)} variant="outline" size="sm">
+                       <Gift className="mr-2 h-4 w-4 text-red-500" />
+                       Tebrik Et
+                    </Button>
                   </li>
                 ))}
               </ul>
