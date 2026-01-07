@@ -4,7 +4,6 @@ import { boardMembers, textileNews, companyNews } from '@/lib/data';
 import Image from 'next/image';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Badge } from '@/components/ui/badge';
-import { SnakeGame } from '@/components/snake-game';
 
 export default function HomePage() {
   const chairman = boardMembers.find(member => member.title === 'Yönetim Kurulu Başkanı');
@@ -117,14 +116,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section>
-        <h2 className="text-2xl font-bold text-foreground mb-4">Küçük Bir Mola: Yılan Oyunu</h2>
-        <Card>
-          <CardContent className="p-4">
-            <SnakeGame />
-          </CardContent>
-        </Card>
-      </section>
     </div>
   );
 }
