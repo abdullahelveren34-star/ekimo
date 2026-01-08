@@ -57,6 +57,15 @@ const trainingDocuments = [
     type: 'video',
     source: 'https://www.youtube.com/embed/zEuA6pGK2gU'
   },
+  {
+    id: 5,
+    title: 'Yangın Güvenliği ve Acil Durum Eğitimi',
+    description: 'İş yerinde yangın güvenliği önlemleri, yangın söndürücü kullanımı ve acil durum tahliye prosedürleri.',
+    category: 'İSG',
+    lastUpdated: '29.07.2024',
+    type: 'video',
+    source: 'https://www.youtube.com/embed/gO51Q2i-k5E',
+  },
 ];
 
 const sopDocuments = [
