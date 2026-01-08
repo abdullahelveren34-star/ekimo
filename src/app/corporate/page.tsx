@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Landmark, Target, Eye, Building2, GitBranch } from 'lucide-react';
 import React from 'react';
 
-// Simplified structure for the organization chart based on titles and departments
 const orgChartData = {
   title: 'Yönetim Kurulu',
   children: [
@@ -32,35 +31,81 @@ const orgChartData = {
   ],
 };
 
-const OrgChartNode = ({ node, isRoot = false }: { node: { title: string; children?: any[] }, isRoot?: boolean }) => (
-    <div className={`relative flex items-center ${!isRoot ? 'ml-8' : ''}`}>
-        {/* Connector line to parent */}
-        {!isRoot && (
-            <div className="absolute left-0 top-1/2 h-px w-8 bg-border"></div>
-        )}
-        
-        {/* The node box */}
-        <div className="bg-muted p-3 rounded-lg shadow-md text-center inline-block min-w-[150px] z-10 relative">
-            <p className="font-semibold text-sm">{node.title}</p>
+const OrgChartNode = ({ node }: { node: { title: string; children?: any[] }}) => (
+    <div className="tree-node">
+        <div className="node-content bg-muted text-foreground p-2 rounded-lg shadow-sm border border-border inline-block">
+            {node.title}
         </div>
-
-        {/* Children container */}
         {node.children && node.children.length > 0 && (
-            <div className="relative pl-8">
-                 {/* Vertical line connecting to children block */}
-                <div className="absolute left-8 top-0 bottom-0 w-px bg-border"></div>
-                {/* Horizontal line from node to the vertical line */}
-                <div className="absolute left-0 top-1/2 h-px w-8 bg-border"></div>
-                
-                <ul className="flex flex-col gap-2">
-                    {node.children.map((child, index) => (
-                        <li key={index}>
-                            <OrgChartNode node={child} />
-                        </li>
-                    ))}
-                </ul>
-            </div>
+            <ul className="tree-children">
+                {node.children.map((child, index) => (
+                    <li key={index}>
+                        <OrgChartNode node={child} />
+                    </li>
+                ))}
+            </ul>
         )}
+        <style jsx>{`
+            .tree-node {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 0 10px;
+            }
+            .node-content {
+                white-space: nowrap;
+            }
+            .tree-children {
+                display: flex;
+                padding-left: 0;
+                list-style-type: none;
+                position: relative;
+                margin-top: 20px;
+            }
+            .tree-children::before {
+                content: '';
+                position: absolute;
+                top: -10px;
+                left: 50%;
+                width: 1px;
+                height: 10px;
+                background-color: hsl(var(--border));
+            }
+            .tree-children > li {
+                padding: 20px 10px 0;
+                position: relative;
+            }
+            .tree-children > li::before,
+            .tree-children > li::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 50%;
+                width: 50%;
+                height: 1px;
+                background-color: hsl(var(--border));
+            }
+            .tree-children > li::after {
+                left: 0;
+                width: 50%;
+            }
+            .tree-children > li:first-child::after {
+                display: none;
+            }
+            .tree-children > li:last-child::before {
+                display: none;
+            }
+            .tree-children > li > .tree-node::before {
+                content: '';
+                position: absolute;
+                top: -20px;
+                left: 50%;
+                width: 1px;
+                height: 20px;
+                background-color: hsl(var(--border));
+            }
+        `}</style>
     </div>
 );
 
@@ -70,7 +115,7 @@ export default function CorporatePage() {
     <div className="space-y-8">
       <header>
         <div className="flex items-center gap-3">
-          <Landmark className="h-8 w-8 text-purple-500" />
+          <Landmark className="h-8 w-8 text-primary" />
           <div>
             <h1 className="text-3xl font-bold text-foreground">Kurumsal</h1>
             <p className="text-muted-foreground mt-1">Şirketimizin kimliği, değerleri ve hedefleri hakkında bilgiler.</p>
@@ -127,13 +172,13 @@ export default function CorporatePage() {
         <Card className="lg:col-span-2">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                    <GitBranch className="h-6 w-6 text-red-500" />
+                    <GitBranch className="h-6 w-6 text-primary" />
                     Organizasyon Şeması
                 </CardTitle>
             </CardHeader>
             <CardContent className="overflow-x-auto p-6">
-                <div className="flex justify-start">
-                   <OrgChartNode node={orgChartData} isRoot={true} />
+                <div className="flex justify-center">
+                   <OrgChartNode node={orgChartData} />
                 </div>
             </CardContent>
         </Card>
