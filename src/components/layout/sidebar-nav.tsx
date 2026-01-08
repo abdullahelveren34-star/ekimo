@@ -42,7 +42,7 @@ const navItems = [
   { href: '/jobs', label: 'İş İlanları', icon: Briefcase, color: 'text-blue-500' },
   { href: '/requests', label: 'Talepler', icon: ClipboardList, color: 'text-cyan-500' },
   { href: '/bt-requests', label: 'BT Talepleri', icon: Server, color: 'text-gray-500' },
-  { href: '/documents', label: 'Dokümanlar', icon: FileText, color: 'text-indigo-500' },
+  { href: '/documents', label: 'Eğitim & Dokümanlar', icon: FileText, color: 'text-indigo-500' },
   { href: '/corporate', label: 'Kurumsal', icon: Landmark, color: 'text-purple-500' },
   { href: '/management', label: 'Yönetim', icon: Shield, id: 'management', color: 'text-red-500' },
 ];
