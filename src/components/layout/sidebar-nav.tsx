@@ -28,6 +28,7 @@ import {
   Server,
   Users,
   Shield,
+  Landmark,
 } from 'lucide-react';
 import { useFirebase, useCollection } from '@/firebase';
 import { collection, query, where } from 'firebase/firestore';
@@ -42,6 +43,7 @@ const navItems = [
   { href: '/requests', label: 'Talepler', icon: ClipboardList },
   { href: '/bt-requests', label: 'BT Talepleri', icon: Server },
   { href: '/documents', label: 'Dokümanlar', icon: FileText },
+  { href: '/corporate', label: 'Kurumsal', icon: Landmark },
   { href: '/management', label: 'Yönetim', icon: Shield, id: 'management' },
 ];
 
