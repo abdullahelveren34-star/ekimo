@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -34,26 +33,33 @@ const orgChartData = {
 };
 
 const OrgChartNode = ({ node }: { node: { title: string; children?: any[] } }) => (
-  <div className="flex flex-col items-center text-center">
-    <div className="bg-muted/50 p-3 rounded-lg shadow-md text-center inline-block min-w-[150px]">
-      <p className="font-semibold">{node.title}</p>
-    </div>
-    {node.children && node.children.length > 0 && (
-      <div className="flex justify-center pt-8 relative">
-        {/* Vertical line from parent */}
-        <div className="absolute top-0 left-1/2 w-px h-8 bg-border -translate-x-1/2" />
-        {node.children.map((child, index) => (
-          <div key={index} className="px-4 relative">
-             {/* Horizontal line */}
-            <div className={`absolute top-0 h-px bg-border ${index === 0 ? 'left-1/2 w-1/2' : index === node.children!.length - 1 ? 'right-1/2 w-1/2' : 'w-full left-0'}`} />
-             {/* Vertical line to child */}
-            <div className="absolute top-0 left-1/2 w-px h-8 bg-border -translate-x-1/2" />
-            <OrgChartNode node={child} />
-          </div>
-        ))}
+    <div className="flex flex-col items-center">
+      {/* Node Box */}
+      <div className="bg-muted p-3 rounded-lg shadow-md text-center inline-block min-w-[150px] z-10 relative">
+        <p className="font-semibold">{node.title}</p>
       </div>
-    )}
-  </div>
+      
+      {/* Children */}
+      {node.children && node.children.length > 0 && (
+        <div className="flex flex-col items-center">
+          {/* Vertical line from parent to horizontal line */}
+          <div className="w-px h-8 bg-border" />
+          
+          <div className="flex justify-center relative">
+             {/* Horizontal line */}
+            <div className="absolute top-0 left-0 right-0 h-px bg-border" />
+
+            {node.children.map((child, index) => (
+              <div key={index} className="px-4 flex flex-col items-center relative">
+                 {/* Vertical line from horizontal line to child */}
+                <div className="w-px h-8 bg-border" />
+                <OrgChartNode node={child} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
 );
 
 
