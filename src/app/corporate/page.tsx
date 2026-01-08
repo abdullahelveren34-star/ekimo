@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Landmark, Target, Eye, Building2, GitBranch, Sitemap } from 'lucide-react';
+import { Landmark, Target, Eye, Building2, GitBranch } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const orgChartData = {
@@ -128,7 +128,7 @@ export default function CorporatePage() {
         <Card className="lg:col-span-2">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                    <Sitemap className="h-6 w-6 text-primary" />
+                    <GitBranch className="h-6 w-6 text-primary" />
                     Organizasyon Şeması
                 </CardTitle>
             </CardHeader>
