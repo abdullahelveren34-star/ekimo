@@ -2,144 +2,60 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Landmark, Target, Eye, Building2, GitBranch, ChevronsUpDown } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { allEmployees, Employee } from '@/lib/data';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import { Landmark, Target, Eye, Building2, GitBranch } from 'lucide-react';
+import React from 'react';
 
-type EmployeeNode = {
-  id: string;
-  name: string;
-  title: string;
-  avatar: string;
-  children: EmployeeNode[];
+// Simplified structure for the organization chart based on titles and departments
+const orgChartData = {
+  title: 'Yönetim Kurulu',
+  children: [
+    {
+      title: 'Genel Müdür',
+      children: [
+        { title: 'Satış' },
+        { title: 'Pazarlama' },
+        { title: 'Tasarım' },
+        { title: 'Satınalma' },
+        { title: 'Üretim Planlama' },
+        { title: 'Üretim' },
+        { title: 'Kalite ve Güvence' },
+        { title: 'Sosyal Uygunluk' },
+        { title: 'Mali İşler' },
+        { title: 'Modelhane' },
+        { title: 'Depolar' },
+        { title: 'Kesimhane' },
+        { title: 'Marka' },
+        { title: 'İnsan Kaynakları' },
+        { title: 'İdari İşler' },
+        { title: 'BT' },
+      ],
+    },
+  ],
 };
 
-const buildHierarchy = (employees: Employee[]): EmployeeNode | null => {
-    const employeeMap: { [id: string]: EmployeeNode } = {};
-    employees.forEach(emp => {
-        employeeMap[emp.id] = {
-            id: emp.id,
-            name: emp.name,
-            title: emp.title,
-            avatar: emp.avatarUrl,
-            children: [],
-        };
-    });
-
-    const managers: { [dept: string]: EmployeeNode } = {};
-    const directors: EmployeeNode[] = [];
-    let generalManager: EmployeeNode | null = null;
-    let root: EmployeeNode | null = null;
-    let boardVicePresident: EmployeeNode | null = null;
-    const otherEmployees: EmployeeNode[] = [];
-
-    // Identify roles
-    employees.forEach(emp => {
-        const node = employeeMap[emp.id];
-        if (emp.title === 'Yönetim Kurulu Başkanı') {
-            root = node;
-        } else if (emp.title === 'Yönetim Kurulu Başkan Yrd.') {
-            boardVicePresident = node;
-        } else if (emp.title === 'Genel Müdür') {
-            generalManager = node;
-        } else if (emp.title.includes('Müdür') || emp.title.includes('Direktör')) {
-            managers[emp.department] = node;
-            directors.push(node);
-        } else {
-            otherEmployees.push(node);
-        }
-    });
-
-    if (!root) return null;
-
-    // Build hierarchy
-    if (boardVicePresident) {
-        root.children.push(boardVicePresident);
-    }
-    if (generalManager) {
-        root.children.push(generalManager);
-
-        // Link directors to General Manager
-        directors.forEach(directorNode => {
-            generalManager!.children.push(directorNode);
-        });
-        
-        // Link other employees to their respective managers, or to the general manager if no manager exists
-        const employeeToDepartmentMap = employees.reduce((acc, emp) => {
-            acc[emp.id] = emp.department;
-            return acc;
-        }, {} as Record<string, string>);
-
-        otherEmployees.forEach(empNode => {
-            const department = employeeToDepartmentMap[empNode.id];
-            const managerNode = managers[department];
-            if (managerNode) {
-                // Ensure we don't add a manager as a child of another manager in the same department
-                if (!managerNode.children.some(child => child.id === empNode.id) && managerNode.id !== empNode.id) {
-                     managerNode.children.push(empNode);
-                }
-            } else {
-                 // If no manager is found for the department, link to General Manager
-                 if (!generalManager!.children.some(child => child.id === empNode.id)) {
-                    generalManager!.children.push(empNode);
-                 }
-            }
-        });
-    }
-
-    return root;
-};
-
-
-const OrgChartNode = ({ node }: { node: EmployeeNode }) => (
+const OrgChartNode = ({ node }: { node: { title: string; children?: any[] } }) => (
   <div className="flex flex-col items-center text-center">
-     <Collapsible>
-        <div className="bg-muted/50 p-3 rounded-lg shadow-md text-center inline-block min-w-[180px]">
-            <Link href={`/personnel/${node.id}`} className="block hover:opacity-80 transition-opacity">
-                <Avatar className="mx-auto h-20 w-20 mb-2 cursor-pointer transition-transform hover:scale-105">
-                    <AvatarImage src={node.avatar} alt={node.name} />
-                    <AvatarFallback>{node.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                </Avatar>
-                <p className="font-semibold">{node.name}</p>
-                <p className="text-xs text-muted-foreground">{node.title}</p>
-            </Link>
-            {node.children && node.children.length > 0 && (
-                 <CollapsibleTrigger asChild>
-                    <Button variant="ghost" size="sm" className="mt-2 text-xs">
-                        <ChevronsUpDown className="h-3 w-3 mr-1" />
-                        {node.children.length} Bağlı Kişi
-                    </Button>
-                </CollapsibleTrigger>
-            )}
-        </div>
-        {node.children && node.children.length > 0 && (
-        <CollapsibleContent>
-            <div className="flex flex-col items-center pt-4">
-                <div className="w-px h-4 bg-border" />
-                <div className="flex justify-center flex-wrap items-start">
-                {node.children.map((child, index) => (
-                    <div key={index} className="px-4 relative pt-4 mt-4">
-                        <div className="absolute top-0 left-1/2 w-px h-8 bg-border -translate-x-1/2" />
-                        { node.children!.length > 1 && <div className={`absolute top-4 h-px bg-border ${index === 0 ? 'left-1/2 w-1/2' : index === node.children!.length - 1 ? 'right-1/2 w-1/2' : 'w-full left-0'}`} />}
-                        <OrgChartNode node={child} />
-                    </div>
-                ))}
-                </div>
-            </div>
-        </CollapsibleContent>
-        )}
-    </Collapsible>
+    <div className="bg-muted/50 p-3 rounded-lg shadow-md text-center inline-block min-w-[150px]">
+      <p className="font-semibold">{node.title}</p>
+    </div>
+    {node.children && node.children.length > 0 && (
+      <div className="flex justify-center pt-8 relative">
+        {/* Vertical line from parent */}
+        <div className="absolute top-0 left-1/2 w-px h-8 bg-border -translate-x-1/2" />
+        {node.children.map((child, index) => (
+          <div key={index} className="px-4 relative">
+             {/* Horizontal line */}
+            <div className={`absolute top-0 h-px bg-border ${index === 0 ? 'left-1/2 w-1/2' : index === node.children!.length - 1 ? 'right-1/2 w-1/2' : 'w-full left-0'}`} />
+             {/* Vertical line to child */}
+            <div className="absolute top-0 left-1/2 w-px h-8 bg-border -translate-x-1/2" />
+            <OrgChartNode node={child} />
+          </div>
+        ))}
+      </div>
+    )}
   </div>
 );
 
-const orgChartData = buildHierarchy(allEmployees);
 
 export default function CorporatePage() {
   return (
@@ -208,8 +124,8 @@ export default function CorporatePage() {
                 </CardTitle>
             </CardHeader>
             <CardContent className="overflow-x-auto p-6">
-                <div className="min-w-max py-4">
-                   {orgChartData ? <OrgChartNode node={orgChartData} /> : <p>Organizasyon şeması yüklenemedi.</p>}
+                <div className="flex justify-center min-w-max py-4">
+                   <OrgChartNode node={orgChartData} />
                 </div>
             </CardContent>
         </Card>
