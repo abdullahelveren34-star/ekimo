@@ -33,17 +33,26 @@ const orgChartData = {
 };
 
 const OrgChartNode = ({ node, isRoot = false }: { node: { title: string; children?: any[] }, isRoot?: boolean }) => (
-    <div className={`relative flex flex-col items-center justify-center ${!isRoot && 'pl-8'}`}>
-        {/* Connector line for non-root nodes */}
+    <div className={`relative flex items-center ${!isRoot ? 'ml-8' : ''}`}>
+        {/* Connector line to parent */}
         {!isRoot && (
             <div className="absolute left-0 top-1/2 h-px w-8 bg-border"></div>
         )}
+        
+        {/* The node box */}
         <div className="bg-muted p-3 rounded-lg shadow-md text-center inline-block min-w-[150px] z-10 relative">
             <p className="font-semibold text-sm">{node.title}</p>
         </div>
+
+        {/* Children container */}
         {node.children && node.children.length > 0 && (
-            <div className="relative mt-2 pl-8 border-l border-border">
-                <ul className="space-y-2">
+            <div className="relative pl-8">
+                 {/* Vertical line connecting to children block */}
+                <div className="absolute left-8 top-0 bottom-0 w-px bg-border"></div>
+                {/* Horizontal line from node to the vertical line */}
+                <div className="absolute left-0 top-1/2 h-px w-8 bg-border"></div>
+                
+                <ul className="flex flex-col gap-2">
                     {node.children.map((child, index) => (
                         <li key={index}>
                             <OrgChartNode node={child} />
