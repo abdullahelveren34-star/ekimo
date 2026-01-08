@@ -22,64 +22,79 @@ type EmployeeNode = {
 };
 
 const buildHierarchy = (employees: Employee[]): EmployeeNode | null => {
-  const employeeMap: { [id: string]: EmployeeNode } = {};
-  employees.forEach(emp => {
-    employeeMap[emp.id] = {
-      id: emp.id,
-      name: emp.name,
-      title: emp.title,
-      avatar: emp.avatarUrl,
-      children: [],
-    };
-  });
-
-  let root: EmployeeNode | null = null;
-  const managers: { [dept: string]: EmployeeNode } = {};
-  const directors: EmployeeNode[] = [];
-  let generalManager: EmployeeNode | null = null;
-  const otherEmployees: Employee[] = [];
-
-  // Group employees by role
-  employees.forEach(emp => {
-    if (emp.title === 'Yönetim Kurulu Başkanı') {
-      root = employeeMap[emp.id];
-    } else if (emp.title === 'Genel Müdür') {
-      generalManager = employeeMap[emp.id];
-    } else if (emp.title.includes('Direktör') || emp.title.includes('Müdür')) {
-        if(emp.title.includes('Direktör') || emp.title.includes('Müdür')){
-            managers[emp.department] = employeeMap[emp.id];
-        }
-        if(!emp.title.includes('Yönetim Kurulu')){
-            directors.push(employeeMap[emp.id]);
-        }
-    } else {
-      otherEmployees.push(emp);
-    }
-  });
-  
-  if (!root) return null;
-
-  // Link General Manager and Board Members to the root
-  const boardMember = Object.values(employeeMap).find(e=> e.title === 'Yönetim Kurulu Başkan Yrd.');
-  if (boardMember) root.children.push(boardMember);
-  if (generalManager) root.children.push(generalManager);
-
-  // Link Directors/Managers to the General Manager
-  if (generalManager) {
-    directors.forEach(directorNode => {
-        generalManager!.children.push(directorNode);
+    const employeeMap: { [id: string]: EmployeeNode } = {};
+    employees.forEach(emp => {
+        employeeMap[emp.id] = {
+            id: emp.id,
+            name: emp.name,
+            title: emp.title,
+            avatar: emp.avatarUrl,
+            children: [],
+        };
     });
-  }
 
-  // Link employees to their respective managers
-  otherEmployees.forEach(emp => {
-    const managerNode = managers[emp.department];
-    if (managerNode) {
-      managerNode.children.push(employeeMap[emp.id]);
+    const managers: { [dept: string]: EmployeeNode } = {};
+    const directors: EmployeeNode[] = [];
+    let generalManager: EmployeeNode | null = null;
+    let root: EmployeeNode | null = null;
+    let boardVicePresident: EmployeeNode | null = null;
+    const otherEmployees: EmployeeNode[] = [];
+
+    // Identify roles
+    employees.forEach(emp => {
+        const node = employeeMap[emp.id];
+        if (emp.title === 'Yönetim Kurulu Başkanı') {
+            root = node;
+        } else if (emp.title === 'Yönetim Kurulu Başkan Yrd.') {
+            boardVicePresident = node;
+        } else if (emp.title === 'Genel Müdür') {
+            generalManager = node;
+        } else if (emp.title.includes('Müdür') || emp.title.includes('Direktör')) {
+            managers[emp.department] = node;
+            directors.push(node);
+        } else {
+            otherEmployees.push(node);
+        }
+    });
+
+    if (!root) return null;
+
+    // Build hierarchy
+    if (boardVicePresident) {
+        root.children.push(boardVicePresident);
     }
-  });
+    if (generalManager) {
+        root.children.push(generalManager);
 
-  return root;
+        // Link directors to General Manager
+        directors.forEach(directorNode => {
+            generalManager!.children.push(directorNode);
+        });
+        
+        // Link other employees to their respective managers, or to the general manager if no manager exists
+        const employeeToDepartmentMap = employees.reduce((acc, emp) => {
+            acc[emp.id] = emp.department;
+            return acc;
+        }, {} as Record<string, string>);
+
+        otherEmployees.forEach(empNode => {
+            const department = employeeToDepartmentMap[empNode.id];
+            const managerNode = managers[department];
+            if (managerNode) {
+                // Ensure we don't add a manager as a child of another manager in the same department
+                if (!managerNode.children.some(child => child.id === empNode.id) && managerNode.id !== empNode.id) {
+                     managerNode.children.push(empNode);
+                }
+            } else {
+                 // If no manager is found for the department, link to General Manager
+                 if (!generalManager!.children.some(child => child.id === empNode.id)) {
+                    generalManager!.children.push(empNode);
+                 }
+            }
+        });
+    }
+
+    return root;
 };
 
 
