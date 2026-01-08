@@ -35,20 +35,20 @@ import { collection, query, where } from 'firebase/firestore';
 import { approverUser } from '@/lib/data';
 
 const navItems = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/', label: 'Ana Sayfa', icon: Home },
-  { href: '/departments', label: 'Departmanlar', icon: Building },
-  { href: '/personnel', label: 'Personel', icon: Users },
-  { href: '/jobs', label: 'İş İlanları', icon: Briefcase },
-  { href: '/requests', label: 'Talepler', icon: ClipboardList },
-  { href: '/bt-requests', label: 'BT Talepleri', icon: Server },
-  { href: '/documents', label: 'Dokümanlar', icon: FileText },
-  { href: '/corporate', label: 'Kurumsal', icon: Landmark },
-  { href: '/management', label: 'Yönetim', icon: Shield, id: 'management' },
+  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, color: 'text-sky-500' },
+  { href: '/', label: 'Ana Sayfa', icon: Home, color: 'text-green-500' },
+  { href: '/departments', label: 'Departmanlar', icon: Building, color: 'text-yellow-500' },
+  { href: '/personnel', label: 'Personel', icon: Users, color: 'text-orange-500' },
+  { href: '/jobs', label: 'İş İlanları', icon: Briefcase, color: 'text-blue-500' },
+  { href: '/requests', label: 'Talepler', icon: ClipboardList, color: 'text-cyan-500' },
+  { href: '/bt-requests', label: 'BT Talepleri', icon: Server, color: 'text-gray-500' },
+  { href: '/documents', label: 'Dokümanlar', icon: FileText, color: 'text-indigo-500' },
+  { href: '/corporate', label: 'Kurumsal', icon: Landmark, color: 'text-purple-500' },
+  { href: '/management', label: 'Yönetim', icon: Shield, id: 'management', color: 'text-red-500' },
 ];
 
 const bottomNavItems = [
-    { href: '/ai-screener', label: 'AI Tarama', icon: Bot },
+    { href: '/ai-screener', label: 'AI Tarama', icon: Bot, color: 'text-teal-500' },
 ]
 
 export function SidebarNav() {
@@ -85,7 +85,7 @@ export function SidebarNav() {
                   isActive={pathname.startsWith(item.href) && (item.href !== '/' || pathname === '/')}
                   tooltip={item.label}
                 >
-                  <item.icon />
+                  <item.icon className={item.color} />
                   <span>{item.label}</span>
                   {item.id === 'management' && pendingRequests && pendingRequests.length > 0 && (
                     <SidebarMenuBadge>{pendingRequests.length}</SidebarMenuBadge>
@@ -104,7 +104,7 @@ export function SidebarNav() {
                     isActive={pathname === item.href}
                     tooltip={item.label}
                     >
-                    <item.icon />
+                    <item.icon className={item.color} />
                     <span>{item.label}</span>
                     </SidebarMenuButton>
                 </Link>
