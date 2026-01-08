@@ -4,7 +4,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Landmark, Target, Eye, Building2, GitBranch, ChevronsUpDown } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { allEmployees } from '@/lib/data';
+import { allEmployees, Employee } from '@/lib/data';
 import {
   Collapsible,
   CollapsibleContent,
@@ -18,69 +18,64 @@ type EmployeeNode = {
   name: string;
   title: string;
   avatar: string;
-  children?: EmployeeNode[];
+  children: EmployeeNode[];
 };
 
-const buildHierarchy = (employees: typeof allEmployees): EmployeeNode | null => {
-  const employeeMap: { [id: string]: EmployeeNode & { employee: any } } = {};
+const buildHierarchy = (employees: Employee[]): EmployeeNode | null => {
+  const employeeMap: { [id: string]: EmployeeNode } = {};
   employees.forEach(emp => {
-    employeeMap[emp.id] = { 
+    employeeMap[emp.id] = {
       id: emp.id,
-      name: emp.name, 
-      title: emp.title, 
-      avatar: emp.avatarUrl, 
-      children: [], 
-      employee: emp 
+      name: emp.name,
+      title: emp.title,
+      avatar: emp.avatarUrl,
+      children: [],
     };
   });
 
   let root: EmployeeNode | null = null;
-  const directors: { [title: string]: EmployeeNode } = {};
+  const managers: { [dept: string]: EmployeeNode } = {};
+  const directors: EmployeeNode[] = [];
+  let generalManager: EmployeeNode | null = null;
+  const otherEmployees: Employee[] = [];
 
-  // First pass: identify root and directors
+  // Group employees by role
   employees.forEach(emp => {
-    const node = employeeMap[emp.id];
     if (emp.title === 'Yönetim Kurulu Başkanı') {
-      root = node;
-    } else if (emp.title === 'Genel Müdür' || emp.title.includes('Direktör') || emp.title.includes('Müdür')) {
-       if(!emp.title.includes('Yönetim Kurulu')){
-         directors[emp.title] = node;
-       }
+      root = employeeMap[emp.id];
+    } else if (emp.title === 'Genel Müdür') {
+      generalManager = employeeMap[emp.id];
+    } else if (emp.title.includes('Direktör') || emp.title.includes('Müdür')) {
+        if(emp.title.includes('Direktör') || emp.title.includes('Müdür')){
+            managers[emp.department] = employeeMap[emp.id];
+        }
+        if(!emp.title.includes('Yönetim Kurulu')){
+            directors.push(employeeMap[emp.id]);
+        }
+    } else {
+      otherEmployees.push(emp);
     }
   });
-
+  
   if (!root) return null;
 
-  // Find the General Manager and build the main branch
-  const generalManager = Object.values(employeeMap).find(e => e.title === 'Genel Müdür');
-  if (generalManager) {
-      const boardMember = Object.values(employeeMap).find(e=> e.title === 'Yönetim Kurulu Başkan Yrd.');
-      if(boardMember) {
-        root.children?.push(boardMember);
-      }
-      root.children?.push(generalManager);
+  // Link General Manager and Board Members to the root
+  const boardMember = Object.values(employeeMap).find(e=> e.title === 'Yönetim Kurulu Başkan Yrd.');
+  if (boardMember) root.children.push(boardMember);
+  if (generalManager) root.children.push(generalManager);
 
-      // Assign directors under the General Manager
-      Object.values(directors).forEach(directorNode => {
-          if(directorNode.title !== 'Genel Müdür' && (directorNode.title.includes('Direktör') || directorNode.title.includes('Müdür'))){
-              generalManager.children?.push(directorNode);
-          }
-      });
+  // Link Directors/Managers to the General Manager
+  if (generalManager) {
+    directors.forEach(directorNode => {
+        generalManager!.children.push(directorNode);
+    });
   }
 
-
-  // Assign employees to their respective directors
-  employees.forEach(emp => {
-    if (emp.title !== 'Yönetim Kurulu Başkanı' && emp.title !== 'Genel Müdür' && !emp.title.includes('Direktör') && !emp.title.includes('Müdür') && emp.title !== 'Yönetim Kurulu Başkan Yrd.') {
-      const directorTitle = emp.department === 'İnsan Kaynakları' ? 'İK Müdürü' :
-                           emp.department === 'BT' ? 'Grup IT Direktörü' :
-                           emp.department === 'Mali İşler' ? 'Mali İşler Direktörü' : null;
-      
-      const directorNode = Object.values(directors).find(d => d.title === directorTitle);
-
-      if (directorNode) {
-        directorNode.children?.push(employeeMap[emp.id]);
-      }
+  // Link employees to their respective managers
+  otherEmployees.forEach(emp => {
+    const managerNode = managers[emp.department];
+    if (managerNode) {
+      managerNode.children.push(employeeMap[emp.id]);
     }
   });
 
@@ -91,15 +86,15 @@ const buildHierarchy = (employees: typeof allEmployees): EmployeeNode | null => 
 const OrgChartNode = ({ node }: { node: EmployeeNode }) => (
   <div className="flex flex-col items-center text-center">
      <Collapsible>
-        <div className="bg-muted/50 p-3 rounded-lg shadow-md text-center inline-block">
-            <Link href={`/personnel/${node.id}`}>
+        <div className="bg-muted/50 p-3 rounded-lg shadow-md text-center inline-block min-w-[180px]">
+            <Link href={`/personnel/${node.id}`} className="block hover:opacity-80 transition-opacity">
                 <Avatar className="mx-auto h-20 w-20 mb-2 cursor-pointer transition-transform hover:scale-105">
                     <AvatarImage src={node.avatar} alt={node.name} />
                     <AvatarFallback>{node.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                 </Avatar>
+                <p className="font-semibold">{node.name}</p>
+                <p className="text-xs text-muted-foreground">{node.title}</p>
             </Link>
-            <p className="font-semibold">{node.name}</p>
-            <p className="text-xs text-muted-foreground">{node.title}</p>
             {node.children && node.children.length > 0 && (
                  <CollapsibleTrigger asChild>
                     <Button variant="ghost" size="sm" className="mt-2 text-xs">
@@ -113,7 +108,7 @@ const OrgChartNode = ({ node }: { node: EmployeeNode }) => (
         <CollapsibleContent>
             <div className="flex flex-col items-center pt-4">
                 <div className="w-px h-4 bg-border" />
-                <div className="flex justify-center flex-wrap">
+                <div className="flex justify-center flex-wrap items-start">
                 {node.children.map((child, index) => (
                     <div key={index} className="px-4 relative pt-4 mt-4">
                         <div className="absolute top-0 left-1/2 w-px h-8 bg-border -translate-x-1/2" />
@@ -207,5 +202,3 @@ export default function CorporatePage() {
     </div>
   );
 }
-
-    
