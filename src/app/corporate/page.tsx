@@ -32,33 +32,26 @@ const orgChartData = {
   ],
 };
 
-const OrgChartNode = ({ node }: { node: { title: string; children?: any[] } }) => (
-    <div className="flex flex-col items-center">
-      {/* Node Box */}
-      <div className="bg-muted p-3 rounded-lg shadow-md text-center inline-block min-w-[150px] z-10 relative">
-        <p className="font-semibold">{node.title}</p>
-      </div>
-      
-      {/* Children */}
-      {node.children && node.children.length > 0 && (
-        <div className="flex flex-col items-center">
-          {/* Vertical line from parent to horizontal line */}
-          <div className="w-px h-8 bg-border" />
-          
-          <div className="flex justify-center relative">
-             {/* Horizontal line */}
-            <div className="absolute top-0 left-0 right-0 h-px bg-border" />
-
-            {node.children.map((child, index) => (
-              <div key={index} className="px-4 flex flex-col items-center relative">
-                 {/* Vertical line from horizontal line to child */}
-                <div className="w-px h-8 bg-border" />
-                <OrgChartNode node={child} />
-              </div>
-            ))}
-          </div>
+const OrgChartNode = ({ node, isRoot = false }: { node: { title: string; children?: any[] }, isRoot?: boolean }) => (
+    <div className={`relative flex flex-col items-center justify-center ${!isRoot && 'pl-8'}`}>
+        {/* Connector line for non-root nodes */}
+        {!isRoot && (
+            <div className="absolute left-0 top-1/2 h-px w-8 bg-border"></div>
+        )}
+        <div className="bg-muted p-3 rounded-lg shadow-md text-center inline-block min-w-[150px] z-10 relative">
+            <p className="font-semibold text-sm">{node.title}</p>
         </div>
-      )}
+        {node.children && node.children.length > 0 && (
+            <div className="relative mt-2 pl-8 border-l border-border">
+                <ul className="space-y-2">
+                    {node.children.map((child, index) => (
+                        <li key={index}>
+                            <OrgChartNode node={child} />
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        )}
     </div>
 );
 
@@ -130,8 +123,8 @@ export default function CorporatePage() {
                 </CardTitle>
             </CardHeader>
             <CardContent className="overflow-x-auto p-6">
-                <div className="flex justify-center min-w-max py-4">
-                   <OrgChartNode node={orgChartData} />
+                <div className="flex justify-start">
+                   <OrgChartNode node={orgChartData} isRoot={true} />
                 </div>
             </CardContent>
         </Card>
