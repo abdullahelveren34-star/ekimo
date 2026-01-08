@@ -4,7 +4,21 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookOpen, ClipboardCheck, FileText } from 'lucide-react';
+import { BookOpen, ClipboardCheck, FileText, Youtube, Award, CheckCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
+import { currentUser } from '@/lib/data';
+
 
 const trainingDocuments = [
   {
@@ -13,6 +27,8 @@ const trainingDocuments = [
     description: 'Şirket kültürümüz, temel prosedürler ve departmanlar hakkında genel bilgilendirme.',
     category: 'Genel',
     lastUpdated: '15.07.2024',
+    type: 'document',
+    source: '/docs/oryantasyon.pdf',
   },
   {
     id: 2,
@@ -20,6 +36,8 @@ const trainingDocuments = [
     description: 'Tüm çalışanlar için zorunlu olan temel iş sağlığı ve güvenliği kuralları.',
     category: 'İSG',
     lastUpdated: '01.06.2024',
+    type: 'video',
+    source: 'https://www.youtube.com/embed/5_v-y_I-o-0',
   },
   {
     id: 3,
@@ -27,6 +45,8 @@ const trainingDocuments = [
     description: 'Yönetici ve yönetici adayları için liderlik becerilerini geliştirme materyalleri.',
     category: 'Yönetim',
     lastUpdated: '20.05.2024',
+    type: 'document',
+    source: '/docs/liderlik.pdf',
   },
    {
     id: 4,
@@ -34,6 +54,8 @@ const trainingDocuments = [
     description: 'Satış ekibinin müşteri portföyünü ve satış başarısını artırmaya yönelik teknikler.',
     category: 'Satış',
     lastUpdated: '18.07.2024',
+    type: 'video',
+    source: 'https://www.youtube.com/embed/zEuA6pGK2gU'
   },
 ];
 
@@ -74,6 +96,17 @@ const sopDocuments = [
 
 
 export default function DocumentsPage() {
+    const { toast } = useToast();
+    const [completedTrainings, setCompletedTrainings] = useState<Set<number>>(new Set());
+
+    const handleGenerateCertificate = (trainingId: number, trainingTitle: string) => {
+        setCompletedTrainings(prev => new Set(prev).add(trainingId));
+        toast({
+            title: '🎉 Tebrikler!',
+            description: `Sayın ${currentUser.name}, "${trainingTitle}" eğitimini başarıyla tamamladınız. Sertifikanız profilinize eklendi.`,
+        });
+    };
+    
   return (
     <div className="space-y-8">
       <header>
@@ -100,21 +133,73 @@ export default function DocumentsPage() {
         
         <TabsContent value="training">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-            {trainingDocuments.map((doc) => (
-              <Card key={doc.id} className="flex flex-col">
-                <CardHeader>
-                  <CardTitle className="text-lg">{doc.title}</CardTitle>
-                  <CardDescription>{doc.category} Kategorisi</CardDescription>
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <p className="text-sm text-muted-foreground">{doc.description}</p>
-                </CardContent>
-                <CardFooter className="flex justify-between items-center text-xs text-muted-foreground">
-                   <span>Son Güncelleme: {doc.lastUpdated}</span>
-                   <Button variant="secondary" size="sm">Görüntüle</Button>
-                </CardFooter>
-              </Card>
-            ))}
+            {trainingDocuments.map((doc) => {
+              const isCompleted = completedTrainings.has(doc.id);
+              const trainingCard = (
+                <Card key={doc.id} className="flex flex-col">
+                    <CardHeader>
+                        <div className='flex justify-between items-start'>
+                            <CardTitle className="text-lg">{doc.title}</CardTitle>
+                             <Badge variant="outline" className='flex items-center gap-2'>
+                                {doc.type === 'video' ? <Youtube className='h-4 w-4 text-red-500' /> : <FileText className='h-4 w-4' />}
+                                <span>{doc.type === 'video' ? 'Video' : 'Doküman'}</span>
+                            </Badge>
+                        </div>
+                        <CardDescription>{doc.category} Kategorisi</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex-grow">
+                        <p className="text-sm text-muted-foreground">{doc.description}</p>
+                    </CardContent>
+                    <CardFooter className="flex justify-between items-center text-xs text-muted-foreground">
+                        <span>Son Güncelleme: {doc.lastUpdated}</span>
+                        {isCompleted ? (
+                             <div className="flex items-center gap-2 text-green-500 font-semibold">
+                                <CheckCircle className="h-4 w-4" />
+                                Tamamlandı
+                            </div>
+                        ) : doc.type === 'document' ? (
+                            <Button size="sm" onClick={() => handleGenerateCertificate(doc.id, doc.title)}>
+                                <Award className="mr-2 h-4 w-4" />
+                                Eğitimi Tamamla & Sertifika Al
+                            </Button>
+                        ) : (
+                            <DialogTrigger asChild>
+                                <Button variant="secondary" size="sm">Videoyu İzle</Button>
+                            </DialogTrigger>
+                        )}
+                    </CardFooter>
+                </Card>
+              );
+
+              if (doc.type === 'video') {
+                return (
+                    <Dialog key={doc.id}>
+                        {trainingCard}
+                        <DialogContent className="max-w-4xl p-0">
+                            <div className="aspect-video">
+                                <iframe 
+                                    width="100%" 
+                                    height="100%" 
+                                    src={doc.source}
+                                    title={doc.title}
+                                    frameBorder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                    allowFullScreen
+                                ></iframe>
+                            </div>
+                            <DialogFooter className="p-4 bg-muted/50 border-t">
+                                <Button disabled={isCompleted} onClick={() => handleGenerateCertificate(doc.id, doc.title)}>
+                                    <Award className="mr-2 h-4 w-4" />
+                                    Eğitimi Tamamladım & Sertifika Al
+                                </Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
+                )
+              }
+              
+              return trainingCard;
+            })}
           </div>
         </TabsContent>
 
