@@ -1,5 +1,3 @@
-'use client';
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Landmark, Target, Eye, Building2, GitBranch } from 'lucide-react';
 import React from 'react';
