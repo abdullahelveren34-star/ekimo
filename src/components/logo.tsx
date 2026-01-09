@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 export function Logo({ className }: { className?: string }) {
   return (
     <svg
-      width="100"
+      width="110"
       height="32"
       viewBox="0 0 110 32"
       fill="none"
@@ -30,7 +30,7 @@ export function Logo({ className }: { className?: string }) {
         fontWeight="bold"
         fill="hsl(var(--sidebar-foreground))"
       >
-        kimo
+        KIMO
       </text>
     </svg>
   );
