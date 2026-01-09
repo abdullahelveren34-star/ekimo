@@ -1,6 +1,5 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   Users,
@@ -23,15 +22,16 @@ import {
 } from 'lucide-react';
 import React from 'react';
 import { departmentMembers } from '@/lib/data';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogDescription,
-} from "@/components/ui/dialog";
 import Link from 'next/link';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+
 
 const departments = [
   { name: 'Satış', icon: TrendingUp, color: 'text-green-500' },
@@ -54,48 +54,43 @@ const departments = [
 ];
 
 export default function DepartmentsPage() {
-
   return (
-      <div className="space-y-8">
-        <header>
-          <h1 className="text-3xl font-bold text-foreground">Departmanlar</h1>
-          <p className="text-muted-foreground mt-1">Şirket departmanlarını yönetin.</p>
-        </header>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="space-y-8">
+      <header>
+        <div className="flex items-center gap-3">
+          <Users className="h-8 w-8 text-primary" />
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">Departmanlar</h1>
+            <p className="text-muted-foreground mt-1">Şirket departmanlarını ve çalışanlarını görüntüleyin.</p>
+          </div>
+        </div>
+      </header>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Departman Listesi</CardTitle>
+          <CardDescription>Bir departmanın çalışanlarını görmek için üzerine tıklayın.</CardDescription>
+        </CardHeader>
+        <Accordion type="single" collapsible className="w-full px-6 pb-6">
           {departments.map((dept) => {
             const deptMembers = departmentMembers[dept.name as keyof typeof departmentMembers] || [];
             return (
-              <Dialog key={dept.name}>
-                <DialogTrigger asChild>
-                  <Card className="cursor-pointer hover:border-primary transition-colors">
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <CardTitle className="text-lg font-medium">{dept.name}</CardTitle>
-                        <dept.icon className={`h-5 w-5 ${dept.color}`} />
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-sm text-muted-foreground mt-3 flex items-center">
-                        <Users className="h-4 w-4 mr-2" />
-                        {deptMembers.length} Çalışan
-                      </div>
-                    </CardContent>
-                  </Card>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
-                  <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2">
-                      <dept.icon className={`h-5 w-5 ${dept.color}`} />
-                      {dept.name} Departmanı
-                    </DialogTitle>
-                    <DialogDescription>
-                      Bu departmanda görevli çalışanların listesi.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="py-4">
-                    <ul className="space-y-4 max-h-[60vh] overflow-y-auto pr-4">
-                      {deptMembers.length > 0 ? (
-                        deptMembers.map((member) => (
+              <AccordionItem value={dept.name} key={dept.name}>
+                <AccordionTrigger className="hover:no-underline">
+                  <div className="flex items-center gap-4">
+                    <dept.icon className={`h-6 w-6 ${dept.color}`} />
+                    <span className="text-lg font-medium">{dept.name}</span>
+                  </div>
+                  <Badge variant="secondary" className="flex items-center gap-2">
+                    <Users className="h-4 w-4" />
+                    {deptMembers.length} Çalışan
+                  </Badge>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="pt-4">
+                    {deptMembers.length > 0 ? (
+                      <ul className="space-y-4 max-h-[60vh] overflow-y-auto pr-4">
+                        {deptMembers.map((member) => (
                           <li key={member.id}>
                             <Link href={`/personnel/${member.id}`} className="flex items-center gap-4 p-2 rounded-md hover:bg-muted transition-colors">
                               <Avatar className="h-12 w-12">
@@ -108,17 +103,18 @@ export default function DepartmentsPage() {
                               </div>
                             </Link>
                           </li>
-                        ))
-                      ) : (
-                        <p className="text-sm text-muted-foreground">Bu departmanda henüz çalışan bulunmuyor.</p>
-                      )}
-                    </ul>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-sm text-muted-foreground text-center py-4">Bu departmanda henüz çalışan bulunmuyor.</p>
+                    )}
                   </div>
-                </DialogContent>
-              </Dialog>
+                </AccordionContent>
+              </AccordionItem>
             );
           })}
-        </div>
-      </div>
+        </Accordion>
+      </Card>
+    </div>
   );
 }
