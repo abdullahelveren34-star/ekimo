@@ -70,7 +70,7 @@ export function SidebarNav() {
     <>
       <SidebarHeader>
         <div className="flex items-center gap-3 p-2">
-            <Logo className="w-auto h-8" />
+            <Logo className="w-auto h-10" />
             <div className="grow" />
             <SidebarTrigger className="hidden md:flex" />
         </div>
