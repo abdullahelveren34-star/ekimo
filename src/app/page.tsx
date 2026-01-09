@@ -108,7 +108,7 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col gap-8">
-       <section className="flex justify-center">
+       <section className="flex justify-center p-6 bg-muted/50 rounded-lg -mt-4 -mx-4 sm:-mt-6 sm:-mx-6 lg:-mt-8 lg:-mx-8 mb-4">
         <Logo />
       </section>
 
