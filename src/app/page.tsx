@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Cake, Gift, Star, Send, Leaf, Clock, Calendar, MapPin, CloudSun } from 'lucide-react';
+import { Logo } from '@/components/logo';
 
 type Employee = {
   name: string;
@@ -107,6 +108,10 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col gap-8">
+       <section className="flex justify-center">
+        <Logo />
+      </section>
+
        <section>
         <Card>
           <CardContent className="p-4">
