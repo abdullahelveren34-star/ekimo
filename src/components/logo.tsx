@@ -3,9 +3,9 @@ import { cn } from "@/lib/utils";
 export function Logo({ className }: { className?: string }) {
   return (
     <svg
-      width="110"
-      height="32"
-      viewBox="0 0 110 32"
+      width="140"
+      height="40"
+      viewBox="0 0 140 40"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={cn("text-primary", className)}
@@ -24,13 +24,24 @@ export function Logo({ className }: { className?: string }) {
       />
       <text
         x="32"
-        y="23"
+        y="18"
         fontFamily="sans-serif"
         fontSize="20"
         fontWeight="bold"
         fill="hsl(var(--sidebar-foreground))"
       >
         KIMO
+      </text>
+      <text
+        x="32"
+        y="32"
+        fontFamily="sans-serif"
+        fontSize="8"
+        fontWeight="normal"
+        fill="hsl(var(--sidebar-foreground))"
+        letterSpacing="0.5"
+      >
+        COMMUNICATION
       </text>
     </svg>
   );
