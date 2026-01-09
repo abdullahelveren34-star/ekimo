@@ -19,7 +19,6 @@ import {
   LayoutDashboard,
   Settings,
   LogOut,
-  AtSign,
   Home,
   Building,
   ClipboardList,
@@ -33,6 +32,7 @@ import {
 import { useFirebase, useCollection } from '@/firebase';
 import { collection, query, where } from 'firebase/firestore';
 import { approverUser } from '@/lib/data';
+import { Logo } from '../logo';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, color: 'text-sky-500' },
@@ -70,8 +70,7 @@ export function SidebarNav() {
     <>
       <SidebarHeader>
         <div className="flex items-center gap-3 p-2">
-            <AtSign className="size-8 text-primary" />
-            <span className="text-lg font-semibold text-sidebar-foreground">E-Kimo</span>
+            <Logo className="w-auto h-8" />
             <div className="grow" />
             <SidebarTrigger className="hidden md:flex" />
         </div>
