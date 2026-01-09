@@ -1,6 +1,16 @@
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import {
   Users,
   TrendingUp,
@@ -20,18 +30,9 @@ import {
   DraftingCompass,
   Server,
 } from 'lucide-react';
-import React from 'react';
+import React, { useState } from 'react';
 import { departmentMembers } from '@/lib/data';
 import Link from 'next/link';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-
 
 const departments = [
   { name: 'Satış', icon: TrendingUp, color: 'text-green-500' },
@@ -54,6 +55,17 @@ const departments = [
 ];
 
 export default function DepartmentsPage() {
+  const [selectedDepartment, setSelectedDepartment] = useState<{ name: string, members: any[] } | null>(null);
+
+  const handleOpenDialog = (dept: { name: string; icon: React.ElementType; color: string }) => {
+    const deptMembers = departmentMembers[dept.name as keyof typeof departmentMembers] || [];
+    setSelectedDepartment({ name: dept.name, members: deptMembers });
+  };
+
+  const handleCloseDialog = () => {
+    setSelectedDepartment(null);
+  };
+
   return (
     <div className="space-y-8">
       <header>
@@ -66,55 +78,66 @@ export default function DepartmentsPage() {
         </div>
       </header>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Departman Listesi</CardTitle>
-          <CardDescription>Bir departmanın çalışanlarını görmek için üzerine tıklayın.</CardDescription>
-        </CardHeader>
-        <Accordion type="single" collapsible className="w-full px-6 pb-6">
-          {departments.map((dept) => {
-            const deptMembers = departmentMembers[dept.name as keyof typeof departmentMembers] || [];
-            return (
-              <AccordionItem value={dept.name} key={dept.name}>
-                <AccordionTrigger className="hover:no-underline">
-                  <div className="flex items-center gap-4">
-                    <dept.icon className={`h-6 w-6 ${dept.color}`} />
-                    <span className="text-lg font-medium">{dept.name}</span>
-                  </div>
-                  <Badge variant="secondary" className="flex items-center gap-2">
-                    <Users className="h-4 w-4" />
-                    {deptMembers.length} Çalışan
-                  </Badge>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="pt-4">
-                    {deptMembers.length > 0 ? (
-                      <ul className="space-y-4 max-h-[60vh] overflow-y-auto pr-4">
-                        {deptMembers.map((member) => (
-                          <li key={member.id}>
-                            <Link href={`/personnel/${member.id}`} className="flex items-center gap-4 p-2 rounded-md hover:bg-muted transition-colors">
-                              <Avatar className="h-12 w-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {departments.map((dept) => {
+          const deptMembers = departmentMembers[dept.name as keyof typeof departmentMembers] || [];
+          return (
+            <Dialog key={dept.name} onOpenChange={(isOpen) => !isOpen && handleCloseDialog()}>
+              <DialogTrigger asChild>
+                <Card 
+                  onClick={() => handleOpenDialog(dept)}
+                  className="group flex flex-col items-center justify-center p-6 text-center cursor-pointer hover:shadow-lg hover:border-primary transition-all"
+                >
+                  <CardHeader className="p-0">
+                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-muted group-hover:bg-primary transition-colors">
+                      <dept.icon className={`h-8 w-8 ${dept.color} group-hover:text-primary-foreground transition-colors`} />
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-0 mt-4">
+                    <CardTitle className="text-lg">{dept.name}</CardTitle>
+                     <p className="text-sm text-muted-foreground mt-1">{deptMembers.length} Çalışan</p>
+                  </CardContent>
+                </Card>
+              </DialogTrigger>
+            </Dialog>
+          );
+        })}
+      </div>
+
+       {selectedDepartment && (
+        <Dialog open={!!selectedDepartment} onOpenChange={(isOpen) => !isOpen && handleCloseDialog()}>
+            <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                <DialogTitle>{selectedDepartment.name} Departmanı</DialogTitle>
+                <DialogDescription>
+                    Bu departmanda görevli çalışanların listesi.
+                </DialogDescription>
+                </DialogHeader>
+                <div className="max-h-[60vh] overflow-y-auto pr-4">
+                    {selectedDepartment.members.length > 0 ? (
+                        <ul className="space-y-4">
+                        {selectedDepartment.members.map((member) => (
+                            <li key={member.id}>
+                            <Link href={`/personnel/${member.id}`} className="flex items-center gap-4 p-2 rounded-md hover:bg-muted transition-colors" onClick={handleCloseDialog}>
+                                <Avatar className="h-12 w-12">
                                 <AvatarImage src={member.avatarUrl} alt={member.name} />
                                 <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                              </Avatar>
-                              <div>
+                                </Avatar>
+                                <div>
                                 <p className="font-semibold">{member.name}</p>
                                 <p className="text-sm text-muted-foreground">{member.title}</p>
-                              </div>
+                                </div>
                             </Link>
-                          </li>
+                            </li>
                         ))}
-                      </ul>
+                        </ul>
                     ) : (
-                      <p className="text-sm text-muted-foreground text-center py-4">Bu departmanda henüz çalışan bulunmuyor.</p>
+                        <p className="text-sm text-muted-foreground text-center py-4">Bu departmanda henüz çalışan bulunmuyor.</p>
                     )}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            );
-          })}
-        </Accordion>
-      </Card>
+                </div>
+            </DialogContent>
+        </Dialog>
+       )}
     </div>
   );
 }
