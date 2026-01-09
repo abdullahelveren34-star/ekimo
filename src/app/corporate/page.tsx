@@ -45,106 +45,31 @@ const orgChartData = {
 
 
 const OrgChartNode = ({ node }: { node: { title: string; person?: string | null; children?: any[] }}) => (
-    <div className="tree-node">
-        <div className="node-content bg-muted text-foreground p-2 rounded-lg shadow-sm border border-border inline-block text-center">
+    <div className="relative flex flex-col items-center p-2">
+        <div className="bg-muted text-foreground p-2 rounded-lg shadow-sm border border-border inline-block text-center min-w-[120px] whitespace-nowrap">
             <div>{node.title}</div>
             {node.person && (
                 <div className="text-orange-500 text-xs mt-1">{node.person}</div>
             )}
         </div>
         {node.children && node.children.length > 0 && (
-            <ul className="tree-children">
+            <div className="flex pt-5 mt-5 relative">
+                {/* Vertical line from parent */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 h-5 w-px bg-border"></div>
                 {node.children.map((child, index) => (
-                    <li key={index}>
+                    <div key={index} className="relative px-2 flex flex-col items-center">
+                         {/* Horizontal line */}
+                        <div className="absolute top-0 left-0 w-full h-px bg-border"></div>
+                        {/* Hide ends for single child */}
+                        {node.children.length > 1 && index === 0 && <div className="absolute top-0 left-1/2 w-1/2 h-px bg-background"></div>}
+                        {node.children.length > 1 && index === node.children.length - 1 && <div className="absolute top-0 left-0 w-1/2 h-px bg-background"></div>}
+                        {/* Vertical line to child */}
+                        <div className="absolute -top-5 left-1/2 -translate-x-1/2 h-5 w-px bg-border"></div>
                         <OrgChartNode node={child} />
-                    </li>
+                    </div>
                 ))}
-            </ul>
+            </div>
         )}
-        <style jsx>{`
-            .tree-node {
-                position: relative;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                margin: 0 5px;
-            }
-            .node-content {
-                white-space: nowrap;
-                min-width: 120px;
-            }
-            .tree-children {
-                display: flex;
-                padding-left: 0;
-                list-style-type: none;
-                position: relative;
-                margin-top: 20px;
-            }
-            .tree-children::before {
-                content: '';
-                position: absolute;
-                top: -10px;
-                left: 50%;
-                width: 1px;
-                height: 10px;
-                background-color: hsl(var(--border));
-            }
-            .tree-children > li {
-                padding: 20px 5px 0;
-                position: relative;
-            }
-            .tree-children > li::before,
-            .tree-children > li::after {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 50%;
-                width: 50%;
-                height: 1px;
-                background-color: hsl(var(--border));
-            }
-            .tree-children > li::after {
-                left: 0;
-                width: 50%;
-            }
-            .tree-children > li:first-child::after {
-                border-top-left-radius: 4px;
-                border-left: 0;
-                left: 50%;
-                width: 50%;
-            }
-            .tree-children > li:last-child::before {
-                 border-top-right-radius: 4px;
-                 border-right: 0;
-                 left:0;
-                 width: 50%;
-            }
-            .tree-children > li:only-child::before, .tree-children > li:only-child::after {
-                display: none;
-            }
-
-            .tree-children > li:first-child:not(:only-child)::after {
-                left: 50%;
-                width: 50%;
-                border-top-left-radius: 0;
-            }
-
-            .tree-children > li:last-child:not(:only-child)::before {
-                width: 50%;
-                left: 0;
-                border-top-right-radius: 0;
-            }
-            
-            .tree-children > li > .tree-node::before {
-                content: '';
-                position: absolute;
-                top: -20px;
-                left: 50%;
-                width: 1px;
-                height: 20px;
-                background-color: hsl(var(--border));
-            }
-        `}</style>
     </div>
 );
 
