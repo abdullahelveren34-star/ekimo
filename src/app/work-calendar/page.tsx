@@ -92,9 +92,10 @@ const FormContent = ({
                   <SelectTrigger id="task-type"><SelectValue placeholder="Tür seçin..." /></SelectTrigger>
                   <SelectContent>
                       <SelectItem value="Planlama">Planlama</SelectItem>
-                      <SelectItem value="Üretim">Üretim</SelectItem>
-                      <SelectItem value="Geliştirme">Geliştirme</SelectItem>
-                      <SelectItem value="Analiz">Analiz</SelectItem>
+                      <SelectItem value="İş Takip">İş Takip</SelectItem>
+                      <SelectItem value="Operasyon">Operasyon</SelectItem>
+                      <SelectItem value="Sayım">Sayım</SelectItem>
+                      <SelectItem value="Bakım">Bakım</SelectItem>
                   </SelectContent>
               </Select>
           </div>
