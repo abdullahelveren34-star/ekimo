@@ -15,6 +15,13 @@ import { useFirebase } from "@/firebase"
 import { createApprovalRequest } from "@/lib/actions"
 import { toast } from "@/hooks/use-toast"
 
+const expenseTypeToKdvRate: { [key: string]: number } = {
+  'Yemek': 0.10,
+  'Ulaşım': 0.20,
+  'Konaklama': 0.10,
+  'Ofis Malzemesi': 0.20,
+};
+
 export default function RequestsPage() {
   const { firestore } = useFirebase();
 
@@ -37,6 +44,7 @@ export default function RequestsPage() {
   const [expenseAmount, setExpenseAmount] = useState('');
   const [expenseKdvRate, setExpenseKdvRate] = useState<number | undefined>(undefined);
   const [expenseKdvAmount, setExpenseKdvAmount] = useState<string>('');
+  const [totalExpenseAmount, setTotalExpenseAmount] = useState<string>('');
   const [expenseDescription, setExpenseDescription] = useState('');
 
   // Vehicle State
@@ -66,15 +74,26 @@ export default function RequestsPage() {
   const airportsForDepartureCity = departureCity ? airportsByCity[departureCity as keyof typeof airportsByCity] || [] : [];
   const airportsForArrivalCity = arrivalCity ? airportsByCity[arrivalCity as keyof typeof airportsByCity] || [] : [];
 
+ useEffect(() => {
+    if (expenseType && expenseTypeToKdvRate[expenseType]) {
+        setExpenseKdvRate(expenseTypeToKdvRate[expenseType]);
+    } else if (expenseType === 'Diğer') {
+        setExpenseKdvRate(undefined);
+    }
+  }, [expenseType]);
+
   useEffect(() => {
     if (expenseAmount && expenseKdvRate !== undefined) {
-        const amount = parseFloat(expenseAmount);
-        if (!isNaN(amount)) {
-            const kdv = amount * expenseKdvRate;
-            setExpenseKdvAmount(kdv.toFixed(2));
-        }
+      const amount = parseFloat(expenseAmount);
+      if (!isNaN(amount)) {
+        const kdv = amount * expenseKdvRate;
+        const total = amount + kdv;
+        setExpenseKdvAmount(kdv.toFixed(2));
+        setTotalExpenseAmount(total.toFixed(2));
+      }
     } else {
-        setExpenseKdvAmount('');
+      setExpenseKdvAmount('');
+      setTotalExpenseAmount(expenseAmount);
     }
   }, [expenseAmount, expenseKdvRate]);
   
@@ -89,6 +108,7 @@ export default function RequestsPage() {
     setExpenseAmount('');
     setExpenseKdvRate(undefined);
     setExpenseKdvAmount('');
+    setTotalExpenseAmount('');
     setExpenseDescription('');
     setRequesterName('');
     setVehiclePlate('');
@@ -270,12 +290,12 @@ export default function RequestsPage() {
               </div>
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="expense-amount">Tutar (KDV Hariç)</Label>
+                  <Label htmlFor="expense-amount">KDV Hariç Tutar</Label>
                   <Input id="expense-amount" type="number" placeholder="0.00 TL" value={expenseAmount} onChange={(e) => setExpenseAmount(e.target.value)} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="expense-kdv-rate">KDV Oranı</Label>
-                  <Select value={expenseKdvRate !== undefined ? String(expenseKdvRate) : ''} onValueChange={(value) => setExpenseKdvRate(Number(value))}>
+                  <Select value={expenseKdvRate !== undefined ? String(expenseKdvRate) : ''} onValueChange={(value) => setExpenseKdvRate(Number(value))} disabled={expenseType !== 'Diğer'}>
                     <SelectTrigger id="expense-kdv-rate">
                         <SelectValue placeholder="KDV oranı seçin..." />
                     </SelectTrigger>
@@ -287,10 +307,16 @@ export default function RequestsPage() {
                   </Select>
                 </div>
               </div>
-               <div className="space-y-2">
-                    <Label>Hesaplanan KDV Tutarı</Label>
-                    <Input value={expenseKdvAmount ? `${expenseKdvAmount} TL` : "0.00 TL"} readOnly className="bg-muted" />
-                </div>
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label>Hesaplanan KDV Tutarı</Label>
+                        <Input value={expenseKdvAmount ? `${expenseKdvAmount} TL` : "0.00 TL"} readOnly className="bg-muted" />
+                    </div>
+                    <div className="space-y-2">
+                        <Label>KDV Dahil Toplam Tutar</Label>
+                        <Input value={totalExpenseAmount ? `${totalExpenseAmount} TL` : "0.00 TL"} readOnly className="bg-muted font-bold text-primary" />
+                    </div>
+               </div>
               <div className="space-y-2">
                 <Label htmlFor="expense-description">Açıklama</Label>
                 <Textarea id="expense-description" placeholder="Masrafın detaylarını açıklayın..." value={expenseDescription} onChange={(e) => setExpenseDescription(e.target.value)} />
@@ -301,7 +327,7 @@ export default function RequestsPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={() => handleSubmit('Masraf', { expenseType, amount: expenseAmount, kdvRate: expenseKdvRate, kdv: expenseKdvAmount, description: expenseDescription })} disabled={!firestore}>Masraf Bildir</Button>
+              <Button onClick={() => handleSubmit('Masraf', { expenseType, amount: expenseAmount, kdvRate: expenseKdvRate, kdv: expenseKdvAmount, totalAmount: totalExpenseAmount, description: expenseDescription })} disabled={!firestore}>Masraf Bildir</Button>
             </CardFooter>
           </Card>
         </TabsContent>

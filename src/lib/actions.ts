@@ -20,6 +20,7 @@ export type RequestDetails = {
     amount?: string;
     kdvRate?: number;
     kdv?: string;
+    totalAmount?: string;
     // Travel request
     travelRequestType?: string;
     city?: string;
