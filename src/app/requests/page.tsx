@@ -239,7 +239,18 @@ export default function RequestsPage() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="expense-type">Masraf Türü</Label>
-                <Input id="expense-type" placeholder="örn. Yemek, Ulaşım, Konaklama" value={expenseType} onChange={(e) => setExpenseType(e.target.value)} />
+                 <Select value={expenseType} onValueChange={setExpenseType}>
+                  <SelectTrigger id="expense-type">
+                    <SelectValue placeholder="Masraf türünü seçin..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Yemek">Yemek</SelectItem>
+                    <SelectItem value="Ulaşım">Ulaşım (Taksi, Toplu Taşıma vb.)</SelectItem>
+                    <SelectItem value="Konaklama">Konaklama</SelectItem>
+                    <SelectItem value="Ofis Malzemesi">Ofis Malzemesi</SelectItem>
+                    <SelectItem value="Diğer">Diğer</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="expense-amount">Tutar</Label>
