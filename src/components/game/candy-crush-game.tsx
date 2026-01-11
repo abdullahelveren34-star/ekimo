@@ -195,58 +195,57 @@ export const CandyCrushGame = () => {
                 <CardTitle>Kimo Eşleştirme</CardTitle>
                 <CardDescription>Molada küçük bir oyun oynamaya ne dersin?</CardDescription>
             </CardHeader>
-            <CardContent>
-                <div className="grid md:grid-cols-2 gap-8 items-center">
-                     <div className="flex flex-col items-center md:items-start space-y-4">
-                        <div className="flex items-center gap-6 w-full">
-                             <div className="text-center flex-1">
-                                <div className={cn(
-                                    "text-4xl font-bold text-primary transition-all duration-300",
-                                    scoreUpdated && "score-updated"
-                                )}>{score}</div>
-                                <div className="text-sm text-muted-foreground">Puan</div>
-                            </div>
-                            <Button onClick={createBoard} className="flex-1">Yeni Oyun</Button>
-                        </div>
-                        <div className="p-4 bg-muted/50 rounded-lg text-xs text-muted-foreground space-y-1.5">
-                             <h4 className="font-semibold text-foreground text-sm">Nasıl Oynanır?</h4>
-                             <p>
-                                <strong>1. Sürükle ve Bırak:</strong> Bir taşı, hemen yanındaki (yukarı, aşağı, sol, sağ) başka bir taşla yer değiştirmek için sürükleyip bırakın.
-                            </p>
-                            <p>
-                                <strong>2. Eşleştir:</strong> Amacınız, aynı renkteki 3 veya daha fazla taşı dikey veya yatay bir çizgide bir araya getirmektir.
-                            </p>
-                             <p>
-                                <strong>3. Puan Kazan:</strong> Başarılı bir eşleşme yaptığınızda taşlar kaybolur ve puan kazanırsınız. 4'lü eşleşmeler daha çok puan verir!
-                            </p>
-                        </div>
+            <CardContent className="flex flex-col items-center gap-8">
+                <div className="flex justify-center">
+                    <div className="grid grid-cols-8 gap-1 p-2 bg-muted rounded-lg candy-crush-board">
+                        {board.map((item, index) => {
+                            const Icon = item.component;
+                            return (
+                                <div
+                                    key={index}
+                                    className={cn(
+                                        "w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-md cursor-grab transition-all duration-300",
+                                        "bg-muted/30 shadow-lg hover:scale-110 active:scale-95 active:cursor-grabbing",
+                                        "border-2 border-primary/50"
+                                    )}
+                                    data-id={index}
+                                    draggable={true}
+                                    onDragStart={dragStart}
+                                    onDragOver={(e) => e.preventDefault()}
+                                    onDragEnter={(e) => e.preventDefault()}
+                                    onDragLeave={(e) => e.preventDefault()}
+                                    onDrop={dragDrop}
+                                    onDragEnd={dragEnd}
+                                >
+                                    {Icon && <Icon className={`w-7 h-7 sm:w-9 sm:h-9 ${item.color} pointer-events-none`} />}
+                                </div>
+                            );
+                        })}
                     </div>
-                    <div className="flex justify-center">
-                        <div className="grid grid-cols-8 gap-1 p-2 bg-muted rounded-lg candy-crush-board">
-                            {board.map((item, index) => {
-                                const Icon = item.component;
-                                return (
-                                    <div
-                                        key={index}
-                                        className={cn(
-                                            "w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-md cursor-grab transition-all duration-300",
-                                            "bg-muted/30 shadow-lg hover:scale-110 active:scale-95 active:cursor-grabbing",
-                                            "border-2 border-primary/50"
-                                        )}
-                                        data-id={index}
-                                        draggable={true}
-                                        onDragStart={dragStart}
-                                        onDragOver={(e) => e.preventDefault()}
-                                        onDragEnter={(e) => e.preventDefault()}
-                                        onDragLeave={(e) => e.preventDefault()}
-                                        onDrop={dragDrop}
-                                        onDragEnd={dragEnd}
-                                    >
-                                        {Icon && <Icon className={`w-7 h-7 sm:w-9 sm:h-9 ${item.color} pointer-events-none`} />}
-                                    </div>
-                                );
-                            })}
+                </div>
+
+                <div className="flex flex-col items-center space-y-4 w-full max-w-md">
+                    <div className="flex items-center justify-between gap-6 w-full">
+                         <div className="text-center">
+                            <div className={cn(
+                                "text-4xl font-bold text-primary transition-all duration-300",
+                                scoreUpdated && "score-updated"
+                            )}>{score}</div>
+                            <div className="text-sm text-muted-foreground">Puan</div>
                         </div>
+                        <Button onClick={createBoard}>Yeni Oyun</Button>
+                    </div>
+                    <div className="p-4 bg-muted/50 rounded-lg text-xs text-muted-foreground space-y-1.5 w-full">
+                         <h4 className="font-semibold text-foreground text-sm text-center">Nasıl Oynanır?</h4>
+                         <p>
+                            <strong>1. Sürükle ve Bırak:</strong> Bir taşı, hemen yanındaki (yukarı, aşağı, sol, sağ) başka bir taşla yer değiştirmek için sürükleyip bırakın.
+                        </p>
+                        <p>
+                            <strong>2. Eşleştir:</strong> Amacınız, aynı renkteki 3 veya daha fazla taşı dikey veya yatay bir çizgide bir araya getirmektir.
+                        </p>
+                         <p>
+                            <strong>3. Puan Kazan:</strong> Başarılı bir eşleşme yaptığınızda taşlar kaybolur ve puan kazanırsınız. 4'lü eşleşmeler daha çok puan verir!
+                        </p>
                     </div>
                 </div>
             </CardContent>
