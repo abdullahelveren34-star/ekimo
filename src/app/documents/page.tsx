@@ -604,9 +604,9 @@ export default function DocumentsPage() {
 
                     <Separator />
 
-                     <div className="space-y-4 p-4 border rounded-lg bg-muted/50 text-muted-foreground">
-                        <h4 className="font-semibold text-foreground">Açık Rıza ve KVKK Bilgilendirme Metni</h4>
-                        <p className="text-xs">
+                     <div className="space-y-4 p-4 border rounded-lg bg-muted/50">
+                        <h4 className="font-semibold text-foreground text-primary">Açık Rıza ve KVKK Bilgilendirme Metni</h4>
+                        <p className="text-xs text-muted-foreground">
                             6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) uyarınca, bu formda yer alan performans değerlendirme verileriniz, iş sözleşmesi ve meşru menfaatlerimiz kapsamında, prim, terfi ve eğitim planlaması süreçlerinin yürütülmesi amacıyla Şirketimiz tarafından işlenmektedir. Bu veriler, yalnızca yetkili yöneticiler ve İnsan Kaynakları departmanı tarafından erişilebilir olacak ve yasal süreler boyunca güvenli bir şekilde saklanacaktır.
                         </p>
                          <div className="flex items-center space-x-2 pt-2">
@@ -626,3 +626,5 @@ export default function DocumentsPage() {
     </div>
   );
 }
+
+    
