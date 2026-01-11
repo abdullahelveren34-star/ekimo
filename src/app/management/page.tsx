@@ -1,18 +1,17 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Shield, FileText, CalendarPlus, HandCoins, Car, Plane, Wrench, Briefcase, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useFirebase } from '@/firebase';
-import { doc } from 'firebase/firestore';
+import { useFirebase, useCollection } from '@/firebase';
+import { doc, collection, query, where } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import type { ApprovalRequest, RequestDetails } from '@/lib/actions';
 import { updateDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { allEmployees } from '@/lib/data';
-import { mockApprovalRequests } from '@/lib/mock-requests';
 import {
   Dialog,
   DialogContent,
@@ -49,22 +48,33 @@ const getEmployeeById = (id: string) => allEmployees.find(e => e.id === id);
 
 export default function ManagementPage() {
   const { firestore, user } = useFirebase();
-  const [requests, setRequests] = useState<ApprovalRequest[]>(mockApprovalRequests);
   const { toast } = useToast();
-  const isLoading = false; // Mock loading state
+
+  const pendingRequestsQuery = useMemo(() => {
+    if (!firestore) return null;
+    return query(
+      collection(firestore, 'approvalRequests'),
+      where('status', '==', 'Beklemede')
+      // Potentially add: where('approverId', '==', user.uid)
+    );
+  }, [firestore]);
+
+  const { data: requests, isLoading } = useCollection<ApprovalRequest>(pendingRequestsQuery);
 
   const handleRequestStatusUpdate = (requestId: string, newStatus: 'Onaylandı' | 'Reddedildi') => {
-    // For live data, this would interact with Firestore
-    if (firestore) {
-      const requestRef = doc(firestore, "approvalRequests", requestId);
-      updateDocumentNonBlocking(requestRef, {
-        status: newStatus,
-        approvalDate: new Date().toISOString(),
+    if (!firestore) {
+      toast({
+        variant: "destructive",
+        title: "Hata!",
+        description: "Veritabanı bağlantısı kurulamadı."
       });
+      return;
     }
-
-    // For mock data, we just filter it out from the local state
-    setRequests(prevRequests => prevRequests.filter(req => req.id !== requestId));
+    const requestRef = doc(firestore, "approvalRequests", requestId);
+    updateDocumentNonBlocking(requestRef, {
+      status: newStatus,
+      approvalDate: new Date().toISOString(),
+    });
 
     toast({
       title: "Başarılı!",

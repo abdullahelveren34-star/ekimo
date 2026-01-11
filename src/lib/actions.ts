@@ -4,6 +4,7 @@ import { collection, addDoc, Firestore } from 'firebase/firestore';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 import { addDocumentNonBlocking } from '@/firebase/non-blocking-updates';
+import { toast } from '@/hooks/use-toast';
 
 
 // Define a more specific type for the 'details' object
@@ -74,7 +75,18 @@ export async function createApprovalRequest(
       status: 'Beklemede',
   };
 
-  // Use the non-blocking function to add the document
-  addDocumentNonBlocking(requestsCollection, data);
+  try {
+    await addDoc(requestsCollection, data);
+    toast({
+        title: "Talep Gönderildi!",
+        description: "Talebiniz başarıyla yönetici onayına gönderilmiştir.",
+    });
+  } catch(e) {
+      const permissionError = new FirestorePermissionError({
+        path: requestsCollection.path,
+        operation: 'create',
+        requestResourceData: data,
+      })
+      errorEmitter.emit('permission-error', permissionError);
+  }
 }
-
