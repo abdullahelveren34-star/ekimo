@@ -63,6 +63,35 @@ export default function RequestsPage() {
   const hotelsForSelectedCity = selectedAccommodationCity ? hotelsByCity[selectedAccommodationCity as keyof typeof hotelsByCity] || [] : [];
   const airportsForDepartureCity = departureCity ? airportsByCity[departureCity as keyof typeof airportsByCity] || [] : [];
   const airportsForArrivalCity = arrivalCity ? airportsByCity[arrivalCity as keyof typeof airportsByCity] || [] : [];
+  
+  const resetForms = () => {
+    setDocumentType('');
+    setHrNotes('');
+    setLeaveType('');
+    setLeaveStartDate('');
+    setLeaveEndDate('');
+    setLeaveDescription('');
+    setExpenseType('');
+    setExpenseAmount('');
+    setExpenseDescription('');
+    setRequesterName('');
+    setVehiclePlate('');
+    setVehicleKm('');
+    setDestination('');
+    setStartDate('');
+    setEndDate('');
+    setVehicleNotes('');
+    setSelectedAccommodationCity('');
+    setSelectedHotel('');
+    setDepartureCity('');
+    setSelectedDepartureAirport('');
+    setArrivalCity('');
+    setSelectedArrivalAirport('');
+    setTravelStartDate('');
+    setTravelEndDate('');
+    setSecondPassenger('');
+    setTravelNotes('');
+  };
 
   const handleSubmit = (requestType: string, details: any) => {
     if (!firestore) {
@@ -79,8 +108,9 @@ export default function RequestsPage() {
       requestType,
       details
     }).then(() => {
-        toast({ title: "Başarılı!", description: "Talebiniz başarıyla oluşturuldu ve onaya gönderildi." });
-        // Optionally reset form fields here
+        resetForms();
+        // Optionally, show a more subtle confirmation or just reset the form.
+        // For example, you could change a button text to "Sent!" for a short duration.
     }).catch(error => {
         console.error("Talep oluşturulurken hata:", error);
         toast({ variant: "destructive", title: "Hata!", description: error.message || "Talep oluşturulurken bir sorun oluştu." });
