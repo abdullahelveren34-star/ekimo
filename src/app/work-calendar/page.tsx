@@ -77,19 +77,6 @@ export default function WorkCalendarPage() {
     }
   }, [isAddDialogOpen]);
 
-  useEffect(() => {
-    if (editingTask) {
-        setNewTaskDescription(editingTask.description);
-        setNewTaskEmployee(editingTask.employeeId);
-        setNewTaskType(editingTask.type);
-        setNewTaskPriority(editingTask.priority);
-        setNewTaskDueDate(editingTask.dueDate);
-        setIsEditDialogOpen(true);
-    } else {
-        setIsEditDialogOpen(false);
-    }
-  }, [editingTask]);
-
   const resetForm = () => {
     setNewTaskDescription('');
     setNewTaskEmployee(currentUser.id);
@@ -128,6 +115,7 @@ export default function WorkCalendarPage() {
     toast({ title: "Görev Güncellendi!", description: `Görev başarıyla güncellendi.` });
     setEditingTask(null);
     resetForm();
+    setIsEditDialogOpen(false);
   };
 
   const handleCompleteTask = (taskId: number) => {
@@ -138,6 +126,28 @@ export default function WorkCalendarPage() {
   const handleDeleteTask = (taskId: number) => {
     setTasks(prev => prev.filter(task => task.id !== taskId));
     toast({ title: "Görev Silindi!", description: "Görev başarıyla silindi." });
+  };
+
+  const handleEditClick = (task: Task) => {
+    setEditingTask(task);
+    setNewTaskDescription(task.description);
+    setNewTaskEmployee(task.employeeId);
+    setNewTaskType(task.type);
+    setNewTaskPriority(task.priority);
+    setNewTaskDueDate(task.dueDate);
+    setIsEditDialogOpen(true);
+  };
+
+  const handleDialogClose = (isOpen: boolean) => {
+      if (!isOpen) {
+          resetForm();
+          setEditingTask(null);
+          setIsAddDialogOpen(false);
+          setIsEditDialogOpen(false);
+      } else if (isAddDialogOpen) {
+          setIsAddDialogOpen(true);
+          setNewTaskEmployee(currentUser.id);
+      }
   };
   
   const FormContent = () => (
@@ -198,8 +208,8 @@ export default function WorkCalendarPage() {
             <p className="text-muted-foreground mt-1">Çalışanların üretim ve planlama görevlerini yönetin.</p>
           </div>
         </div>
-        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-          <DialogTrigger asChild><Button><Plus className="mr-2 h-4 w-4" />Yeni Görev Ekle</Button></DialogTrigger>
+        <Dialog open={isAddDialogOpen} onOpenChange={handleDialogClose}>
+          <DialogTrigger asChild><Button onClick={() => setIsAddDialogOpen(true)}><Plus className="mr-2 h-4 w-4" />Yeni Görev Ekle</Button></DialogTrigger>
           <DialogContent className="sm:max-w-[480px]">
             <DialogHeader><DialogTitle>Yeni Görev Oluştur</DialogTitle><DialogDescription>Aşağıdaki formu doldurarak yeni bir görev atayın.</DialogDescription></DialogHeader>
             <FormContent />
@@ -252,7 +262,7 @@ export default function WorkCalendarPage() {
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><GripVertical className="h-4 w-4" /></Button></DropdownMenuTrigger>
                           <DropdownMenuContent>
-                            <DropdownMenuItem onClick={() => setEditingTask(task)}><Edit className="mr-2 h-4 w-4" /> Düzenle</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleEditClick(task)}><Edit className="mr-2 h-4 w-4" /> Düzenle</DropdownMenuItem>
                             <DropdownMenuItem onClick={() => handleCompleteTask(task.id)}><CheckCircle className="mr-2 h-4 w-4" /> Tamamla</DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="text-red-500" onClick={() => handleDeleteTask(task.id)}><Trash2 className="mr-2 h-4 w-4" /> Sil</DropdownMenuItem>
@@ -270,11 +280,11 @@ export default function WorkCalendarPage() {
         </CardContent>
       </Card>
       
-      <Dialog open={isEditDialogOpen} onOpenChange={(open) => !open && setEditingTask(null)}>
+      <Dialog open={isEditDialogOpen} onOpenChange={handleDialogClose}>
           <DialogContent className="sm:max-w-[480px]">
             <DialogHeader><DialogTitle>Görevi Düzenle</DialogTitle><DialogDescription>Görevin detaylarını güncelleyin.</DialogDescription></DialogHeader>
             <FormContent />
-            <DialogFooter><Button type="button" variant="outline" onClick={() => setEditingTask(null)}>İptal</Button><Button type="button" onClick={handleUpdateTask}>Değişiklikleri Kaydet</Button></DialogFooter>
+            <DialogFooter><Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>İptal</Button><Button type="button" onClick={handleUpdateTask}>Değişiklikleri Kaydet</Button></DialogFooter>
           </DialogContent>
       </Dialog>
     </div>
