@@ -35,6 +35,7 @@ export default function RequestsPage() {
   // Expense State
   const [expenseType, setExpenseType] = useState('');
   const [expenseAmount, setExpenseAmount] = useState('');
+  const [expenseKDV, setExpenseKDV] = useState('');
   const [expenseDescription, setExpenseDescription] = useState('');
 
   // Vehicle State
@@ -73,6 +74,7 @@ export default function RequestsPage() {
     setLeaveDescription('');
     setExpenseType('');
     setExpenseAmount('');
+    setExpenseKDV('');
     setExpenseDescription('');
     setRequesterName('');
     setVehiclePlate('');
@@ -252,9 +254,15 @@ export default function RequestsPage() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="expense-amount">Tutar</Label>
-                <Input id="expense-amount" type="number" placeholder="0.00 TL" value={expenseAmount} onChange={(e) => setExpenseAmount(e.target.value)} />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="expense-amount">Tutar</Label>
+                  <Input id="expense-amount" type="number" placeholder="0.00 TL" value={expenseAmount} onChange={(e) => setExpenseAmount(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="expense-kdv">KDV Tutarı</Label>
+                  <Input id="expense-kdv" type="number" placeholder="0.00 TL" value={expenseKDV} onChange={(e) => setExpenseKDV(e.target.value)} />
+                </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="expense-description">Açıklama</Label>
@@ -266,7 +274,7 @@ export default function RequestsPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={() => handleSubmit('Masraf', { expenseType, amount: expenseAmount, description: expenseDescription })} disabled={!firestore}>Masraf Bildir</Button>
+              <Button onClick={() => handleSubmit('Masraf', { expenseType, amount: expenseAmount, kdv: expenseKDV, description: expenseDescription })} disabled={!firestore}>Masraf Bildir</Button>
             </CardFooter>
           </Card>
         </TabsContent>

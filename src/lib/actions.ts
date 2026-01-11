@@ -18,6 +18,7 @@ export type RequestDetails = {
     // Expense request
     expenseType?: string;
     amount?: string;
+    kdv?: string;
     // Travel request
     travelRequestType?: string;
     city?: string;
