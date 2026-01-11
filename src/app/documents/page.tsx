@@ -395,12 +395,28 @@ const ratingDescriptions: { [key: number]: string } = {
 export default function DocumentsPage() {
     const { toast } = useToast();
     const [completedTrainings, setCompletedTrainings] = useState<Set<number>>(new Set());
+    const hrManager = allEmployees.find(emp => emp.title === 'İK Müdürü');
 
     const handleGenerateCertificate = (trainingId: number, trainingTitle: string) => {
         setCompletedTrainings(prev => new Set(prev).add(trainingId));
         toast({
             title: '🎉 Tebrikler!',
             description: `Sayın ${currentUser.name}, "${trainingTitle}" eğitimini başarıyla tamamladınız. Sertifikanız profilinize eklendi.`,
+        });
+    };
+    
+    const handleSaveEvaluation = () => {
+        if (!hrManager) {
+             toast({
+                variant: 'destructive',
+                title: 'Hata!',
+                description: 'İK Yöneticisi bilgisi bulunamadı. Lütfen sistem yöneticisi ile iletişime geçin.',
+            });
+            return;
+        }
+        toast({
+            title: 'Başarıyla Kaydedildi!',
+            description: `Değerlendirme formu İnsan Kaynakları Yöneticisi (${hrManager.email}) adresine başarıyla gönderilmiştir.`,
         });
     };
     
@@ -618,7 +634,7 @@ export default function DocumentsPage() {
                     </div>
                 </CardContent>
                 <CardFooter>
-                    <Button size="lg">Değerlendirmeyi Kaydet</Button>
+                    <Button size="lg" onClick={handleSaveEvaluation}>Değerlendirmeyi Kaydet</Button>
                 </CardFooter>
             </Card>
         </TabsContent>
@@ -626,5 +642,7 @@ export default function DocumentsPage() {
     </div>
   );
 }
+
+    
 
     
