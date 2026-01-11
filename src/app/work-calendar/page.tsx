@@ -14,7 +14,6 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { allEmployees, currentUser } from '@/lib/data';
-import { useToast } from '@/hooks/use-toast';
 
 type TaskStatus = 'Beklemede' | 'Devam Ediyor' | 'Tamamlandı';
 type TaskPriority = 'Düşük' | 'Orta' | 'Yüksek' | 'Kritik';
@@ -137,7 +136,6 @@ export default function WorkCalendarPage() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
-  const { toast } = useToast();
 
   const [formDescription, setFormDescription] = useState('');
   const [formEmployee, setFormEmployee] = useState(currentUser.id);
@@ -163,7 +161,6 @@ export default function WorkCalendarPage() {
   
   const handleAddTask = () => {
     if (!formDescription || !formEmployee || !formDueDate) {
-      toast({ variant: "destructive", title: "Eksik Bilgi", description: "Lütfen tüm zorunlu alanları doldurun." });
       return;
     }
     const newTask: Task = {
@@ -227,7 +224,13 @@ export default function WorkCalendarPage() {
           <div className="flex justify-between items-center">
             <div>
               <CardTitle>Görev Listesi</CardTitle>
-              <CardDescription>{selectedEmployee ? `${selectedEmployee.name} için atanan görevler.` : 'Bir çalışan seçin.'}</CardDescription>
+              <CardDescription>
+                {selectedEmployee ? (
+                  <><span className="font-bold text-primary">{selectedEmployee.name}</span> için atanan görevler.</>
+                ) : (
+                  'Bir çalışan seçin.'
+                )}
+              </CardDescription>
             </div>
              <DropdownMenu>
               <DropdownMenuTrigger asChild><Button variant="outline">{selectedEmployee?.name || 'Çalışan Seç'}<ChevronDown className="ml-2 h-4 w-4" /></Button></DropdownMenuTrigger>
