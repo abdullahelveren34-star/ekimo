@@ -132,12 +132,13 @@ export const CandyCrushGame = () => {
     const [scoreUpdated, setScoreUpdated] = useState(false);
     const [draggedItemIndex, setDraggedItemIndex] = useState<number | null>(null);
     const [replacedItemIndex, setReplacedItemIndex] = useState<number | null>(null);
-    const [isAutoPlaying, setIsAutoPlaying] = useState(false);
+    const [matchedIndices, setMatchedIndices] = useState<Set<number>>(new Set());
 
     const createBoard = useCallback(() => {
         const newBoard = Array.from({ length: width * width }, () => itemTypes[Math.floor(Math.random() * itemTypes.length)]);
         setBoard(newBoard);
         setScore(0);
+        setMatchedIndices(new Set());
     }, []);
     
     useEffect(() => {
@@ -152,23 +153,35 @@ export const CandyCrushGame = () => {
         }
     }, [score]);
 
+    const triggerMatchEffect = (indices: number[]) => {
+        const newMatches = new Set(matchedIndices);
+        indices.forEach(index => newMatches.add(index));
+        setMatchedIndices(newMatches);
+
+        setTimeout(() => {
+            setMatchedIndices(prev => {
+                const updated = new Set(prev);
+                indices.forEach(index => updated.delete(index));
+                return updated;
+            });
+        }, 500);
+    };
+
     const checkForColumnOfFour = useCallback((currentBoard: any[]) => {
-        let changed = false;
         for (let i = 0; i <= 39; i++) {
             const columnOfFour = [i, i + width, i + width * 2, i + width * 3];
             const decidedColor = currentBoard[i]?.color;
             const isBlank = currentBoard[i]?.component === null;
             if (!isBlank && columnOfFour.every(index => currentBoard[index]?.color === decidedColor)) {
                 setScore(prev => prev + 4);
+                triggerMatchEffect(columnOfFour);
                 columnOfFour.forEach(index => currentBoard[index] = blankItem);
-                changed = true;
+                return true;
             }
         }
-        return changed;
     }, []);
 
     const checkForRowOfFour = useCallback((currentBoard: any[]) => {
-        let changed = false;
         for (let i = 0; i < 64; i++) {
             const rowOfFour = [i, i + 1, i + 2, i + 3];
             const decidedColor = currentBoard[i]?.color;
@@ -177,30 +190,28 @@ export const CandyCrushGame = () => {
             if (notValid.includes(i)) continue;
             if (!isBlank && rowOfFour.every(index => currentBoard[index]?.color === decidedColor)) {
                 setScore(prev => prev + 4);
+                triggerMatchEffect(rowOfFour);
                 rowOfFour.forEach(index => currentBoard[index] = blankItem);
-                changed = true;
+                return true;
             }
         }
-        return changed;
     }, []);
 
     const checkForColumnOfThree = useCallback((currentBoard: any[]) => {
-        let changed = false;
         for (let i = 0; i <= 47; i++) {
             const columnOfThree = [i, i + width, i + width * 2];
             const decidedColor = currentBoard[i]?.color;
             const isBlank = currentBoard[i]?.component === null;
             if (!isBlank && columnOfThree.every(index => currentBoard[index]?.color === decidedColor)) {
                 setScore(prev => prev + 3);
+                triggerMatchEffect(columnOfThree);
                 columnOfThree.forEach(index => currentBoard[index] = blankItem);
-                changed = true;
+                return true;
             }
         }
-        return changed;
     }, []);
 
     const checkForRowOfThree = useCallback((currentBoard: any[]) => {
-        let changed = false;
         for (let i = 0; i < 64; i++) {
             const rowOfThree = [i, i + 1, i + 2];
             const decidedColor = currentBoard[i]?.color;
@@ -209,100 +220,40 @@ export const CandyCrushGame = () => {
             if (notValid.includes(i)) continue;
             if (!isBlank && rowOfThree.every(index => currentBoard[index]?.color === decidedColor)) {
                 setScore(prev => prev + 3);
+                triggerMatchEffect(rowOfThree);
                 rowOfThree.forEach(index => currentBoard[index] = blankItem);
-                changed = true;
+                return true;
             }
         }
-        return changed;
     }, []);
     
     const moveIntoSquareBelow = useCallback((currentBoard: any[]) => {
-        let changed = false;
         for (let i = 0; i <= 55; i++) {
             const firstRow = [0, 1, 2, 3, 4, 5, 6, 7];
             const isFirstRow = firstRow.includes(i);
 
             if (isFirstRow && currentBoard[i].component === null) {
                 currentBoard[i] = itemTypes[Math.floor(Math.random() * itemTypes.length)];
-                changed = true;
             }
             if (currentBoard[i + width].component === null) {
                 currentBoard[i + width] = currentBoard[i];
                 currentBoard[i] = blankItem;
-                changed = true;
             }
         }
-        return changed;
     }, []);
-
-    const performMove = (fromIndex: number, toIndex: number) => {
-        const newBoard = [...board];
-        const draggedItem = newBoard[fromIndex];
-        newBoard[fromIndex] = newBoard[toIndex];
-        newBoard[toIndex] = draggedItem;
-
-        const tempBoard = [...newBoard];
-        const col4 = checkForColumnOfFour(tempBoard);
-        const row4 = checkForRowOfFour(tempBoard);
-        const col3 = checkForColumnOfThree(tempBoard);
-        const row3 = checkForRowOfThree(tempBoard);
-        
-        if (row3 || row4 || col3 || col4) {
-             setBoard(newBoard);
-             return true;
-        }
-        return false;
-    }
-
-    const findValidMove = () => {
-        for (let i = 0; i < width * width; i++) {
-            const neighbors = [i + 1, i - 1, i + width, i - width].filter(n => n >= 0 && n < width * width);
-            for (const neighbor of neighbors) {
-                 const newBoard = [...board];
-                 const temp = newBoard[i];
-                 newBoard[i] = newBoard[neighbor];
-                 newBoard[neighbor] = temp;
- 
-                 const tempBoardForCheck = [...newBoard];
-                 if (checkForColumnOfFour(tempBoardForCheck) || checkForRowOfFour(tempBoardForCheck) || checkForColumnOfThree(tempBoardForCheck) || checkForRowOfThree(tempBoardForCheck)) {
-                     return { from: i, to: neighbor };
-                 }
-            }
-        }
-        return null;
-    }
 
     useEffect(() => {
         const gameLoop = setInterval(() => {
             const newBoard = [...board];
-            const col4 = checkForColumnOfFour(newBoard);
-            const row4 = checkForRowOfFour(newBoard);
-            const col3 = checkForColumnOfThree(newBoard);
-            const row3 = checkForRowOfThree(newBoard);
-            const gravity = moveIntoSquareBelow(newBoard);
-            
-            if (col4 || row4 || col3 || row3 || gravity) {
-                setBoard(newBoard);
-            }
+            checkForRowOfFour(newBoard);
+            checkForColumnOfFour(newBoard);
+            checkForRowOfThree(newBoard);
+            checkForColumnOfThree(newBoard);
+            moveIntoSquareBelow(newBoard);
+            setBoard(newBoard);
         }, 150);
         return () => clearInterval(gameLoop);
     }, [board, checkForColumnOfFour, checkForRowOfFour, checkForColumnOfThree, checkForRowOfThree, moveIntoSquareBelow]);
-
-    useEffect(() => {
-        if (isAutoPlaying) {
-            const autoPlayLoop = setInterval(() => {
-                const move = findValidMove();
-                if (move) {
-                    performMove(move.from, move.to);
-                } else {
-                    // No valid moves, maybe reset board or stop
-                    setIsAutoPlaying(false);
-                }
-            }, 1000);
-            return () => clearInterval(autoPlayLoop);
-        }
-    }, [isAutoPlaying, board]);
-
 
     const dragStart = (e: React.DragEvent<HTMLDivElement>) => {
         setDraggedItemIndex(parseInt(e.currentTarget.dataset.id || '-1'));
@@ -325,15 +276,28 @@ export const CandyCrushGame = () => {
         const isValidMove = validMoves.includes(replacedItemIndex);
         
         if (isValidMove) {
-            performMove(draggedItemIndex, replacedItemIndex);
+            const newBoard = [...board];
+            const draggedItem = newBoard[draggedItemIndex];
+            newBoard[draggedItemIndex] = newBoard[replacedItemIndex];
+            newBoard[replacedItemIndex] = draggedItem;
+
+            const tempBoard = [...newBoard];
+            const isColumnOfFour = checkForColumnOfFour(tempBoard);
+            const isRowOfFour = checkForRowOfFour(tempBoard);
+            const isColumnOfThree = checkForColumnOfThree(tempBoard);
+            const isRowOfThree = checkForRowOfThree(tempBoard);
+
+            if (isRowOfThree || isRowOfFour || isColumnOfThree || isColumnOfFour) {
+                setBoard(newBoard);
+            } else {
+                // If not a valid match, revert the board
+                const revertedBoard = [...board];
+                setBoard(revertedBoard);
+            }
         }
         
         setDraggedItemIndex(null);
         setReplacedItemIndex(null);
-    }
-    
-    const toggleAutoPlay = () => {
-        setIsAutoPlaying(prev => !prev);
     }
 
     return (
@@ -350,16 +314,18 @@ export const CandyCrushGame = () => {
                        <div className="text-sm text-muted-foreground">Puan</div>
                     </div>
                     
-                    <div className="grid grid-cols-8 gap-1 p-2 bg-muted rounded-lg candy-crush-board">
+                    <div className="grid grid-cols-8 gap-1 p-2 bg-muted rounded-lg candy-crush-board relative">
                         {board.map((item, index) => {
                             const Icon = item.component;
+                            const isMatched = matchedIndices.has(index);
                             return (
                                 <div
                                     key={index}
                                     className={cn(
                                         "w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-md cursor-grab transition-all duration-300 ease-in-out",
                                         "bg-muted/30 shadow-lg hover:scale-110 active:scale-95 active:cursor-grabbing",
-                                        "border-2 border-primary/50"
+                                        "border-2 border-primary/50",
+                                        "relative" // For positioning the effect
                                     )}
                                     data-id={index}
                                     draggable={true}
@@ -370,7 +336,10 @@ export const CandyCrushGame = () => {
                                     onDrop={dragDrop}
                                     onDragEnd={dragEnd}
                                 >
-                                    {Icon && <Icon className={`w-7 h-7 sm:w-9 sm:h-9 ${item.color} pointer-events-none`} />}
+                                    {Icon && <Icon className={cn("w-7 h-7 sm:w-9 sm:h-9 pointer-events-none", item.color)} />}
+                                    {isMatched && (
+                                        <Star className="absolute w-8 h-8 text-yellow-300 animate-star-pop" />
+                                    )}
                                 </div>
                             );
                         })}
@@ -380,10 +349,6 @@ export const CandyCrushGame = () => {
                 <div className="flex flex-col items-center space-y-4 w-full max-w-2xl pt-4 border-t border-border z-10">
                     <div className="flex gap-4">
                         <Button onClick={createBoard}>Yeni Oyun</Button>
-                        <Button onClick={toggleAutoPlay} variant="outline">
-                            {isAutoPlaying ? <Pause className="mr-2"/> : <Play className="mr-2" />}
-                            {isAutoPlaying ? 'Durdur' : 'Otomatik Oynat'}
-                        </Button>
                     </div>
                     <div className="p-4 bg-muted/50 rounded-lg text-xs text-muted-foreground space-y-1.5 w-full text-center">
                          <h4 className="font-semibold text-foreground text-sm">Nasıl Oynanır?</h4>
