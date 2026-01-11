@@ -1,14 +1,14 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { CalendarCheck, ChevronDown, Plus, Tag, Edit, Trash2, CheckCircle, GripVertical } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from '@/components/ui/dropdown-menu';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -51,8 +51,75 @@ const statusColors: Record<TaskStatus, string> = {
   'Tamamlandı': 'bg-green-500/20 text-green-400',
 };
 
-
 const relevantEmployees = allEmployees.filter(e => e.department === 'Üretim Planlama' || e.department === 'Üretim' || e.department === 'BT');
+
+interface FormContentProps {
+  formDescription: string;
+  setFormDescription: (value: string) => void;
+  formEmployee: string;
+  setFormEmployee: (value: string) => void;
+  formType: string;
+  setFormType: (value: string) => void;
+  formPriority: TaskPriority;
+  setFormPriority: (value: TaskPriority) => void;
+  formDueDate: string;
+  setFormDueDate: (value: string) => void;
+}
+
+const FormContent = ({
+  formDescription, setFormDescription,
+  formEmployee, setFormEmployee,
+  formType, setFormType,
+  formPriority, setFormPriority,
+  formDueDate, setFormDueDate
+}: FormContentProps) => (
+  <div className="grid gap-6 py-4">
+      <div className="grid gap-2">
+          <Label htmlFor="task-description">Görev Açıklaması</Label>
+          <Textarea id="task-description" placeholder="Yapılacak işin detaylarını yazın..." value={formDescription} onChange={(e) => setFormDescription(e.target.value)} rows={5} />
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-2">
+              <Label htmlFor="task-employee">Atanacak Çalışan</Label>
+              <Select value={formEmployee} onValueChange={setFormEmployee}>
+                  <SelectTrigger id="task-employee"><SelectValue placeholder="Çalışan seçin..." /></SelectTrigger>
+                  <SelectContent>{relevantEmployees.map(emp => <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>)}</SelectContent>
+              </Select>
+          </div>
+          <div className="grid gap-2">
+              <Label htmlFor="task-type">Görev Türü</Label>
+              <Select value={formType} onValueChange={setFormType}>
+                  <SelectTrigger id="task-type"><SelectValue placeholder="Tür seçin..." /></SelectTrigger>
+                  <SelectContent>
+                      <SelectItem value="Planlama">Planlama</SelectItem>
+                      <SelectItem value="Üretim">Üretim</SelectItem>
+                      <SelectItem value="Geliştirme">Geliştirme</SelectItem>
+                      <SelectItem value="Analiz">Analiz</SelectItem>
+                  </SelectContent>
+              </Select>
+          </div>
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-2">
+              <Label htmlFor="task-priority">Öncelik</Label>
+              <Select value={formPriority} onValueChange={(v) => setFormPriority(v as TaskPriority)}>
+                  <SelectTrigger id="task-priority"><SelectValue placeholder="Öncelik seçin..." /></SelectTrigger>
+                  <SelectContent>
+                      <SelectItem value="Düşük">Düşük</SelectItem>
+                      <SelectItem value="Orta">Orta</SelectItem>
+                      <SelectItem value="Yüksek">Yüksek</SelectItem>
+                      <SelectItem value="Kritik">Kritik</SelectItem>
+                  </SelectContent>
+              </Select>
+          </div>
+          <div className="grid gap-2">
+              <Label htmlFor="task-due-date">Bitiş Tarihi</Label>
+              <Input id="task-due-date" type="date" value={formDueDate} onChange={(e) => setFormDueDate(e.target.value)} />
+          </div>
+      </div>
+  </div>
+);
+
 
 export default function WorkCalendarPage() {
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
@@ -135,53 +202,6 @@ export default function WorkCalendarPage() {
     toast({ title: "Görev Silindi!", description: "Görev başarıyla silindi." });
   };
   
-  const FormContent = () => (
-    <div className="grid gap-6 py-4">
-        <div className="grid gap-2">
-            <Label htmlFor="task-description">Görev Açıklaması</Label>
-            <Textarea id="task-description" placeholder="Yapılacak işin detaylarını yazın..." value={formDescription} onChange={(e) => setFormDescription(e.target.value)} rows={5} />
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-            <div className="grid gap-2">
-                <Label htmlFor="task-employee">Atanacak Çalışan</Label>
-                <Select value={formEmployee} onValueChange={setFormEmployee}>
-                    <SelectTrigger id="task-employee"><SelectValue placeholder="Çalışan seçin..." /></SelectTrigger>
-                    <SelectContent>{relevantEmployees.map(emp => <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>)}</SelectContent>
-                </Select>
-            </div>
-            <div className="grid gap-2">
-                <Label htmlFor="task-type">Görev Türü</Label>
-                <Select value={formType} onValueChange={setFormType}>
-                    <SelectTrigger id="task-type"><SelectValue placeholder="Tür seçin..." /></SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="Planlama">Planlama</SelectItem>
-                        <SelectItem value="Üretim">Üretim</SelectItem>
-                        <SelectItem value="Geliştirme">Geliştirme</SelectItem>
-                        <SelectItem value="Analiz">Analiz</SelectItem>
-                    </SelectContent>
-                </Select>
-            </div>
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-            <div className="grid gap-2">
-                <Label htmlFor="task-priority">Öncelik</Label>
-                <Select value={formPriority} onValueChange={(v) => setFormPriority(v as TaskPriority)}>
-                    <SelectTrigger id="task-priority"><SelectValue placeholder="Öncelik seçin..." /></SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="Düşük">Düşük</SelectItem>
-                        <SelectItem value="Orta">Orta</SelectItem>
-                        <SelectItem value="Yüksek">Yüksek</SelectItem>
-                        <SelectItem value="Kritik">Kritik</SelectItem>
-                    </SelectContent>
-                </Select>
-            </div>
-            <div className="grid gap-2">
-                <Label htmlFor="task-due-date">Bitiş Tarihi</Label>
-                <Input id="task-due-date" type="date" value={formDueDate} onChange={(e) => setFormDueDate(e.target.value)} />
-            </div>
-        </div>
-    </div>
-  );
 
   return (
     <div className="space-y-8">
@@ -261,7 +281,13 @@ export default function WorkCalendarPage() {
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogContent className="sm:max-w-[480px]">
             <DialogHeader><DialogTitle>Yeni Görev Oluştur</DialogTitle><DialogDescription>Aşağıdaki formu doldurarak yeni bir görev atayın.</DialogDescription></DialogHeader>
-            <FormContent />
+            <FormContent
+                formDescription={formDescription} setFormDescription={setFormDescription}
+                formEmployee={formEmployee} setFormEmployee={setFormEmployee}
+                formType={formType} setFormType={setFormType}
+                formPriority={formPriority} setFormPriority={setFormPriority}
+                formDueDate={formDueDate} setFormDueDate={setFormDueDate}
+            />
             <DialogFooter><Button type="button" variant="outline" onClick={() => setIsAddDialogOpen(false)}>İptal</Button><Button type="button" onClick={handleAddTask}>Görevi Kaydet</Button></DialogFooter>
           </DialogContent>
       </Dialog>
@@ -269,7 +295,13 @@ export default function WorkCalendarPage() {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
           <DialogContent className="sm:max-w-[480px]">
             <DialogHeader><DialogTitle>Görevi Düzenle</DialogTitle><DialogDescription>Görevin detaylarını güncelleyin.</DialogDescription></DialogHeader>
-            <FormContent />
+            <FormContent
+                formDescription={formDescription} setFormDescription={setFormDescription}
+                formEmployee={formEmployee} setFormEmployee={setFormEmployee}
+                formType={formType} setFormType={setFormType}
+                formPriority={formPriority} setFormPriority={setFormPriority}
+                formDueDate={formDueDate} setFormDueDate={setFormDueDate}
+            />
             <DialogFooter><Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>İptal</Button><Button type="button" onClick={handleUpdateTask}>Değişiklikleri Kaydet</Button></DialogFooter>
           </DialogContent>
       </Dialog>
