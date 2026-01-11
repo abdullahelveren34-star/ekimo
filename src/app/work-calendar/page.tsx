@@ -18,12 +18,13 @@ import { useToast } from '@/hooks/use-toast';
 
 type TaskStatus = 'Beklemede' | 'Devam Ediyor' | 'Tamamlandı';
 type TaskPriority = 'Düşük' | 'Orta' | 'Yüksek' | 'Kritik';
+type TaskType = 'Planlama' | 'İş Takip' | 'Operasyon' | 'Sayım' | 'Bakım';
 
 interface Task {
     id: number;
     employeeId: string;
     description: string;
-    type: string;
+    type: TaskType;
     status: TaskStatus;
     priority: TaskPriority;
     dueDate: string;
@@ -31,10 +32,10 @@ interface Task {
 
 const initialTasks: Task[] = [
   { id: 1, employeeId: '24', description: 'Yaz koleksiyonu için kesim planını oluştur', type: 'Planlama', status: 'Beklemede' as const, priority: 'Yüksek' as const, dueDate: '2024-08-05' },
-  { id: 2, employeeId: '28', description: '5. üretim bandındaki makine bakımını denetle', type: 'Üretim', status: 'Devam Ediyor' as const, priority: 'Orta' as const, dueDate: '2024-08-02' },
-  { id: 3, employeeId: '24', description: 'Yeni gelen kumaşların stok girişini planla', type: 'Planlama', status: 'Tamamlandı' as const, priority: 'Orta' as const, dueDate: '2024-07-30' },
-  { id: 4, employeeId: '27', description: 'Haftalık üretim hedeflerini gözden geçir ve raporla', type: 'Üretim', status: 'Beklemede' as const, priority: 'Yüksek' as const, dueDate: '2024-08-01' },
-  { id: 5, employeeId: '28', description: 'Vardiya devir teslim prosedürlerini kontrol et', type: 'Üretim', status: 'Devam Ediyor' as const, priority: 'Düşük' as const, dueDate: '2024-08-01' },
+  { id: 2, employeeId: '28', description: '5. üretim bandındaki makine bakımını denetle', type: 'Bakım', status: 'Devam Ediyor' as const, priority: 'Orta' as const, dueDate: '2024-08-02' },
+  { id: 3, employeeId: '24', description: 'Yeni gelen kumaşların stok girişini planla', type: 'Sayım', status: 'Tamamlandı' as const, priority: 'Orta' as const, dueDate: '2024-07-30' },
+  { id: 4, employeeId: '27', description: 'Haftalık üretim hedeflerini gözden geçir ve raporla', type: 'İş Takip', status: 'Beklemede' as const, priority: 'Yüksek' as const, dueDate: '2024-08-01' },
+  { id: 5, employeeId: '28', description: 'Vardiya devir teslim prosedürlerini kontrol et', type: 'Operasyon', status: 'Devam Ediyor' as const, priority: 'Düşük' as const, dueDate: '2024-08-01' },
   { id: 6, employeeId: '23', description: 'Sonraki ayın hammadde ihtiyacını belirle', type: 'Planlama', status: 'Beklemede' as const, priority: 'Kritik' as const, dueDate: '2024-08-10' },
 ];
 
@@ -51,6 +52,14 @@ const statusColors: Record<TaskStatus, string> = {
   'Tamamlandı': 'bg-green-500/20 text-green-400',
 };
 
+const typeColors: Record<TaskType, string> = {
+    'Planlama': 'bg-purple-500/10 text-purple-700 border-purple-500/20',
+    'İş Takip': 'bg-cyan-500/10 text-cyan-700 border-cyan-500/20',
+    'Operasyon': 'bg-green-500/10 text-green-700 border-green-500/20',
+    'Sayım': 'bg-amber-500/10 text-amber-700 border-amber-500/20',
+    'Bakım': 'bg-orange-500/10 text-orange-700 border-orange-500/20',
+};
+
 const relevantEmployees = allEmployees.filter(e => e.department === 'Üretim Planlama' || e.department === 'Üretim' || e.department === 'BT');
 
 interface FormContentProps {
@@ -58,8 +67,8 @@ interface FormContentProps {
   setFormDescription: (value: string) => void;
   formEmployee: string;
   setFormEmployee: (value: string) => void;
-  formType: string;
-  setFormType: (value: string) => void;
+  formType: TaskType;
+  setFormType: (value: TaskType) => void;
   formPriority: TaskPriority;
   setFormPriority: (value: TaskPriority) => void;
   formDueDate: string;
@@ -88,7 +97,7 @@ const FormContent = ({
           </div>
           <div className="grid gap-2">
               <Label htmlFor="task-type">Görev Türü</Label>
-              <Select value={formType} onValueChange={setFormType}>
+              <Select value={formType} onValueChange={(v) => setFormType(v as TaskType)}>
                   <SelectTrigger id="task-type"><SelectValue placeholder="Tür seçin..." /></SelectTrigger>
                   <SelectContent>
                       <SelectItem value="Planlama">Planlama</SelectItem>
@@ -132,7 +141,7 @@ export default function WorkCalendarPage() {
 
   const [formDescription, setFormDescription] = useState('');
   const [formEmployee, setFormEmployee] = useState(currentUser.id);
-  const [formType, setFormType] = useState('Planlama');
+  const [formType, setFormType] = useState<TaskType>('Planlama');
   const [formPriority, setFormPriority] = useState<TaskPriority>('Orta');
   const [formDueDate, setFormDueDate] = useState('');
 
@@ -253,7 +262,7 @@ export default function WorkCalendarPage() {
                   filteredTasks.map(task => (
                     <TableRow key={task.id}>
                       <TableCell className="font-medium">{task.description}</TableCell>
-                      <TableCell><Badge variant="outline" className="flex items-center gap-1.5"><Tag className="h-3 w-3" />{task.type}</Badge></TableCell>
+                      <TableCell><Badge variant="outline" className={`flex items-center gap-1.5 ${typeColors[task.type]}`}><Tag className="h-3 w-3" />{task.type}</Badge></TableCell>
                       <TableCell><Badge variant="outline" className={priorityColors[task.priority]}>{task.priority}</Badge></TableCell>
                       <TableCell><Badge className={`pointer-events-none ${statusColors[task.status]}`}>{task.status}</Badge></TableCell>
                       <TableCell>{new Date(task.dueDate).toLocaleDateString('tr-TR')}</TableCell>
