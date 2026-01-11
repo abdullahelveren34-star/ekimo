@@ -41,10 +41,10 @@ export default function RequestsPage() {
 
   // Expense State
   const [expenseType, setExpenseType] = useState('');
-  const [expenseAmount, setExpenseAmount] = useState('');
+  const [totalExpenseAmount, setTotalExpenseAmount] = useState(''); // User input: Amount INCLUSIVE of VAT
   const [expenseKdvRate, setExpenseKdvRate] = useState<number | undefined>(undefined);
-  const [expenseKdvAmount, setExpenseKdvAmount] = useState<string>('');
-  const [totalExpenseAmount, setTotalExpenseAmount] = useState<string>('');
+  const [expenseAmountExclVat, setExpenseAmountExclVat] = useState(''); // Calculated amount EXCLUSIVE of VAT
+  const [expenseKdvAmount, setExpenseKdvAmount] = useState<string>(''); // Calculated VAT amount
   const [expenseDescription, setExpenseDescription] = useState('');
 
   // Vehicle State
@@ -83,19 +83,18 @@ export default function RequestsPage() {
   }, [expenseType]);
 
   useEffect(() => {
-    if (expenseAmount && expenseKdvRate !== undefined) {
-      const amount = parseFloat(expenseAmount);
-      if (!isNaN(amount)) {
-        const kdv = amount * expenseKdvRate;
-        const total = amount + kdv;
-        setExpenseKdvAmount(kdv.toFixed(2));
-        setTotalExpenseAmount(total.toFixed(2));
-      }
+    const totalAmountFloat = parseFloat(totalExpenseAmount);
+    if (!isNaN(totalAmountFloat) && expenseKdvRate !== undefined) {
+      const amountExclVat = totalAmountFloat / (1 + expenseKdvRate);
+      const kdvAmount = totalAmountFloat - amountExclVat;
+      
+      setExpenseAmountExclVat(amountExclVat.toFixed(2));
+      setExpenseKdvAmount(kdvAmount.toFixed(2));
     } else {
+      setExpenseAmountExclVat('');
       setExpenseKdvAmount('');
-      setTotalExpenseAmount(expenseAmount);
     }
-  }, [expenseAmount, expenseKdvRate]);
+  }, [totalExpenseAmount, expenseKdvRate]);
   
   const resetForms = () => {
     setDocumentType('');
@@ -105,10 +104,10 @@ export default function RequestsPage() {
     setLeaveEndDate('');
     setLeaveDescription('');
     setExpenseType('');
-    setExpenseAmount('');
-    setExpenseKdvRate(undefined);
-    setExpenseKdvAmount('');
     setTotalExpenseAmount('');
+    setExpenseKdvRate(undefined);
+    setExpenseAmountExclVat('');
+    setExpenseKdvAmount('');
     setExpenseDescription('');
     setRequesterName('');
     setVehiclePlate('');
@@ -290,14 +289,14 @@ export default function RequestsPage() {
               </div>
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="expense-amount">KDV Hariç Tutar</Label>
-                  <Input id="expense-amount" type="number" placeholder="0.00 TL" value={expenseAmount} onChange={(e) => setExpenseAmount(e.target.value)} />
+                  <Label htmlFor="total-expense-amount">KDV Dahil Toplam Tutar</Label>
+                  <Input id="total-expense-amount" type="number" placeholder="0.00 TL" value={totalExpenseAmount} onChange={(e) => setTotalExpenseAmount(e.target.value)} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="expense-kdv-rate">KDV Oranı</Label>
                   <Select value={expenseKdvRate !== undefined ? String(expenseKdvRate) : ''} onValueChange={(value) => setExpenseKdvRate(Number(value))} disabled={expenseType !== 'Diğer'}>
                     <SelectTrigger id="expense-kdv-rate">
-                        <SelectValue placeholder="KDV oranı seçin..." />
+                        <SelectValue placeholder={expenseType !== 'Diğer' && expenseKdvRate !== undefined ? `%${expenseKdvRate * 100}` : "Oran seçin..."} />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="0.01">%1</SelectItem>
@@ -309,12 +308,12 @@ export default function RequestsPage() {
               </div>
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                        <Label>Hesaplanan KDV Tutarı</Label>
-                        <Input value={expenseKdvAmount ? `${expenseKdvAmount} TL` : "0.00 TL"} readOnly className="bg-muted" />
+                        <Label>KDV Hariç Tutar</Label>
+                        <Input value={expenseAmountExclVat ? `${expenseAmountExclVat} TL` : "0.00 TL"} readOnly className="bg-muted" />
                     </div>
                     <div className="space-y-2">
-                        <Label>KDV Dahil Toplam Tutar</Label>
-                        <Input value={totalExpenseAmount ? `${totalExpenseAmount} TL` : "0.00 TL"} readOnly className="bg-muted font-bold text-primary" />
+                        <Label>Hesaplanan KDV Tutarı</Label>
+                        <Input value={expenseKdvAmount ? `${expenseKdvAmount} TL` : "0.00 TL"} readOnly className="bg-muted" />
                     </div>
                </div>
               <div className="space-y-2">
@@ -327,7 +326,14 @@ export default function RequestsPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={() => handleSubmit('Masraf', { expenseType, amount: expenseAmount, kdvRate: expenseKdvRate, kdv: expenseKdvAmount, totalAmount: totalExpenseAmount, description: expenseDescription })} disabled={!firestore}>Masraf Bildir</Button>
+              <Button onClick={() => handleSubmit('Masraf', { 
+                  expenseType, 
+                  totalAmount: totalExpenseAmount, 
+                  kdvRate: expenseKdvRate, 
+                  amount: expenseAmountExclVat, 
+                  kdv: expenseKdvAmount, 
+                  description: expenseDescription 
+              })} disabled={!firestore}>Masraf Bildir</Button>
             </CardFooter>
           </Card>
         </TabsContent>
