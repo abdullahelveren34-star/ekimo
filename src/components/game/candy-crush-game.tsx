@@ -18,6 +18,40 @@ const itemTypes = [
 
 const blankItem = { component: null, color: '' };
 
+const GameLogo = () => (
+    <svg width="150" height="100" viewBox="0 0 150 100" className="drop-shadow-lg">
+        <defs>
+            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="hsl(var(--primary))" />
+                <stop offset="100%" stopColor="hsl(var(--accent))" />
+            </linearGradient>
+        </defs>
+        <text
+            fontFamily="Inter, sans-serif"
+            fontSize="32"
+            fontWeight="bold"
+            fill="url(#grad1)"
+            x="50%"
+            y="40%"
+            textAnchor="middle"
+        >
+            Kimo
+        </text>
+        <text
+            fontFamily="Inter, sans-serif"
+            fontSize="20"
+            fontWeight="bold"
+            fill="hsl(var(--foreground))"
+            x="50%"
+            y="70%"
+            textAnchor="middle"
+        >
+            Eşleştirme
+        </text>
+    </svg>
+);
+
+
 export const CandyCrushGame = () => {
     const [board, setBoard] = useState<any[]>([]);
     const [score, setScore] = useState(0);
@@ -191,12 +225,19 @@ export const CandyCrushGame = () => {
 
     return (
         <Card>
-            <CardHeader>
-                <CardTitle>Kimo Eşleştirme</CardTitle>
-                <CardDescription>Molada küçük bir oyun oynamaya ne dersin?</CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-col items-center gap-8">
-                <div className="flex justify-center">
+            <CardContent className="flex flex-col items-center gap-6 p-6">
+                <div className="flex flex-col md:flex-row items-center justify-center gap-8 w-full">
+                    <div className="hidden md:flex flex-col items-center justify-center">
+                       <GameLogo />
+                       <div className="text-center mt-4">
+                            <div className={cn(
+                                "text-5xl font-bold text-primary transition-all duration-300",
+                                scoreUpdated && "score-updated"
+                            )}>{score}</div>
+                            <div className="text-sm text-muted-foreground">Puan</div>
+                        </div>
+                    </div>
+                    
                     <div className="grid grid-cols-8 gap-1 p-2 bg-muted rounded-lg candy-crush-board">
                         {board.map((item, index) => {
                             const Icon = item.component;
@@ -222,21 +263,19 @@ export const CandyCrushGame = () => {
                             );
                         })}
                     </div>
-                </div>
-
-                <div className="flex flex-col items-center space-y-4 w-full max-w-md">
-                    <div className="flex items-center justify-between gap-6 w-full">
-                         <div className="text-center">
-                            <div className={cn(
-                                "text-4xl font-bold text-primary transition-all duration-300",
+                     <div className="flex flex-col items-center md:hidden">
+                       <div className={cn(
+                                "text-5xl font-bold text-primary transition-all duration-300",
                                 scoreUpdated && "score-updated"
                             )}>{score}</div>
-                            <div className="text-sm text-muted-foreground">Puan</div>
-                        </div>
-                        <Button onClick={createBoard}>Yeni Oyun</Button>
+                       <div className="text-sm text-muted-foreground">Puan</div>
                     </div>
-                    <div className="p-4 bg-muted/50 rounded-lg text-xs text-muted-foreground space-y-1.5 w-full">
-                         <h4 className="font-semibold text-foreground text-sm text-center">Nasıl Oynanır?</h4>
+                </div>
+
+                <div className="flex flex-col items-center space-y-4 w-full max-w-2xl pt-4 border-t border-border">
+                    <Button onClick={createBoard}>Yeni Oyun</Button>
+                    <div className="p-4 bg-muted/50 rounded-lg text-xs text-muted-foreground space-y-1.5 w-full text-center">
+                         <h4 className="font-semibold text-foreground text-sm">Nasıl Oynanır?</h4>
                          <p>
                             <strong>1. Sürükle ve Bırak:</strong> Bir taşı, hemen yanındaki (yukarı, aşağı, sol, sağ) başka bir taşla yer değiştirmek için sürükleyip bırakın.
                         </p>
