@@ -175,42 +175,54 @@ export const CandyCrushGame = () => {
     return (
         <Card>
             <CardHeader>
-                <div className='flex justify-between items-center'>
-                    <div>
-                        <CardTitle>Kimo Eşleştirme</CardTitle>
-                        <CardDescription>Molada küçük bir oyun oynamaya ne dersin?</CardDescription>
-                    </div>
-                     <div className='flex items-center gap-4'>
-                        <div className="text-center">
-                            <div className="text-2xl font-bold">{score}</div>
-                            <div className="text-sm text-muted-foreground">Puan</div>
-                        </div>
-                        <Button onClick={createBoard}>Yeni Oyun</Button>
-                    </div>
-                </div>
+                <CardTitle>Kimo Eşleştirme</CardTitle>
+                <CardDescription>Molada küçük bir oyun oynamaya ne dersin?</CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="flex justify-center">
-                    <div className="grid grid-cols-8 gap-1 p-2 bg-muted rounded-lg candy-crush-board">
-                        {board.map((item, index) => {
-                            const Icon = item.component;
-                            return (
-                                <div
-                                    key={index}
-                                    className="w-12 h-12 flex items-center justify-center bg-background rounded-md shadow-inner cursor-grab"
-                                    data-id={index}
-                                    draggable={true}
-                                    onDragStart={dragStart}
-                                    onDragOver={(e) => e.preventDefault()}
-                                    onDragEnter={(e) => e.preventDefault()}
-                                    onDragLeave={(e) => e.preventDefault()}
-                                    onDrop={dragDrop}
-                                    onDragEnd={dragEnd}
-                                >
-                                    {Icon && <Icon className={`w-8 h-8 ${item.color}`} />}
-                                </div>
-                            );
-                        })}
+                <div className="grid md:grid-cols-2 gap-8 items-center">
+                     <div className="flex flex-col items-center md:items-start space-y-4">
+                        <div className="flex items-center gap-6 w-full">
+                             <div className="text-center flex-1">
+                                <div className="text-4xl font-bold text-primary">{score}</div>
+                                <div className="text-sm text-muted-foreground">Puan</div>
+                            </div>
+                            <Button onClick={createBoard} className="flex-1">Yeni Oyun</Button>
+                        </div>
+                        <div className="p-4 bg-muted/50 rounded-lg text-sm text-muted-foreground space-y-2">
+                             <h4 className="font-semibold text-foreground">Nasıl Oynanır?</h4>
+                             <p>
+                                <strong>1. Sürükle ve Bırak:</strong> Bir taşı, hemen yanındaki (yukarı, aşağı, sol, sağ) başka bir taşla yer değiştirmek için sürükleyip bırakın.
+                            </p>
+                            <p>
+                                <strong>2. Eşleştir:</strong> Amacınız, aynı renkteki 3 veya daha fazla taşı dikey veya yatay bir çizgide bir araya getirmektir.
+                            </p>
+                             <p>
+                                <strong>3. Puan Kazan:</strong> Başarılı bir eşleşme yaptığınızda taşlar kaybolur ve puan kazanırsınız. 4'lü eşleşmeler daha çok puan verir!
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex justify-center">
+                        <div className="grid grid-cols-8 gap-1 p-2 bg-muted rounded-lg candy-crush-board">
+                            {board.map((item, index) => {
+                                const Icon = item.component;
+                                return (
+                                    <div
+                                        key={index}
+                                        className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-background rounded-md shadow-inner cursor-grab"
+                                        data-id={index}
+                                        draggable={true}
+                                        onDragStart={dragStart}
+                                        onDragOver={(e) => e.preventDefault()}
+                                        onDragEnter={(e) => e.preventDefault()}
+                                        onDragLeave={(e) => e.preventDefault()}
+                                        onDrop={dragDrop}
+                                        onDragEnd={dragEnd}
+                                    >
+                                        {Icon && <Icon className={`w-6 h-6 sm:w-8 sm:h-8 ${item.color}`} />}
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
                 </div>
             </CardContent>
