@@ -17,26 +17,27 @@ import { allEmployees, currentUser } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 
 const initialTasks = [
-  { id: 1, employeeId: '24', description: 'Yaz koleksiyonu için kesim planını oluştur', type: 'Planlama', status: 'Beklemede', priority: 'Yüksek', dueDate: '2024-08-05' },
-  { id: 2, employeeId: '28', description: '5. üretim bandındaki makine bakımını denetle', type: 'Üretim', status: 'Devam Ediyor', priority: 'Orta', dueDate: '2024-08-02' },
-  { id: 3, employeeId: '24', description: 'Yeni gelen kumaşların stok girişini planla', type: 'Planlama', status: 'Tamamlandı', priority: 'Orta', dueDate: '2024-07-30' },
-  { id: 4, employeeId: '27', description: 'Haftalık üretim hedeflerini gözden geçir ve raporla', type: 'Üretim', status: 'Beklemede', priority: 'Yüksek', dueDate: '2024-08-01' },
-  { id: 5, employeeId: '28', description: 'Vardiya devir teslim prosedürlerini kontrol et', type: 'Üretim', status: 'Devam Ediyor', priority: 'Düşük', dueDate: '2024-08-01' },
-  { id: 6, employeeId: '23', description: 'Sonraki ayın hammadde ihtiyacını belirle', type: 'Planlama', status: 'Beklemede', priority: 'Kritik', dueDate: '2024-08-10' },
+  { id: 1, employeeId: '24', description: 'Yaz koleksiyonu için kesim planını oluştur', type: 'Planlama', status: 'Beklemede' as const, priority: 'Yüksek' as const, dueDate: '2024-08-05' },
+  { id: 2, employeeId: '28', description: '5. üretim bandındaki makine bakımını denetle', type: 'Üretim', status: 'Devam Ediyor' as const, priority: 'Orta' as const, dueDate: '2024-08-02' },
+  { id: 3, employeeId: '24', description: 'Yeni gelen kumaşların stok girişini planla', type: 'Planlama', status: 'Tamamlandı' as const, priority: 'Orta' as const, dueDate: '2024-07-30' },
+  { id: 4, employeeId: '27', description: 'Haftalık üretim hedeflerini gözden geçir ve raporla', type: 'Üretim', status: 'Beklemede' as const, priority: 'Yüksek' as const, dueDate: '2024-08-01' },
+  { id: 5, employeeId: '28', description: 'Vardiya devir teslim prosedürlerini kontrol et', type: 'Üretim', status: 'Devam Ediyor' as const, priority: 'Düşük' as const, dueDate: '2024-08-01' },
+  { id: 6, employeeId: '23', description: 'Sonraki ayın hammadde ihtiyacını belirle', type: 'Planlama', status: 'Beklemede' as const, priority: 'Kritik' as const, dueDate: '2024-08-10' },
 ];
 
-const priorityColors = {
+const priorityColors: Record<typeof initialTasks[number]['priority'], string> = {
   'Yüksek': 'bg-red-500/10 text-red-700 border-red-500/20',
   'Orta': 'bg-yellow-500/10 text-yellow-700 border-yellow-500/20',
   'Düşük': 'bg-blue-500/10 text-blue-700 border-blue-500/20',
   'Kritik': 'bg-red-700 text-white border-red-900',
 };
 
-const statusColors = {
+const statusColors: Record<typeof initialTasks[number]['status'], string> = {
   'Beklemede': 'bg-gray-500/20 text-gray-400',
   'Devam Ediyor': 'bg-blue-500/20 text-blue-400',
   'Tamamlandı': 'bg-green-500/20 text-green-400',
 };
+
 
 const relevantEmployees = allEmployees.filter(e => e.department === 'Üretim Planlama' || e.department === 'Üretim' || e.department === 'BT');
 
@@ -126,7 +127,7 @@ export default function WorkCalendarPage() {
             </DialogHeader>
             <div className="grid gap-6 py-4">
               <div className="grid gap-2">
-                <Label htmlFor="task-description">Görev Açıklaması</Label>
+                <Label htmlFor="task-description">Görev Açıklaması (Günlük)</Label>
                 <Textarea id="task-description" placeholder="Yapılacak işin detaylarını yazın..." value={newTaskDescription} onChange={(e) => setNewTaskDescription(e.target.value)} rows={5} />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -239,10 +240,10 @@ export default function WorkCalendarPage() {
                         </Badge>
                       </TableCell>
                        <TableCell>
-                        <Badge variant="outline" className={priorityColors[task.priority as keyof typeof priorityColors]}>{task.priority}</Badge>
+                        <Badge variant="outline" className={priorityColors[task.priority]}>{task.priority}</Badge>
                       </TableCell>
                       <TableCell>
-                         <Badge className={`pointer-events-none ${statusColors[task.status as keyof typeof statusColors]}`}>{task.status}</Badge>
+                         <Badge className={`pointer-events-none ${statusColors[task.status]}`}>{task.status}</Badge>
                       </TableCell>
                       <TableCell>{new Date(task.dueDate).toLocaleDateString('tr-TR')}</TableCell>
                     </TableRow>
@@ -262,5 +263,3 @@ export default function WorkCalendarPage() {
     </div>
   );
 }
-
-    
