@@ -347,9 +347,26 @@ export default function RequestsPage() {
               <CardDescription>Maaş avansı taleplerinizi bu form üzerinden iletebilirsiniz.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="advance-amount">Talep Edilen Tutar</Label>
-                <Input id="advance-amount" type="number" placeholder="0.00 TL" />
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="advance-amount">Talep Edilen Tutar</Label>
+                    <Input id="advance-amount" type="number" placeholder="0.00 TL" />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="advance-installments">Taksit Sayısı</Label>
+                    <Select>
+                        <SelectTrigger id="advance-installments">
+                            <SelectValue placeholder="Taksit sayısı seçin..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="2">2 Taksit</SelectItem>
+                            <SelectItem value="3">3 Taksit</SelectItem>
+                            <SelectItem value="6">6 Taksit</SelectItem>
+                            <SelectItem value="9">9 Taksit</SelectItem>
+                            <SelectItem value="12">12 Taksit</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="advance-reason">Avans Sebebi</Label>
