@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -35,7 +35,8 @@ export default function RequestsPage() {
   // Expense State
   const [expenseType, setExpenseType] = useState('');
   const [expenseAmount, setExpenseAmount] = useState('');
-  const [expenseKDV, setExpenseKDV] = useState('');
+  const [expenseKdvRate, setExpenseKdvRate] = useState<number | undefined>(undefined);
+  const [expenseKdvAmount, setExpenseKdvAmount] = useState<string>('');
   const [expenseDescription, setExpenseDescription] = useState('');
 
   // Vehicle State
@@ -64,6 +65,18 @@ export default function RequestsPage() {
   const hotelsForSelectedCity = selectedAccommodationCity ? hotelsByCity[selectedAccommodationCity as keyof typeof hotelsByCity] || [] : [];
   const airportsForDepartureCity = departureCity ? airportsByCity[departureCity as keyof typeof airportsByCity] || [] : [];
   const airportsForArrivalCity = arrivalCity ? airportsByCity[arrivalCity as keyof typeof airportsByCity] || [] : [];
+
+  useEffect(() => {
+    if (expenseAmount && expenseKdvRate !== undefined) {
+        const amount = parseFloat(expenseAmount);
+        if (!isNaN(amount)) {
+            const kdv = amount * expenseKdvRate;
+            setExpenseKdvAmount(kdv.toFixed(2));
+        }
+    } else {
+        setExpenseKdvAmount('');
+    }
+  }, [expenseAmount, expenseKdvRate]);
   
   const resetForms = () => {
     setDocumentType('');
@@ -74,7 +87,8 @@ export default function RequestsPage() {
     setLeaveDescription('');
     setExpenseType('');
     setExpenseAmount('');
-    setExpenseKDV('');
+    setExpenseKdvRate(undefined);
+    setExpenseKdvAmount('');
     setExpenseDescription('');
     setRequesterName('');
     setVehiclePlate('');
@@ -254,16 +268,29 @@ export default function RequestsPage() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="expense-amount">Tutar</Label>
+                  <Label htmlFor="expense-amount">Tutar (KDV Hariç)</Label>
                   <Input id="expense-amount" type="number" placeholder="0.00 TL" value={expenseAmount} onChange={(e) => setExpenseAmount(e.target.value)} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="expense-kdv">KDV Tutarı</Label>
-                  <Input id="expense-kdv" type="number" placeholder="0.00 TL" value={expenseKDV} onChange={(e) => setExpenseKDV(e.target.value)} />
+                  <Label htmlFor="expense-kdv-rate">KDV Oranı</Label>
+                  <Select value={expenseKdvRate !== undefined ? String(expenseKdvRate) : ''} onValueChange={(value) => setExpenseKdvRate(Number(value))}>
+                    <SelectTrigger id="expense-kdv-rate">
+                        <SelectValue placeholder="KDV oranı seçin..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="0.01">%1</SelectItem>
+                        <SelectItem value="0.10">%10</SelectItem>
+                        <SelectItem value="0.20">%20</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
+               <div className="space-y-2">
+                    <Label>Hesaplanan KDV Tutarı</Label>
+                    <Input value={expenseKdvAmount ? `${expenseKdvAmount} TL` : "0.00 TL"} readOnly className="bg-muted" />
+                </div>
               <div className="space-y-2">
                 <Label htmlFor="expense-description">Açıklama</Label>
                 <Textarea id="expense-description" placeholder="Masrafın detaylarını açıklayın..." value={expenseDescription} onChange={(e) => setExpenseDescription(e.target.value)} />
@@ -274,7 +301,7 @@ export default function RequestsPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={() => handleSubmit('Masraf', { expenseType, amount: expenseAmount, kdv: expenseKDV, description: expenseDescription })} disabled={!firestore}>Masraf Bildir</Button>
+              <Button onClick={() => handleSubmit('Masraf', { expenseType, amount: expenseAmount, kdvRate: expenseKdvRate, kdv: expenseKdvAmount, description: expenseDescription })} disabled={!firestore}>Masraf Bildir</Button>
             </CardFooter>
           </Card>
         </TabsContent>
