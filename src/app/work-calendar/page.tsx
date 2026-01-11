@@ -240,11 +240,11 @@ export default function WorkCalendarPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Görev</TableHead>
-                  <TableHead className="w-[120px]">Tür</TableHead>
-                  <TableHead className="w-[120px]">Öncelik</TableHead>
-                  <TableHead className="w-[150px]">Durum</TableHead>
-                  <TableHead className="w-[150px]">Bitiş Tarihi</TableHead>
-                  <TableHead className="w-[100px] text-right">İşlemler</TableHead>
+                  <TableHead className="w-[120px] text-primary">Tür</TableHead>
+                  <TableHead className="w-[120px] text-primary">Öncelik</TableHead>
+                  <TableHead className="w-[150px] text-primary">Durum</TableHead>
+                  <TableHead className="w-[150px] text-primary">Bitiş Tarihi</TableHead>
+                  <TableHead className="w-[100px] text-right text-primary">İşlemler</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
