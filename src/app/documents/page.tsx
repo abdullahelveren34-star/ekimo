@@ -4,7 +4,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookOpen, ClipboardCheck, FileText, Youtube, Award, CheckCircle } from 'lucide-react';
+import { BookOpen, ClipboardCheck, FileText, Youtube, Award, CheckCircle, UserCheck, Scale } from 'lucide-react';
 import React, { useState } from 'react';
 import {
   Dialog,
@@ -17,7 +17,14 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { currentUser } from '@/lib/data';
+import { currentUser, allEmployees } from '@/lib/data';
+import { Label } from '@/components/ui/label';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Separator } from '@/components/ui/separator';
+import { Input } from '@/components/ui/input';
 
 
 const trainingDocuments = [
@@ -366,6 +373,24 @@ const sopDocuments = [
   },
 ];
 
+const competencies = [
+    { id: 'communication', label: 'İletişim Becerileri' },
+    { id: 'teamwork', label: 'Takım Çalışması ve İşbirliği' },
+    { id: 'problemSolving', label: 'Problem Çözme ve Karar Verme' },
+    { id: 'responsibility', label: 'Sorumluluk Alma ve İnisiyatif Kullanma' },
+    { id: 'jobKnowledge', label: 'İş Bilgisi ve Teknik Yeterlilik' },
+    { id: 'quality', label: 'İş Kalitesi ve Detaylara Dikkat' },
+    { id: 'adaptation', label: 'Değişime ve Gelişime Açıklık' },
+];
+
+const ratingDescriptions: { [key: number]: string } = {
+  1: "Beklentileri Karşılamıyor",
+  2: "Geliştirilmesi Gerekiyor",
+  3: "Beklentileri Karşılıyor",
+  4: "Beklentileri Aşıyor",
+  5: "Olağanüstü Performans"
+};
+
 
 export default function DocumentsPage() {
     const { toast } = useToast();
@@ -386,13 +411,13 @@ export default function DocumentsPage() {
           <FileText className="h-8 w-8 text-primary" />
           <div>
             <h1 className="text-3xl font-bold text-foreground">Doküman Merkezi</h1>
-            <p className="text-muted-foreground mt-1">Eğitim materyallerine ve standart operasyon prosedürlerine buradan ulaşın.</p>
+            <p className="text-muted-foreground mt-1">Eğitim materyallerine, prosedürlere ve değerlendirme formlarına buradan ulaşın.</p>
           </div>
         </div>
       </header>
       
       <Tabs defaultValue="training" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="training">
             <BookOpen className="mr-2 h-4 w-4" />
             Eğitim Dokümanları
@@ -400,6 +425,10 @@ export default function DocumentsPage() {
           <TabsTrigger value="sop">
             <ClipboardCheck className="mr-2 h-4 w-4" />
             Standart Operasyon Prosedürleri (SOP)
+          </TabsTrigger>
+           <TabsTrigger value="performance">
+            <UserCheck className="mr-2 h-4 w-4" />
+            Performans Değerlendirme
           </TabsTrigger>
         </TabsList>
         
@@ -497,6 +526,101 @@ export default function DocumentsPage() {
               </Card>
             ))}
           </div>
+        </TabsContent>
+        
+        <TabsContent value="performance">
+            <Card className="mt-6">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-3 text-2xl">
+                        <Scale className="h-7 w-7 text-primary" />
+                        Aylık Personel Performans Değerlendirme Formu
+                    </CardTitle>
+                    <CardDescription>
+                        Bu form, personelin aylık performansını objektif kriterlere göre değerlendirmek ve geri bildirim sağlamak amacıyla kullanılır. 
+                        Sonuçlar, yıl sonu prim ve terfi süreçlerinde önemli bir veri olarak dikkate alınacaktır.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-8">
+                    <div className="space-y-6 p-6 border rounded-lg bg-background">
+                         <h3 className="font-semibold text-lg text-primary border-b pb-2">Değerlendirme Bilgileri</h3>
+                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div className="space-y-2">
+                                <Label htmlFor="evaluated-employee">Değerlendirilen Personel</Label>
+                                <Select>
+                                    <SelectTrigger id="evaluated-employee"><SelectValue placeholder="Personel seçin..." /></SelectTrigger>
+                                    <SelectContent>{allEmployees.map(emp => <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>)}</SelectContent>
+                                </Select>
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="evaluator-manager">Değerlendiren Yönetici</Label>
+                                <Input id="evaluator-manager" value={currentUser.name} readOnly />
+                            </div>
+                             <div className="space-y-2">
+                                <Label htmlFor="evaluation-period">Değerlendirme Dönemi</Label>
+                                <Input id="evaluation-period" type="month" defaultValue={new Date().toISOString().substring(0, 7)} />
+                            </div>
+                         </div>
+                    </div>
+
+                    <div className="space-y-6 p-6 border rounded-lg bg-background">
+                         <h3 className="font-semibold text-lg text-primary border-b pb-2">Yetkinlik Değerlendirmesi</h3>
+                         <div className="space-y-6">
+                            {competencies.map(comp => (
+                                <div key={comp.id} className="space-y-3">
+                                    <Label className="font-medium">{comp.label}</Label>
+                                    <RadioGroup className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
+                                        {Object.entries(ratingDescriptions).map(([value, desc]) => (
+                                             <div key={value} className="flex items-center space-x-2">
+                                                <RadioGroupItem value={value} id={`${comp.id}-${value}`} />
+                                                <Label htmlFor={`${comp.id}-${value}`} className="cursor-pointer text-sm font-normal">{value} - {desc}</Label>
+                                            </div>
+                                        ))}
+                                    </RadioGroup>
+                                </div>
+                            ))}
+                         </div>
+                    </div>
+                    
+                    <div className="space-y-6 p-6 border rounded-lg bg-background">
+                        <h3 className="font-semibold text-lg text-primary border-b pb-2">Hedef Bazlı Değerlendirme</h3>
+                        <div className="space-y-4">
+                            <Textarea placeholder="Personele bu ay için verilen hedefleri ve bu hedeflere ulaşma düzeyini (örneğin; %80 tamamlandı, hedef aşıldı vb.) detaylı olarak açıklayınız." rows={5} />
+                        </div>
+                    </div>
+
+                    <div className="space-y-6 p-6 border rounded-lg bg-background">
+                         <h3 className="font-semibold text-lg text-primary border-b pb-2">Genel Değerlendirme ve Geri Bildirim</h3>
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                                <Label htmlFor="strengths">Personelin Güçlü Yönleri</Label>
+                                <Textarea id="strengths" placeholder="Personelin bu dönemde öne çıkan olumlu yönlerini ve başarılarını belirtiniz." rows={5} />
+                            </div>
+                             <div className="space-y-2">
+                                <Label htmlFor="development-areas">Gelişim Alanları ve Aksiyon Planı</Label>
+                                <Textarea id="development-areas" placeholder="Personelin kendini geliştirmesi gereken alanları ve bu konuda atılacak adımları (eğitim, mentorluk vb.) belirtiniz." rows={5} />
+                            </div>
+                         </div>
+                    </div>
+
+                    <Separator />
+
+                     <div className="space-y-4 p-4 border rounded-lg bg-muted/50 text-muted-foreground">
+                        <h4 className="font-semibold text-foreground">Açık Rıza ve KVKK Bilgilendirme Metni</h4>
+                        <p className="text-xs">
+                            6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) uyarınca, bu formda yer alan performans değerlendirme verileriniz, iş sözleşmesi ve meşru menfaatlerimiz kapsamında, prim, terfi ve eğitim planlaması süreçlerinin yürütülmesi amacıyla Şirketimiz tarafından işlenmektedir. Bu veriler, yalnızca yetkili yöneticiler ve İnsan Kaynakları departmanı tarafından erişilebilir olacak ve yasal süreler boyunca güvenli bir şekilde saklanacaktır.
+                        </p>
+                         <div className="flex items-center space-x-2 pt-2">
+                            <Checkbox id="kvkk-consent" />
+                            <Label htmlFor="kvkk-consent" className="text-xs font-normal leading-snug">
+                                Yukarıdaki bilgilendirme metnini okuduğumu, anladığımı ve bu formda yer alan kişisel verilerimin belirtilen amaçlar doğrultusunda işlenmesine, kaydedilmesine ve saklanmasına açık rıza gösterdiğimi beyan ve kabul ederim.
+                            </Label>
+                        </div>
+                    </div>
+                </CardContent>
+                <CardFooter>
+                    <Button size="lg">Değerlendirmeyi Kaydet</Button>
+                </CardFooter>
+            </Card>
         </TabsContent>
       </Tabs>
     </div>
