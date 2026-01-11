@@ -176,7 +176,6 @@ export default function WorkCalendarPage() {
       dueDate: formDueDate,
     };
     setTasks(prevTasks => [...prevTasks, newTask]);
-    toast({ title: "Görev Eklendi!", description: `"${newTask.description}" görevi başarıyla oluşturuldu.` });
     setIsAddDialogOpen(false);
   };
 
@@ -197,19 +196,16 @@ export default function WorkCalendarPage() {
         ? { ...task, description: formDescription, employeeId: formEmployee, type: formType, priority: formPriority, dueDate: formDueDate } 
         : task
     ));
-    toast({ title: "Görev Güncellendi!", description: `Görev başarıyla güncellendi.` });
     setIsEditDialogOpen(false);
     setEditingTask(null);
   };
 
   const handleCompleteTask = (taskId: number) => {
     setTasks(prev => prev.map(task => task.id === taskId ? { ...task, status: 'Tamamlandı' } : task));
-    toast({ title: "Görev Tamamlandı!", description: "Görevin durumu 'Tamamlandı' olarak işaretlendi." });
   };
 
   const handleDeleteTask = (taskId: number) => {
     setTasks(prev => prev.filter(task => task.id !== taskId));
-    toast({ title: "Görev Silindi!", description: "Görev başarıyla silindi." });
   };
   
 
