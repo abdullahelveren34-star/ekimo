@@ -107,7 +107,6 @@ export default function ManagementPage() {
         return <>
           {renderDetail('Masraf Türü', details.expenseType)}
           {renderDetail('Tutar', details.amount ? `${details.amount} TL` : null)}
-          {renderDetail('KDV', details.kdv ? `${details.kdv} TL` : null)}
           {commonDetails}
         </>;
       case 'Seyahat':

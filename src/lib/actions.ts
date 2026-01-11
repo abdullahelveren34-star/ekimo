@@ -17,10 +17,7 @@ export type RequestDetails = {
     endDate?: string;
     // Expense request
     expenseType?: string;
-    amount?: string; // This will now be amount EXCLUDING VAT
-    kdvRate?: number;
-    kdv?: string; // This is the calculated VAT amount
-    totalAmount?: string; // This is the user-inputted amount INCLUDING VAT
+    amount?: string;
     // Travel request
     travelRequestType?: string;
     city?: string;
@@ -80,3 +77,4 @@ export async function createApprovalRequest(
   // Use the non-blocking function to add the document
   addDocumentNonBlocking(requestsCollection, data);
 }
+

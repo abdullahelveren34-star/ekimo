@@ -15,12 +15,6 @@ import { useFirebase } from "@/firebase"
 import { createApprovalRequest } from "@/lib/actions"
 import { toast } from "@/hooks/use-toast"
 
-const expenseTypeToKdvRate: { [key: string]: number } = {
-  'Yemek': 0.10,
-  'Ulaşım': 0.20,
-  'Konaklama': 0.10,
-  'Ofis Malzemesi': 0.20,
-};
 
 export default function RequestsPage() {
   const { firestore } = useFirebase();
@@ -41,10 +35,7 @@ export default function RequestsPage() {
 
   // Expense State
   const [expenseType, setExpenseType] = useState('');
-  const [totalExpenseAmount, setTotalExpenseAmount] = useState(''); // User input: Amount INCLUSIVE of VAT
-  const [expenseKdvRate, setExpenseKdvRate] = useState<number | undefined>(undefined);
-  const [expenseAmountExclVat, setExpenseAmountExclVat] = useState(''); // Calculated amount EXCLUSIVE of VAT
-  const [expenseKdvAmount, setExpenseKdvAmount] = useState<string>(''); // Calculated VAT amount
+  const [expenseAmount, setExpenseAmount] = useState('');
   const [expenseDescription, setExpenseDescription] = useState('');
 
   // Vehicle State
@@ -73,28 +64,6 @@ export default function RequestsPage() {
   const hotelsForSelectedCity = selectedAccommodationCity ? hotelsByCity[selectedAccommodationCity as keyof typeof hotelsByCity] || [] : [];
   const airportsForDepartureCity = departureCity ? airportsByCity[departureCity as keyof typeof airportsByCity] || [] : [];
   const airportsForArrivalCity = arrivalCity ? airportsByCity[arrivalCity as keyof typeof airportsByCity] || [] : [];
-
- useEffect(() => {
-    if (expenseType && expenseTypeToKdvRate[expenseType]) {
-        setExpenseKdvRate(expenseTypeToKdvRate[expenseType]);
-    } else if (expenseType === 'Diğer') {
-        setExpenseKdvRate(undefined);
-    }
-  }, [expenseType]);
-
-  useEffect(() => {
-    const totalAmountFloat = parseFloat(totalExpenseAmount);
-    if (!isNaN(totalAmountFloat) && expenseKdvRate !== undefined) {
-      const amountExclVat = totalAmountFloat / (1 + expenseKdvRate);
-      const kdvAmount = totalAmountFloat - amountExclVat;
-      
-      setExpenseAmountExclVat(amountExclVat.toFixed(2));
-      setExpenseKdvAmount(kdvAmount.toFixed(2));
-    } else {
-      setExpenseAmountExclVat('');
-      setExpenseKdvAmount('');
-    }
-  }, [totalExpenseAmount, expenseKdvRate]);
   
   const resetForms = () => {
     setDocumentType('');
@@ -104,10 +73,7 @@ export default function RequestsPage() {
     setLeaveEndDate('');
     setLeaveDescription('');
     setExpenseType('');
-    setTotalExpenseAmount('');
-    setExpenseKdvRate(undefined);
-    setExpenseAmountExclVat('');
-    setExpenseKdvAmount('');
+    setExpenseAmount('');
     setExpenseDescription('');
     setRequesterName('');
     setVehiclePlate('');
@@ -272,54 +238,27 @@ export default function RequestsPage() {
               <CardDescription>Şirket için yapılan masrafların geri ödemesi için bu formu doldurun.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="expense-type">Masraf Türü</Label>
-                 <Select value={expenseType} onValueChange={setExpenseType}>
-                  <SelectTrigger id="expense-type">
-                    <SelectValue placeholder="Masraf türünü seçin..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Yemek">Yemek</SelectItem>
-                    <SelectItem value="Ulaşım">Ulaşım (Taksi, Toplu Taşıma vb.)</SelectItem>
-                    <SelectItem value="Konaklama">Konaklama</SelectItem>
-                    <SelectItem value="Ofis Malzemesi">Ofis Malzemesi</SelectItem>
-                    <SelectItem value="Diğer">Diğer</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="expense-type">Masraf Türü</Label>
+                    <Select value={expenseType} onValueChange={setExpenseType}>
+                      <SelectTrigger id="expense-type">
+                        <SelectValue placeholder="Masraf türünü seçin..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Yemek">Yemek</SelectItem>
+                        <SelectItem value="Ulaşım">Ulaşım (Taksi, Toplu Taşıma vb.)</SelectItem>
+                        <SelectItem value="Konaklama">Konaklama</SelectItem>
+                        <SelectItem value="Ofis Malzemesi">Ofis Malzemesi</SelectItem>
+                        <SelectItem value="Diğer">Diğer</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="expense-amount">Tutar</Label>
+                    <Input id="expense-amount" type="number" placeholder="0.00 TL" value={expenseAmount} onChange={(e) => setExpenseAmount(e.target.value)} />
+                  </div>
               </div>
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="total-expense-amount">KDV Dahil Toplam Tutar</Label>
-                  <Input id="total-expense-amount" type="number" placeholder="0.00 TL" value={totalExpenseAmount} onChange={(e) => setTotalExpenseAmount(e.target.value)} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="expense-kdv-rate">KDV Oranı</Label>
-                  <Select 
-                    value={expenseKdvRate !== undefined ? String(expenseKdvRate) : ''} 
-                    onValueChange={(value) => setExpenseKdvRate(Number(value))} 
-                    disabled={expenseType !== 'Diğer'}
-                  >
-                    <SelectTrigger id="expense-kdv-rate">
-                        <SelectValue placeholder={expenseType && expenseType !== 'Diğer' && expenseKdvRate !== undefined ? `%${expenseKdvRate * 100}` : "Oran seçin..."} />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="0.01">%1</SelectItem>
-                        <SelectItem value="0.10">%10</SelectItem>
-                        <SelectItem value="0.20">%20</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                        <Label>KDV Hariç Tutar</Label>
-                        <Input value={expenseAmountExclVat ? `${expenseAmountExclVat} TL` : "0.00 TL"} readOnly className="bg-muted" />
-                    </div>
-                    <div className="space-y-2">
-                        <Label>Hesaplanan KDV Tutarı</Label>
-                        <Input value={expenseKdvAmount ? `${expenseKdvAmount} TL` : "0.00 TL"} readOnly className="bg-muted" />
-                    </div>
-               </div>
               <div className="space-y-2">
                 <Label htmlFor="expense-description">Açıklama</Label>
                 <Textarea id="expense-description" placeholder="Masrafın detaylarını açıklayın..." value={expenseDescription} onChange={(e) => setExpenseDescription(e.target.value)} />
@@ -332,10 +271,7 @@ export default function RequestsPage() {
             <CardFooter>
               <Button onClick={() => handleSubmit('Masraf', { 
                   expenseType, 
-                  totalAmount: totalExpenseAmount, 
-                  kdvRate: expenseKdvRate, 
-                  amount: expenseAmountExclVat, 
-                  kdv: expenseKdvAmount, 
+                  amount: expenseAmount,
                   description: expenseDescription 
               })} disabled={!firestore}>Masraf Bildir</Button>
             </CardFooter>

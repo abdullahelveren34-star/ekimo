@@ -25,8 +25,7 @@ export const mockApprovalRequests: ApprovalRequest[] = [
     details: {
       employeeName: 'Elif Aydın',
       expenseType: 'Müşteri Yemeği',
-      amount: '450.75',
-      kdv: '90.15',
+      amount: '540.90',
       description: 'XYZ Corp ile yapılan öğle yemeği masrafı.',
     },
     status: 'Beklemede',
