@@ -178,13 +178,10 @@ export const CandyCrushGame = () => {
             if (isRowOfThree || isRowOfFour || isColumnOfThree || isColumnOfFour) {
                  setBoard(newBoard);
             } else {
-                // If it's not a valid move, revert the board.
-                // This part seems to be missing, so I'll add a timeout to revert
-                // It's better to check for validity before setting the board state.
-                const tempBoard = [...board]; // original board
-                setTimeout(() => {
-                    setBoard(tempBoard);
-                }, 100);
+                const revertedBoard = [...board];
+                revertedBoard[replacedItemIndex] = newBoard[draggedItemIndex];
+                revertedBoard[draggedItemIndex] = newBoard[replacedItemIndex];
+                setBoard(revertedBoard);
             }
         }
         
@@ -211,8 +208,8 @@ export const CandyCrushGame = () => {
                             </div>
                             <Button onClick={createBoard} className="flex-1">Yeni Oyun</Button>
                         </div>
-                        <div className="p-4 bg-muted/50 rounded-lg text-sm text-muted-foreground space-y-2">
-                             <h4 className="font-semibold text-foreground">Nasıl Oynanır?</h4>
+                        <div className="p-4 bg-muted/50 rounded-lg text-xs text-muted-foreground space-y-1.5">
+                             <h4 className="font-semibold text-foreground text-sm">Nasıl Oynanır?</h4>
                              <p>
                                 <strong>1. Sürükle ve Bırak:</strong> Bir taşı, hemen yanındaki (yukarı, aşağı, sol, sağ) başka bir taşla yer değiştirmek için sürükleyip bırakın.
                             </p>
@@ -232,7 +229,7 @@ export const CandyCrushGame = () => {
                                     <div
                                         key={index}
                                         className={cn(
-                                            "w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-md cursor-grab transition-all duration-300",
+                                            "w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-md cursor-grab transition-all duration-300",
                                             "bg-muted/30 shadow-lg hover:scale-110 active:scale-95 active:cursor-grabbing",
                                             "border-2 border-primary/50"
                                         )}
@@ -245,7 +242,7 @@ export const CandyCrushGame = () => {
                                         onDrop={dragDrop}
                                         onDragEnd={dragEnd}
                                     >
-                                        {Icon && <Icon className={`w-5 h-5 sm:w-7 sm:h-7 ${item.color} pointer-events-none`} />}
+                                        {Icon && <Icon className={`w-7 h-7 sm:w-9 sm:h-9 ${item.color} pointer-events-none`} />}
                                     </div>
                                 );
                             })}
