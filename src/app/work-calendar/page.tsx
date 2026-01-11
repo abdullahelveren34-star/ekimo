@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CalendarCheck, ChevronDown, Plus, Tag } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { allEmployees } from '@/lib/data';
+import { allEmployees, currentUser } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 
 const initialTasks = [
@@ -38,17 +38,17 @@ const statusColors = {
   'Tamamlandı': 'bg-green-500/20 text-green-400',
 };
 
-const relevantEmployees = allEmployees.filter(e => e.department === 'Üretim Planlama' || e.department === 'Üretim');
+const relevantEmployees = allEmployees.filter(e => e.department === 'Üretim Planlama' || e.department === 'Üretim' || e.department === 'BT');
 
 export default function WorkCalendarPage() {
   const [tasks, setTasks] = useState(initialTasks);
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState('24'); // Kaan Vural as default
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(currentUser.id); // Default to current user
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
 
   // New Task Form State
   const [newTaskDescription, setNewTaskDescription] = useState('');
-  const [newTaskEmployee, setNewTaskEmployee] = useState('');
+  const [newTaskEmployee, setNewTaskEmployee] = useState(currentUser.id); // Default to current user
   const [newTaskType, setNewTaskType] = useState('Planlama');
   const [newTaskPriority, setNewTaskPriority] = useState('Orta');
   const [newTaskDueDate, setNewTaskDueDate] = useState('');
@@ -56,6 +56,13 @@ export default function WorkCalendarPage() {
 
   const selectedEmployee = allEmployees.find(emp => emp.id === selectedEmployeeId);
   const filteredTasks = tasks.filter(task => task.employeeId === selectedEmployeeId);
+  
+  useEffect(() => {
+    // When the dialog opens, reset the employee to the current user
+    if (isDialogOpen) {
+      setNewTaskEmployee(currentUser.id);
+    }
+  }, [isDialogOpen]);
 
   const handleAddTask = () => {
     if (!newTaskDescription || !newTaskEmployee || !newTaskDueDate) {
@@ -86,7 +93,7 @@ export default function WorkCalendarPage() {
 
     // Reset form and close dialog
     setNewTaskDescription('');
-    setNewTaskEmployee('');
+    setNewTaskEmployee(currentUser.id);
     setNewTaskType('Planlama');
     setNewTaskPriority('Orta');
     setNewTaskDueDate('');
@@ -120,7 +127,7 @@ export default function WorkCalendarPage() {
             <div className="grid gap-6 py-4">
               <div className="grid gap-2">
                 <Label htmlFor="task-description">Görev Açıklaması</Label>
-                <Textarea id="task-description" placeholder="Yapılacak işin detaylarını yazın..." value={newTaskDescription} onChange={(e) => setNewTaskDescription(e.target.value)} />
+                <Textarea id="task-description" placeholder="Yapılacak işin detaylarını yazın..." value={newTaskDescription} onChange={(e) => setNewTaskDescription(e.target.value)} rows={5} />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
@@ -145,6 +152,8 @@ export default function WorkCalendarPage() {
                         <SelectContent>
                             <SelectItem value="Planlama">Planlama</SelectItem>
                             <SelectItem value="Üretim">Üretim</SelectItem>
+                            <SelectItem value="Geliştirme">Geliştirme</SelectItem>
+                            <SelectItem value="Analiz">Analiz</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
@@ -253,3 +262,5 @@ export default function WorkCalendarPage() {
     </div>
   );
 }
+
+    
