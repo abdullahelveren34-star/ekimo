@@ -165,18 +165,18 @@ export const CandyCrushGame = () => {
         const isValidMove = validMoves.includes(replacedItemIndex);
         
         if (isValidMove) {
-            const newBoard = [...board];
-            const draggedItem = newBoard[draggedItemIndex];
-            newBoard[draggedItemIndex] = newBoard[replacedItemIndex];
-            newBoard[replacedItemIndex] = draggedItem;
+            const tempBoard = [...board];
+            const draggedItem = tempBoard[draggedItemIndex];
+            tempBoard[draggedItemIndex] = tempBoard[replacedItemIndex];
+            tempBoard[replacedItemIndex] = draggedItem;
 
-            const isColumnOfFour = checkForColumnOfFour(newBoard);
-            const isRowOfFour = checkForRowOfFour(newBoard);
-            const isColumnOfThree = checkForColumnOfThree(newBoard);
-            const isRowOfThree = checkForRowOfThree(newBoard);
+            const isColumnOfFour = checkForColumnOfFour(tempBoard);
+            const isRowOfFour = checkForRowOfFour(tempBoard);
+            const isColumnOfThree = checkForColumnOfThree(tempBoard);
+            const isRowOfThree = checkForRowOfThree(tempBoard);
 
             if (isRowOfThree || isRowOfFour || isColumnOfThree || isColumnOfFour) {
-                setBoard(newBoard);
+                setBoard(tempBoard);
             }
         }
         
@@ -223,7 +223,10 @@ export const CandyCrushGame = () => {
                                 return (
                                     <div
                                         key={index}
-                                        className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-background rounded-md shadow-inner cursor-grab"
+                                        className={cn(
+                                            "w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-md cursor-grab transition-all duration-300",
+                                            "bg-muted/30 shadow-lg hover:scale-110 active:scale-95 active:cursor-grabbing"
+                                        )}
                                         data-id={index}
                                         draggable={true}
                                         onDragStart={dragStart}
@@ -233,7 +236,7 @@ export const CandyCrushGame = () => {
                                         onDrop={dragDrop}
                                         onDragEnd={dragEnd}
                                     >
-                                        {Icon && <Icon className={`w-6 h-6 sm:w-8 sm:h-8 ${item.color}`} />}
+                                        {Icon && <Icon className={`w-6 h-6 sm:w-8 sm:h-8 ${item.color} pointer-events-none`} />}
                                     </div>
                                 );
                             })}
