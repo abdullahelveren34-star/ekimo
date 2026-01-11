@@ -113,10 +113,6 @@ export default function HomePage() {
         <Logo />
       </section>
 
-      <section>
-        <CandyCrushGame />
-      </section>
-
        <section>
         <Card>
           <CardContent className="p-4">
@@ -324,6 +320,10 @@ export default function HomePage() {
             )}
           </CardContent>
         </Card>
+      </section>
+
+      <section>
+        <CandyCrushGame />
       </section>
     </div>
   );

@@ -232,7 +232,7 @@ export const CandyCrushGame = () => {
                                     <div
                                         key={index}
                                         className={cn(
-                                            "w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-md cursor-grab transition-all duration-300",
+                                            "w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-md cursor-grab transition-all duration-300",
                                             "bg-muted/30 shadow-lg hover:scale-110 active:scale-95 active:cursor-grabbing",
                                             "border-2 border-primary/50"
                                         )}
@@ -245,7 +245,7 @@ export const CandyCrushGame = () => {
                                         onDrop={dragDrop}
                                         onDragEnd={dragEnd}
                                     >
-                                        {Icon && <Icon className={`w-6 h-6 sm:w-8 sm:h-8 ${item.color} pointer-events-none`} />}
+                                        {Icon && <Icon className={`w-5 h-5 sm:w-7 sm:h-7 ${item.color} pointer-events-none`} />}
                                     </div>
                                 );
                             })}
