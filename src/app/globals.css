@@ -83,8 +83,8 @@
   }
 }
 
-.candy-crush-board img {
-  @apply transition-transform duration-300 ease-in-out;
+.candy-crush-board div {
+  @apply transition-all duration-300 ease-in-out;
 }
 
 .bg-knit-pattern {

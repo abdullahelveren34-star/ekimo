@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Cake, Gift, Star, Send, Leaf, Clock, Calendar, MapPin, CloudSun } from 'lucide-react';
 import { Logo } from '@/components/logo';
+import { CandyCrushGame } from '@/components/game/candy-crush-game';
 
 type Employee = {
   name: string;
@@ -110,6 +111,10 @@ export default function HomePage() {
     <div className="flex flex-col gap-8">
        <section className="bg-knit-pattern flex justify-center p-6 rounded-lg -mt-4 -mx-4 sm:-mt-6 sm:-mx-6 lg:-mt-8 lg:-mx-8 mb-4">
         <Logo />
+      </section>
+
+      <section>
+        <CandyCrushGame />
       </section>
 
        <section>
