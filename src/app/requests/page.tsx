@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/componentsui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -294,9 +294,13 @@ export default function RequestsPage() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="expense-kdv-rate">KDV Oranı</Label>
-                  <Select value={expenseKdvRate !== undefined ? String(expenseKdvRate) : ''} onValueChange={(value) => setExpenseKdvRate(Number(value))} disabled={expenseType !== 'Diğer'}>
+                  <Select 
+                    value={expenseKdvRate !== undefined ? String(expenseKdvRate) : ''} 
+                    onValueChange={(value) => setExpenseKdvRate(Number(value))} 
+                    disabled={expenseType !== 'Diğer'}
+                  >
                     <SelectTrigger id="expense-kdv-rate">
-                        <SelectValue placeholder={expenseType !== 'Diğer' && expenseKdvRate !== undefined ? `%${expenseKdvRate * 100}` : "Oran seçin..."} />
+                        <SelectValue placeholder={expenseType && expenseType !== 'Diğer' && expenseKdvRate !== undefined ? `%${expenseKdvRate * 100}` : "Oran seçin..."} />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="0.01">%1</SelectItem>
@@ -605,3 +609,5 @@ export default function RequestsPage() {
     </div>
   );
 }
+
+    
