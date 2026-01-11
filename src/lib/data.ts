@@ -20,7 +20,14 @@ export type Employee = {
   }[];
   performanceHistory: {
     year: number;
-    monthlyScores: { month: string; score: number }[];
+    monthlyScores: {
+      month: string;
+      workQuality: number;
+      communication: number;
+      responsibility: number;
+      target: number;
+      average: number;
+    }[];
   }[];
 };
 
@@ -125,12 +132,25 @@ export const companyNews = [
 const generatePerformanceHistory = () => {
   const years = [2023, 2024, 2025];
   const months = ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"];
+  
   return years.map(year => ({
     year,
-    monthlyScores: months.map(month => ({
-      month,
-      score: Math.floor(Math.random() * (95 - 60 + 1)) + 60 // Random score between 60 and 95
-    }))
+    monthlyScores: months.map(month => {
+      const workQuality = Math.floor(Math.random() * 41) + 55; // 55-95
+      const communication = Math.floor(Math.random() * 41) + 50; // 50-90
+      const responsibility = Math.floor(Math.random() * 36) + 60; // 60-95
+      const average = Math.floor(Math.random() * 11) + 75; // 75-85
+      const target = 85;
+      
+      return {
+        month,
+        workQuality: workQuality > 100 ? 100 : workQuality,
+        communication: communication > 100 ? 100 : communication,
+        responsibility: responsibility > 100 ? 100 : responsibility,
+        target,
+        average,
+      };
+    })
   }));
 };
 
@@ -219,7 +239,7 @@ export const departmentMembers: { [key: string]: Employee[] } = {
     { id: '49', name: 'Nazlı Özer', title: 'Bordro ve Özlük İşleri Uzmanı', department: 'İnsan Kaynakları', email: 'nazli.ozer@e-kimo.com', phone: '555-444-4447', avatarUrl: 'https://images.unsplash.com/photo-1599842057874-37393e9342df?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1990-01-05', annualLeave: { total: 16, used: 10, remaining: 6 }, equipment: [], performanceHistory: generatePerformanceHistory() },
   ],
   'İdari İşler': [
-    { id: '50', name: 'Osman Gök', title: 'İdari İşler Müdürü', department: 'İdari İşler', email: 'osman.gok@e-kimo.com', phone: '555-678-9012', avatarUrl: 'https://images.unsplash.com/photo-1520409364224-63400afe26e5?q=80&w=1959&auto=format&fit=crop&ixlib-rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1975-08-20', annualLeave: { total: 28, used: 20, remaining: 8 }, equipment: [], performanceHistory: generatePerformanceHistory() },
+    { id: '50', name: 'Osman Gök', title: 'İdari İşler Müdürü', department: 'İdari İşler', email: 'osman.gok@e-kimo.com', phone: '555-678-9012', avatarUrl: 'https://images.unsplash.com/photo-1520409364224-63400afe26e5?q=80&w=1959&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%3D', birthDate: '1975-08-20', annualLeave: { total: 28, used: 20, remaining: 8 }, equipment: [], performanceHistory: generatePerformanceHistory() },
     { id: '51', name: 'Peri Tozu', title: 'Resepsiyonist', department: 'İdari İşler', email: 'peri.tozu@e-kimo.com', phone: '555-678-9013', avatarUrl: 'https://images.unsplash.com/photo-1601288496920-b6154fe3626a?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1999-03-03', annualLeave: { total: 14, used: 1, remaining: 13 }, equipment: [], performanceHistory: generatePerformanceHistory() },
   ],
   'BT': [
@@ -244,7 +264,7 @@ export const currentUser = {
   id: 'abdullah-elveren-id',
   name: 'Abdullah Elveren',
   title: 'Grup Bilgi Teknolojileri Direktörü',
-  avatarUrl: 'https://images.unsplash.com/photo-1557862921-37829c790f19?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  avatarUrl: 'https://images.unsplash.com/photo-1557862921-37829c790f19?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%3D',
   email: 'abdullah.elveren@e-kimo.com'
 };
 
@@ -443,5 +463,3 @@ export const airportsByCity: { [key: string]: string[] } = {
   "Van": ["Van Ferit Melen Havalimanı (VAN)"],
   "Zonguldak": ["Zonguldak Çaycuma Havalimanı (ONQ)"]
 };
-
-    

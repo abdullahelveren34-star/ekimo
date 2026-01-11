@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Briefcase, Building, Cake, CalendarDays, Contact, HardDrive, Mail, Phone, User, TrendingUp } from 'lucide-react';
-import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, Dot } from 'recharts';
+import { Bar, BarChart, XAxis, YAxis } from 'recharts';
 import {
   ChartContainer,
   ChartTooltip,
@@ -26,17 +26,6 @@ function getAge(birthDateString: string) {
     }
     return age;
 }
-
-// Custom dot component
-const CustomizedDot = (props: any) => {
-  const { cx, cy, stroke, payload, value, lowestScore } = props;
-
-  if (value === lowestScore) {
-    return <Dot cx={cx} cy={cy} r={5} fill="hsl(var(--destructive))" stroke={stroke} strokeWidth={2} />;
-  }
-
-  return <Dot cx={cx} cy={cy} r={4} fill={stroke} />;
-};
 
 
 export default function PersonnelDetailPage({ params }: { params: { id: string } }) {
@@ -58,19 +47,12 @@ export default function PersonnelDetailPage({ params }: { params: { id: string }
 
   const performanceDataForYear = employee.performanceHistory.find(p => p.year === selectedYear)?.monthlyScores || [];
 
-  const lowestScore = performanceDataForYear.length > 0 
-    ? Math.min(...performanceDataForYear.map(p => p.score))
-    : null;
-
   const chartConfig = {
-    score: {
-      label: "Performans Skoru",
-      color: "hsl(var(--primary))",
-    },
-     lowestScore: {
-      label: "En Düşük Performans",
-      color: "hsl(var(--destructive))",
-    }
+    workQuality: { label: "İş Kalitesi", color: "hsl(var(--chart-1))" },
+    communication: { label: "İletişim", color: "hsl(var(--chart-2))" },
+    responsibility: { label: "Sorumluluk", color: "hsl(var(--chart-3))" },
+    average: { label: "Ortalama", color: "hsl(var(--foreground))" },
+    target: { label: "Hedef", color: "hsl(var(--primary))" },
   };
 
   const availableYears = employee.performanceHistory.map(p => p.year).sort((a, b) => b - a);
@@ -184,50 +166,117 @@ export default function PersonnelDetailPage({ params }: { params: { id: string }
                   </div>
               </CardContent>
             </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between">
-                  <CardTitle className="flex items-center gap-2 text-xl">
-                      <TrendingUp className="h-5 w-5 text-primary" />
-                      Performans Geçmişi
-                  </CardTitle>
-                  <Select value={String(selectedYear)} onValueChange={(value) => setSelectedYear(Number(value))}>
-                      <SelectTrigger className="w-[120px]">
-                          <SelectValue placeholder="Yıl seçin" />
-                      </SelectTrigger>
-                      <SelectContent>
-                          {availableYears.map(year => (
-                              <SelectItem key={year} value={String(year)}>{year}</SelectItem>
-                          ))}
-                      </SelectContent>
-                  </Select>
-              </CardHeader>
-              <CardContent>
-                {performanceDataForYear.length > 0 ? (
-                  <ChartContainer config={chartConfig} className="h-[300px] w-full">
-                    <RadarChart data={performanceDataForYear}>
-                        <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
-                        <PolarAngleAxis dataKey="month" />
-                        <PolarGrid />
-                        <PolarRadiusAxis angle={30} domain={[0, 100]} />
-                        <Radar
-                            name="Performans"
-                            dataKey="score"
-                            stroke="var(--color-score)"
-                            fill="var(--color-score)"
-                            fillOpacity={0.6}
-                            dot={<CustomizedDot lowestScore={lowestScore} />}
-                        />
-                    </RadarChart>
-                  </ChartContainer>
-                ) : (
-                  <div className="flex items-center justify-center h-[300px] text-muted-foreground text-sm">
-                      {selectedYear} yılı için performans verisi bulunamadı.
-                  </div>
-                )}
-              </CardContent>
-            </Card>
         </div>
       </div>
+      <Card>
+        <CardHeader className="items-start gap-4 space-y-0 sm:flex-row sm:items-center">
+            <div className="flex-1">
+                <CardTitle className="flex items-center gap-2 text-xl">
+                    <TrendingUp className="h-5 w-5 text-primary" />
+                    Yıllık Performans Analizi
+                </CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">
+                    Seçilen yılın aylık yetkinlik puanları, hedef ve ortalamaya göre gösterimi.
+                </p>
+            </div>
+            <Select value={String(selectedYear)} onValueChange={(value) => setSelectedYear(Number(value))}>
+                <SelectTrigger className="w-full sm:w-[120px]">
+                    <SelectValue placeholder="Yıl seçin" />
+                </SelectTrigger>
+                <SelectContent>
+                    {availableYears.map(year => (
+                        <SelectItem key={year} value={String(year)}>{year}</SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+        </CardHeader>
+        <CardContent>
+             {performanceDataForYear.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6">
+                    {performanceDataForYear.map((monthData) => (
+                    <div key={monthData.month} className="space-y-1">
+                        <p className="text-sm font-medium text-center">{monthData.month}</p>
+                        <ChartContainer config={chartConfig} className="h-8 w-full">
+                        <BarChart
+                            accessibilityLayer
+                            layout="vertical"
+                            margin={{ left: 0, top: 0, right: 0, bottom: 0 }}
+                            data={[monthData]}
+                        >
+                            <XAxis type="number" dataKey="target" hide domain={[0, 100]} />
+                            <YAxis type="category" dataKey="month" hide />
+                            <ChartTooltip
+                            cursor={false}
+                            content={
+                                <ChartTooltipContent
+                                hideLabel
+                                formatter={(value, name) => (
+                                    <div className="flex min-w-[120px] items-center text-xs">
+                                        <div className="flex flex-1 items-center gap-2">
+                                            <div
+                                            className="h-2 w-2 rounded-full"
+                                            style={{
+                                                backgroundColor: chartConfig[name as keyof typeof chartConfig]?.color,
+                                            }}
+                                            />
+                                            {chartConfig[name as keyof typeof chartConfig]?.label || name}
+                                        </div>
+                                        <span className="font-bold">
+                                            {value}
+                                        </span>
+                                    </div>
+                                )}
+                                />
+                            }
+                            />
+                             <Bar
+                                dataKey="responsibility"
+                                layout="vertical"
+                                stackId="a"
+                                fill="var(--color-responsibility)"
+                                radius={[4, 4, 4, 4]}
+                                barSize={8}
+                            />
+                            <Bar
+                                dataKey="communication"
+                                layout="vertical"
+                                stackId="a"
+                                fill="var(--color-communication)"
+                                radius={[4, 4, 4, 4]}
+                                barSize={8}
+                            />
+                            <Bar
+                                dataKey="workQuality"
+                                layout="vertical"
+                                stackId="a"
+                                fill="var(--color-workQuality)"
+                                radius={[4, 4, 4, 4]}
+                                barSize={8}
+                            />
+                            <path
+                                d={`M${(monthData.target / 100) * 100}% 0 V 100%`}
+                                stroke="hsl(var(--primary))"
+                                strokeWidth={2}
+                                strokeDasharray="3 3"
+                            />
+                            <path
+                                d={`M${(monthData.average / 100) * 100}% 0 V 100%`}
+                                stroke="hsl(var(--foreground))"
+                                strokeWidth={1}
+                                strokeOpacity={0.5}
+                            />
+                        </BarChart>
+                        </ChartContainer>
+                    </div>
+                    ))}
+                </div>
+            ) : (
+                <div className="flex items-center justify-center h-[200px] text-muted-foreground text-sm">
+                    {selectedYear} yılı için performans verisi bulunamadı.
+                </div>
+            )}
+        </CardContent>
+    </Card>
     </div>
   );
 }
