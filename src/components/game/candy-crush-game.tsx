@@ -58,6 +58,20 @@ const GameLogo = () => (
     </svg>
 );
 
+const DecorativeItems = () => (
+    <>
+      {/* Left Side Decorations */}
+      <Gem className="absolute -left-4 top-1/4 w-16 h-16 text-purple-500 opacity-20 transform -rotate-12 blur-sm pointer-events-none" />
+      <Star className="absolute left-10 top-2/3 w-12 h-12 text-yellow-500 opacity-20 transform rotate-20 blur-sm pointer-events-none" />
+      <Apple className="absolute left-2 bottom-8 w-10 h-10 text-green-500 opacity-20 transform -rotate-45 blur-sm pointer-events-none" />
+
+      {/* Right Side Decorations */}
+      <Heart className="absolute -right-5 top-1/3 w-16 h-16 text-red-500 opacity-20 transform rotate-12 blur-sm pointer-events-none" />
+      <Moon className="absolute right-12 top-3/4 w-12 h-12 text-blue-500 opacity-20 transform -rotate-20 blur-sm pointer-events-none" />
+      <Sun className="absolute right-4 bottom-16 w-10 h-10 text-orange-500 opacity-20 transform rotate-45 blur-sm pointer-events-none" />
+    </>
+);
+
 
 export const CandyCrushGame = () => {
     const [board, setBoard] = useState<any[]>([]);
@@ -231,9 +245,10 @@ export const CandyCrushGame = () => {
     }
 
     return (
-        <Card>
-            <CardContent className="flex flex-col items-center gap-6 p-6">
-                <div className="flex flex-col md:flex-row items-center justify-center gap-8 w-full">
+        <Card className="overflow-hidden">
+            <CardContent className="flex flex-col items-center gap-6 p-6 relative">
+                 <DecorativeItems />
+                <div className="flex flex-col md:flex-row items-center justify-center gap-8 w-full z-10">
                     <div className="hidden md:flex flex-col items-center justify-center">
                        <GameLogo />
                        <div className="text-center mt-4">
@@ -270,17 +285,19 @@ export const CandyCrushGame = () => {
                             );
                         })}
                     </div>
-                     <div className="flex md:hidden flex-col items-center">
-                       <GameLogo />
-                       <div className={cn(
-                                "text-5xl font-bold text-primary transition-all duration-300 mt-4",
+                     <div className="flex md:hidden flex-col items-center z-10">
+                       <div className="relative">
+                          <GameLogo />
+                           <div className={cn(
+                                "absolute -bottom-4 left-1/2 -translate-x-1/2 text-5xl font-bold text-primary transition-all duration-300",
                                 scoreUpdated && "score-updated"
                             )}>{score}</div>
-                       <div className="text-sm text-muted-foreground">Puan</div>
+                       </div>
+                       <div className="text-sm text-muted-foreground mt-4">Puan</div>
                     </div>
                 </div>
 
-                <div className="flex flex-col items-center space-y-4 w-full max-w-2xl pt-4 border-t border-border">
+                <div className="flex flex-col items-center space-y-4 w-full max-w-2xl pt-4 border-t border-border z-10">
                     <Button onClick={createBoard}>Yeni Oyun</Button>
                     <div className="p-4 bg-muted/50 rounded-lg text-xs text-muted-foreground space-y-1.5 w-full text-center">
                          <h4 className="font-semibold text-foreground text-sm">Nasıl Oynanır?</h4>
