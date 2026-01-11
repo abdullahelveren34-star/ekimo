@@ -19,34 +19,41 @@ const itemTypes = [
 const blankItem = { component: null, color: '' };
 
 const GameLogo = () => (
-    <svg width="150" height="100" viewBox="0 0 150 100" className="drop-shadow-lg">
+    <svg width="180" height="100" viewBox="0 0 180 100" className="drop-shadow-lg">
         <defs>
-            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="hsl(var(--primary))" />
-                <stop offset="100%" stopColor="hsl(var(--accent))" />
+            <linearGradient id="candy-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#ff8a00" />
+                <stop offset="100%" stopColor="#e52e71" />
             </linearGradient>
+            <style>
+                {`@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');`}
+            </style>
         </defs>
         <text
-            fontFamily="Inter, sans-serif"
-            fontSize="32"
-            fontWeight="bold"
-            fill="url(#grad1)"
+            fontFamily="'Pacifico', cursive"
+            fontSize="40"
+            fill="url(#candy-grad)"
+            stroke="#fff"
+            strokeWidth="2"
+            strokeLinejoin="round"
             x="50%"
-            y="40%"
+            y="45%"
             textAnchor="middle"
         >
-            Kimo
+            Candy
         </text>
         <text
-            fontFamily="Inter, sans-serif"
-            fontSize="20"
-            fontWeight="bold"
-            fill="hsl(var(--foreground))"
+            fontFamily="'Pacifico', cursive"
+            fontSize="32"
+            fill="#a855f7" 
+            stroke="#fff"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
             x="50%"
-            y="70%"
+            y="80%"
             textAnchor="middle"
         >
-            Eşleştirme
+            Crush
         </text>
     </svg>
 );
@@ -263,9 +270,10 @@ export const CandyCrushGame = () => {
                             );
                         })}
                     </div>
-                     <div className="flex flex-col items-center md:hidden">
+                     <div className="flex md:hidden flex-col items-center">
+                       <GameLogo />
                        <div className={cn(
-                                "text-5xl font-bold text-primary transition-all duration-300",
+                                "text-5xl font-bold text-primary transition-all duration-300 mt-4",
                                 scoreUpdated && "score-updated"
                             )}>{score}</div>
                        <div className="text-sm text-muted-foreground">Puan</div>
