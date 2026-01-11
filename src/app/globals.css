@@ -87,6 +87,21 @@
   @apply transition-all duration-300 ease-in-out;
 }
 
+.score-updated {
+    animation: score-pop 0.5s ease-out;
+}
+
+@keyframes score-pop {
+    0%, 100% {
+        transform: scale(1);
+        color: hsl(var(--primary));
+    }
+    50% {
+        transform: scale(1.25);
+        color: hsl(var(--accent));
+    }
+}
+
 .bg-knit-pattern {
     background-color: hsl(var(--muted) / 0.5);
     background-image: 
