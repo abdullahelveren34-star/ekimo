@@ -15,162 +15,184 @@ const itemTypes = [
     { component: Moon, color: 'text-blue-500' },
 ];
 
+const blankItem = { component: null, color: '' };
+
 export const CandyCrushGame = () => {
     const [board, setBoard] = useState<any[]>([]);
     const [score, setScore] = useState(0);
-    const [draggedItem, setDraggedItem] = useState<number | null>(null);
-    const [replacedItem, setReplacedItem] = useState<number | null>(null);
+    const [draggedItemIndex, setDraggedItemIndex] = useState<number | null>(null);
+    const [replacedItemIndex, setReplacedItemIndex] = useState<number | null>(null);
 
     const createBoard = () => {
-        const newBoard = [];
-        for (let i = 0; i < width * width; i++) {
-            newBoard.push(itemTypes[Math.floor(Math.random() * itemTypes.length)]);
-        }
+        const newBoard = Array.from({ length: width * width }, () => itemTypes[Math.floor(Math.random() * itemTypes.length)]);
         setBoard(newBoard);
         setScore(0);
     };
-
+    
     useEffect(() => {
         createBoard();
     }, []);
-
-    const checkForColumnOfFour = () => {
-        for (let i = 0; i <= 39; i++) {
-            const columnOfFour = [i, i + width, i + width * 2, i + width * 3];
-            const decidedItem = board[i];
-            const isBlank = board[i].component === null;
-
-            if (!isBlank && columnOfFour.every(square => board[square] === decidedItem)) {
-                setScore((prev) => prev + 4);
-                columnOfFour.forEach(square => board[square] = { component: null, color: '' });
-                return true;
+    
+    const checkForMatches = (currentBoard: any[]) => {
+        let newScore = 0;
+        const matchedIndices = new Set<number>();
+    
+        // Check for columns
+        for (let c = 0; c < width; c++) {
+            for (let r = 0; r < width - 2; r++) {
+                const startIndex = r * width + c;
+                if (currentBoard[startIndex]?.component) {
+                    let matchLength = 1;
+                    while (r + matchLength < width && currentBoard[startIndex]?.component === currentBoard[(r + matchLength) * width + c]?.component) {
+                        matchLength++;
+                    }
+                    if (matchLength >= 3) {
+                        newScore += matchLength;
+                        for (let i = 0; i < matchLength; i++) {
+                            matchedIndices.add((r + i) * width + c);
+                        }
+                    }
+                }
             }
         }
-        return false;
-    }
-
-    const checkForRowOfFour = () => {
-        for (let i = 0; i < 64; i++) {
-            const rowOfFour = [i, i + 1, i + 2, i + 3];
-            const decidedItem = board[i];
-            const notValid = [5, 6, 7, 13, 14, 15, 21, 22, 23, 29, 30, 31, 37, 38, 39, 45, 46, 47, 53, 54, 55, 62, 63, 64];
-            const isBlank = board[i].component === null;
-
-            if (notValid.includes(i)) continue;
-
-            if (!isBlank && rowOfFour.every(square => board[square] === decidedItem)) {
-                setScore((prev) => prev + 4);
-                rowOfFour.forEach(square => board[square] = { component: null, color: '' });
-                return true;
+    
+        // Check for rows
+        for (let r = 0; r < width; r++) {
+            for (let c = 0; c < width - 2; c++) {
+                const startIndex = r * width + c;
+                if (currentBoard[startIndex]?.component) {
+                    let matchLength = 1;
+                    while (c + matchLength < width && currentBoard[startIndex]?.component === currentBoard[r * width + (c + matchLength)]?.component) {
+                        matchLength++;
+                    }
+                    if (matchLength >= 3) {
+                        newScore += matchLength;
+                        for (let i = 0; i < matchLength; i++) {
+                            matchedIndices.add(r * width + (c + i));
+                        }
+                    }
+                }
             }
         }
-        return false;
-    }
-
-    const checkForColumnOfThree = () => {
-        for (let i = 0; i <= 47; i++) {
-            const columnOfThree = [i, i + width, i + width * 2];
-            const decidedItem = board[i];
-            const isBlank = board[i].component === null;
-
-            if (!isBlank && columnOfThree.every(square => board[square] === decidedItem)) {
-                setScore((prev) => prev + 3);
-                columnOfThree.forEach(square => board[square] = { component: null, color: '' });
-                return true;
+    
+        if (matchedIndices.size > 0) {
+            setScore(prev => prev + newScore);
+            const nextBoard = currentBoard.map((item, index) => matchedIndices.has(index) ? blankItem : item);
+            return { hasMatch: true, nextBoard };
+        }
+    
+        return { hasMatch: false, nextBoard: currentBoard };
+    };
+    
+    const moveItemsDown = (currentBoard: any[]) => {
+        const newBoard = [...currentBoard];
+        let moved = false;
+        for (let c = 0; c < width; c++) {
+            for (let r = width - 1; r > 0; r--) {
+                const currentIndex = r * width + c;
+                const aboveIndex = (r - 1) * width + c;
+                if (!newBoard[currentIndex].component && newBoard[aboveIndex].component) {
+                    newBoard[currentIndex] = newBoard[aboveIndex];
+                    newBoard[aboveIndex] = blankItem;
+                    moved = true;
+                }
             }
         }
-        return false;
-    }
+        return { moved, nextBoard: newBoard };
+    };
 
-    const checkForRowOfThree = () => {
-        for (let i = 0; i < 64; i++) {
-            const rowOfThree = [i, i + 1, i + 2];
-            const decidedItem = board[i];
-            const notValid = [6, 7, 14, 15, 22, 23, 30, 31, 38, 39, 46, 47, 54, 55, 63, 64];
-            const isBlank = board[i].component === null;
-
-            if (notValid.includes(i)) continue;
-
-            if (!isBlank && rowOfThree.every(square => board[square] === decidedItem)) {
-                setScore((prev) => prev + 3);
-                rowOfThree.forEach(square => board[square] = { component: null, color: '' });
-                return true;
+    const fillTopRow = (currentBoard: any[]) => {
+        const newBoard = [...currentBoard];
+        let filled = false;
+        for (let c = 0; c < width; c++) {
+            if (!newBoard[c].component) {
+                newBoard[c] = itemTypes[Math.floor(Math.random() * itemTypes.length)];
+                filled = true;
             }
         }
-        return false;
-    }
+        return { filled, nextBoard: newBoard };
+    };
 
-    const moveIntoSquareBelow = () => {
-        for (let i = 0; i <= 55; i++) {
-            const firstRow = [0, 1, 2, 3, 4, 5, 6, 7];
-            const isFirstRow = firstRow.includes(i);
 
-            if (isFirstRow && board[i].component === null) {
-                board[i] = itemTypes[Math.floor(Math.random() * itemTypes.length)];
-            }
-
-            if (board[i + width].component === null) {
-                board[i + width] = board[i];
-                board[i] = { component: null, color: '' };
-            }
-        }
-    }
+    useEffect(() => {
+        const gameLoop = () => {
+            setBoard(currentBoard => {
+                let boardAfterMatches = currentBoard;
+                let hasChangedInLoop = false;
+    
+                const { hasMatch, nextBoard } = checkForMatches(currentBoard);
+                if (hasMatch) {
+                    boardAfterMatches = nextBoard;
+                    hasChangedInLoop = true;
+                }
+    
+                let boardAfterGravity = boardAfterMatches;
+                const { moved, nextBoard: gravityBoard } = moveItemsDown(boardAfterGravity);
+                if (moved) {
+                    boardAfterGravity = gravityBoard;
+                    hasChangedInLoop = true;
+                }
+    
+                let boardAfterFill = boardAfterGravity;
+                const { filled, nextBoard: fillBoard } = fillTopRow(boardAfterFill);
+                if (filled) {
+                    boardAfterFill = fillBoard;
+                    hasChangedInLoop = true;
+                }
+    
+                if (hasChangedInLoop) {
+                    return boardAfterFill;
+                }
+                return currentBoard; // No changes, return the original state to prevent re-render
+            });
+        };
+    
+        const timer = setInterval(gameLoop, 150);
+        return () => clearInterval(timer);
+    }, []);
 
     const dragStart = (e: React.DragEvent<HTMLDivElement>) => {
-        setDraggedItem(parseInt(e.currentTarget.dataset.id || '0'));
+        setDraggedItemIndex(parseInt(e.currentTarget.dataset.id || '-1'));
     }
 
     const dragDrop = (e: React.DragEvent<HTMLDivElement>) => {
-        setReplacedItem(parseInt(e.currentTarget.dataset.id || '0'));
+        setReplacedItemIndex(parseInt(e.currentTarget.dataset.id || '-1'));
     }
 
     const dragEnd = () => {
-        if (replacedItem === null || draggedItem === null) return;
-        const newBoard = [...board];
+        if (draggedItemIndex === null || replacedItemIndex === null) return;
 
         const validMoves = [
-            draggedItem - 1,
-            draggedItem - width,
-            draggedItem + 1,
-            draggedItem + width
+            draggedItemIndex - 1,
+            draggedItemIndex + 1,
+            draggedItemIndex - width,
+            draggedItemIndex + width,
         ];
-        const validMove = validMoves.includes(replacedItem);
+
+        const isValidMove = validMoves.includes(replacedItemIndex);
         
-        const draggedItemType = newBoard[draggedItem];
-        const replacedItemType = newBoard[replacedItem];
+        if (isValidMove) {
+            setBoard(currentBoard => {
+                const newBoard = [...currentBoard];
+                const draggedItem = newBoard[draggedItemIndex];
+                newBoard[draggedItemIndex] = newBoard[replacedItemIndex];
+                newBoard[replacedItemIndex] = draggedItem;
 
-        if (validMove) {
-            newBoard[replacedItem] = draggedItemType;
-            newBoard[draggedItem] = replacedItemType;
+                const { hasMatch: hasMatchAfterSwap } = checkForMatches(newBoard);
 
-            const isAColumnOfFour = checkForColumnOfFour();
-            const isARowOfFour = checkForRowOfFour();
-            const isAColumnOfThree = checkForColumnOfThree();
-            const isARowOfThree = checkForRowOfThree();
-
-            if (isARowOfThree || isARowOfFour || isAColumnOfThree || isAColumnOfFour) {
-                setDraggedItem(null);
-                setReplacedItem(null);
-            } else {
-                newBoard[replacedItem] = replacedItemType;
-                newBoard[draggedItem] = draggedItemType;
-            }
-            setBoard(newBoard);
+                if (hasMatchAfterSwap) {
+                    // The useEffect loop will handle clearing and gravity
+                    return newBoard;
+                } else {
+                    // Not a valid match, revert the board to its previous state
+                    return currentBoard; 
+                }
+            });
         }
+        
+        setDraggedItemIndex(null);
+        setReplacedItemIndex(null);
     }
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            checkForColumnOfFour();
-            checkForRowOfFour();
-            checkForColumnOfThree();
-            checkForRowOfThree();
-            moveIntoSquareBelow();
-            setBoard([...board]);
-        }, 150);
-        return () => clearInterval(timer);
-    }, [checkForColumnOfFour, checkForRowOfFour, checkForColumnOfThree, checkForRowOfThree, moveIntoSquareBelow, board]);
-
 
     return (
         <Card>
