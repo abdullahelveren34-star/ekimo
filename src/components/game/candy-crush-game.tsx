@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import { Gem, Star, Heart, Apple, Cherry, Sun, Moon } from 'lucide-react';
+import { Gem, Star, Heart, Apple, Cherry, Sun, Moon, Play, Pause } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
@@ -132,6 +132,7 @@ export const CandyCrushGame = () => {
     const [scoreUpdated, setScoreUpdated] = useState(false);
     const [draggedItemIndex, setDraggedItemIndex] = useState<number | null>(null);
     const [replacedItemIndex, setReplacedItemIndex] = useState<number | null>(null);
+    const [isAutoPlaying, setIsAutoPlaying] = useState(false);
 
     const createBoard = useCallback(() => {
         const newBoard = Array.from({ length: width * width }, () => itemTypes[Math.floor(Math.random() * itemTypes.length)]);
@@ -143,15 +144,13 @@ export const CandyCrushGame = () => {
         createBoard();
     }, [createBoard]);
 
-    // Add effect for score animation
     useEffect(() => {
         if (score > 0) {
             setScoreUpdated(true);
-            const timer = setTimeout(() => setScoreUpdated(false), 500); // Duration of the animation
+            const timer = setTimeout(() => setScoreUpdated(false), 500);
             return () => clearTimeout(timer);
         }
     }, [score]);
-
 
     const checkForColumnOfFour = useCallback((currentBoard: any[]) => {
         let changed = false;
@@ -236,8 +235,45 @@ export const CandyCrushGame = () => {
         return changed;
     }, []);
 
+    const performMove = (fromIndex: number, toIndex: number) => {
+        const newBoard = [...board];
+        const draggedItem = newBoard[fromIndex];
+        newBoard[fromIndex] = newBoard[toIndex];
+        newBoard[toIndex] = draggedItem;
+
+        const tempBoard = [...newBoard];
+        const col4 = checkForColumnOfFour(tempBoard);
+        const row4 = checkForRowOfFour(tempBoard);
+        const col3 = checkForColumnOfThree(tempBoard);
+        const row3 = checkForRowOfThree(tempBoard);
+        
+        if (row3 || row4 || col3 || col4) {
+             setBoard(newBoard);
+             return true;
+        }
+        return false;
+    }
+
+    const findValidMove = () => {
+        for (let i = 0; i < width * width; i++) {
+            const neighbors = [i + 1, i - 1, i + width, i - width].filter(n => n >= 0 && n < width * width);
+            for (const neighbor of neighbors) {
+                 const newBoard = [...board];
+                 const temp = newBoard[i];
+                 newBoard[i] = newBoard[neighbor];
+                 newBoard[neighbor] = temp;
+ 
+                 const tempBoardForCheck = [...newBoard];
+                 if (checkForColumnOfFour(tempBoardForCheck) || checkForRowOfFour(tempBoardForCheck) || checkForColumnOfThree(tempBoardForCheck) || checkForRowOfThree(tempBoardForCheck)) {
+                     return { from: i, to: neighbor };
+                 }
+            }
+        }
+        return null;
+    }
+
     useEffect(() => {
-        const timer = setInterval(() => {
+        const gameLoop = setInterval(() => {
             const newBoard = [...board];
             const col4 = checkForColumnOfFour(newBoard);
             const row4 = checkForRowOfFour(newBoard);
@@ -249,8 +285,24 @@ export const CandyCrushGame = () => {
                 setBoard(newBoard);
             }
         }, 150);
-        return () => clearInterval(timer);
+        return () => clearInterval(gameLoop);
     }, [board, checkForColumnOfFour, checkForRowOfFour, checkForColumnOfThree, checkForRowOfThree, moveIntoSquareBelow]);
+
+    useEffect(() => {
+        if (isAutoPlaying) {
+            const autoPlayLoop = setInterval(() => {
+                const move = findValidMove();
+                if (move) {
+                    performMove(move.from, move.to);
+                } else {
+                    // No valid moves, maybe reset board or stop
+                    setIsAutoPlaying(false);
+                }
+            }, 1000);
+            return () => clearInterval(autoPlayLoop);
+        }
+    }, [isAutoPlaying, board]);
+
 
     const dragStart = (e: React.DragEvent<HTMLDivElement>) => {
         setDraggedItemIndex(parseInt(e.currentTarget.dataset.id || '-1'));
@@ -273,29 +325,15 @@ export const CandyCrushGame = () => {
         const isValidMove = validMoves.includes(replacedItemIndex);
         
         if (isValidMove) {
-            const newBoard = [...board];
-            const draggedItem = newBoard[draggedItemIndex];
-            newBoard[draggedItemIndex] = newBoard[replacedItemIndex];
-            newBoard[replacedItemIndex] = draggedItem;
-
-            // Create a temporary board to check for matches without updating the score yet.
-            const tempBoard = [...newBoard];
-            const isColumnOfFour = checkForColumnOfFour(tempBoard);
-            const isRowOfFour = checkForRowOfFour(tempBoard);
-            const isColumnOfThree = checkForColumnOfThree(tempBoard);
-            const isRowOfThree = checkForRowOfThree(tempBoard);
-            
-            if (isRowOfThree || isRowOfFour || isColumnOfThree || isColumnOfFour) {
-                 // If the move is valid, update the real board and score will be updated by the checks in useEffect
-                 setBoard(newBoard);
-            } else {
-                // If not a valid move, revert the board state without changing score
-                // No need to create revertedBoard, just don't call setBoard(newBoard)
-            }
+            performMove(draggedItemIndex, replacedItemIndex);
         }
         
         setDraggedItemIndex(null);
         setReplacedItemIndex(null);
+    }
+    
+    const toggleAutoPlay = () => {
+        setIsAutoPlaying(prev => !prev);
     }
 
     return (
@@ -340,7 +378,13 @@ export const CandyCrushGame = () => {
                 </div>
 
                 <div className="flex flex-col items-center space-y-4 w-full max-w-2xl pt-4 border-t border-border z-10">
-                    <Button onClick={createBoard}>Yeni Oyun</Button>
+                    <div className="flex gap-4">
+                        <Button onClick={createBoard}>Yeni Oyun</Button>
+                        <Button onClick={toggleAutoPlay} variant="outline">
+                            {isAutoPlaying ? <Pause className="mr-2"/> : <Play className="mr-2" />}
+                            {isAutoPlaying ? 'Durdur' : 'Otomatik Oynat'}
+                        </Button>
+                    </div>
                     <div className="p-4 bg-muted/50 rounded-lg text-xs text-muted-foreground space-y-1.5 w-full text-center">
                          <h4 className="font-semibold text-foreground text-sm">Nasıl Oynanır?</h4>
                          <p>
