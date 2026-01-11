@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Briefcase, Building, Cake, CalendarDays, Contact, HardDrive, Mail, Phone, User, TrendingUp } from 'lucide-react';
-import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart } from 'recharts';
+import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, Dot } from 'recharts';
 import {
   ChartContainer,
   ChartTooltip,
@@ -26,6 +26,18 @@ function getAge(birthDateString: string) {
     }
     return age;
 }
+
+// Custom dot component
+const CustomizedDot = (props: any) => {
+  const { cx, cy, stroke, payload, value, lowestScore } = props;
+
+  if (value === lowestScore) {
+    return <Dot cx={cx} cy={cy} r={5} fill="hsl(var(--destructive))" stroke={stroke} strokeWidth={2} />;
+  }
+
+  return <Dot cx={cx} cy={cy} r={4} fill={stroke} />;
+};
+
 
 export default function PersonnelDetailPage({ params }: { params: { id: string } }) {
   const employee = allEmployees.find(e => e.id === params.id);
@@ -46,11 +58,19 @@ export default function PersonnelDetailPage({ params }: { params: { id: string }
 
   const performanceDataForYear = employee.performanceHistory.find(p => p.year === selectedYear)?.monthlyScores || [];
 
+  const lowestScore = performanceDataForYear.length > 0 
+    ? Math.min(...performanceDataForYear.map(p => p.score))
+    : null;
+
   const chartConfig = {
     score: {
       label: "Performans Skoru",
       color: "hsl(var(--primary))",
     },
+     lowestScore: {
+      label: "En Düşük Performans",
+      color: "hsl(var(--destructive))",
+    }
   };
 
   const availableYears = employee.performanceHistory.map(p => p.year).sort((a, b) => b - a);
@@ -195,6 +215,7 @@ export default function PersonnelDetailPage({ params }: { params: { id: string }
                             stroke="var(--color-score)"
                             fill="var(--color-score)"
                             fillOpacity={0.6}
+                            dot={<CustomizedDot lowestScore={lowestScore} />}
                         />
                     </RadarChart>
                   </ChartContainer>
