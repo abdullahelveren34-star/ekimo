@@ -165,18 +165,26 @@ export const CandyCrushGame = () => {
         const isValidMove = validMoves.includes(replacedItemIndex);
         
         if (isValidMove) {
-            const tempBoard = [...board];
-            const draggedItem = tempBoard[draggedItemIndex];
-            tempBoard[draggedItemIndex] = tempBoard[replacedItemIndex];
-            tempBoard[replacedItemIndex] = draggedItem;
+            const newBoard = [...board];
+            const draggedItem = newBoard[draggedItemIndex];
+            newBoard[draggedItemIndex] = newBoard[replacedItemIndex];
+            newBoard[replacedItemIndex] = draggedItem;
 
-            const isColumnOfFour = checkForColumnOfFour(tempBoard);
-            const isRowOfFour = checkForRowOfFour(tempBoard);
-            const isColumnOfThree = checkForColumnOfThree(tempBoard);
-            const isRowOfThree = checkForRowOfThree(tempBoard);
-
+            const isColumnOfFour = checkForColumnOfFour(newBoard);
+            const isRowOfFour = checkForRowOfFour(newBoard);
+            const isColumnOfThree = checkForColumnOfThree(newBoard);
+            const isRowOfThree = checkForRowOfThree(newBoard);
+            
             if (isRowOfThree || isRowOfFour || isColumnOfThree || isColumnOfFour) {
-                setBoard(tempBoard);
+                 setBoard(newBoard);
+            } else {
+                // If it's not a valid move, revert the board.
+                // This part seems to be missing, so I'll add a timeout to revert
+                // It's better to check for validity before setting the board state.
+                const tempBoard = [...board]; // original board
+                setTimeout(() => {
+                    setBoard(tempBoard);
+                }, 100);
             }
         }
         
@@ -225,7 +233,8 @@ export const CandyCrushGame = () => {
                                         key={index}
                                         className={cn(
                                             "w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-md cursor-grab transition-all duration-300",
-                                            "bg-muted/30 shadow-lg hover:scale-110 active:scale-95 active:cursor-grabbing"
+                                            "bg-muted/30 shadow-lg hover:scale-110 active:scale-95 active:cursor-grabbing",
+                                            "border-2 border-primary/50"
                                         )}
                                         data-id={index}
                                         draggable={true}
