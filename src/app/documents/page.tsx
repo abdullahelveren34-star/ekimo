@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -434,18 +435,24 @@ export default function DocumentsPage() {
       
       <Tabs defaultValue="training" className="w-full">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="training">
-            <BookOpen className="mr-2 h-4 w-4" />
-            Eğitim Dokümanları
-          </TabsTrigger>
-          <TabsTrigger value="sop">
-            <ClipboardCheck className="mr-2 h-4 w-4" />
-            Standart Operasyon Prosedürleri (SOP)
-          </TabsTrigger>
-           <TabsTrigger value="performance">
-            <UserCheck className="mr-2 h-4 w-4" />
+          <div className="group relative flex items-center justify-center">
+            <TabsTrigger value="training" className="w-full transition-transform duration-200 group-hover:scale-105 group-hover:text-primary">
+              <BookOpen className="mr-2 h-4 w-4 text-blue-500" />
+              Eğitim Dokümanları
+            </TabsTrigger>
+          </div>
+          <div className="group relative flex items-center justify-center">
+            <TabsTrigger value="sop" className="w-full transition-transform duration-200 group-hover:scale-105 group-hover:text-primary">
+              <ClipboardCheck className="mr-2 h-4 w-4 text-green-500" />
+              Standart Operasyon Prosedürleri (SOP)
+            </TabsTrigger>
+          </div>
+          <div className="group relative flex items-center justify-center">
+           <TabsTrigger value="performance" className="w-full transition-transform duration-200 group-hover:scale-105 group-hover:text-primary">
+            <UserCheck className="mr-2 h-4 w-4 text-purple-500" />
             Performans Değerlendirme
           </TabsTrigger>
+          </div>
         </TabsList>
         
         <TabsContent value="training">
