@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Briefcase, Building, Cake, CalendarDays, Contact, HardDrive, Mail, Phone, User, TrendingUp } from 'lucide-react';
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart } from 'recharts';
 import {
   ChartContainer,
   ChartTooltip,
@@ -183,26 +183,23 @@ export default function PersonnelDetailPage({ params }: { params: { id: string }
               </CardHeader>
               <CardContent>
                 {performanceDataForYear.length > 0 ? (
-                  <ChartContainer config={chartConfig} className="h-[250px] w-full">
-                    <BarChart accessibilityLayer data={performanceDataForYear} margin={{ top: 20, right: 20, left: -10, bottom: 0 }}>
-                      <CartesianGrid vertical={false} />
-                      <XAxis
-                        dataKey="month"
-                        tickLine={false}
-                        tickMargin={10}
-                        axisLine={false}
-                        tickFormatter={(value) => value.slice(0, 3)}
-                      />
-                       <YAxis domain={[0, 100]} />
-                      <ChartTooltip
-                        cursor={false}
-                        content={<ChartTooltipContent indicator="line" />}
-                      />
-                      <Bar dataKey="score" fill="var(--color-score)" radius={4} />
-                    </BarChart>
+                  <ChartContainer config={chartConfig} className="h-[300px] w-full">
+                    <RadarChart data={performanceDataForYear}>
+                        <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
+                        <PolarAngleAxis dataKey="month" />
+                        <PolarGrid />
+                        <PolarRadiusAxis angle={30} domain={[0, 100]} />
+                        <Radar
+                            name="Performans"
+                            dataKey="score"
+                            stroke="var(--color-score)"
+                            fill="var(--color-score)"
+                            fillOpacity={0.6}
+                        />
+                    </RadarChart>
                   </ChartContainer>
                 ) : (
-                  <div className="flex items-center justify-center h-[250px] text-muted-foreground text-sm">
+                  <div className="flex items-center justify-center h-[300px] text-muted-foreground text-sm">
                       {selectedYear} yılı için performans verisi bulunamadı.
                   </div>
                 )}
