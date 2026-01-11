@@ -1,11 +1,20 @@
+
 'use client';
 
+import { useState } from 'react';
 import { notFound } from 'next/navigation';
-import { allEmployees, type Employee } from '@/lib/data';
+import { allEmployees } from '@/lib/data';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Briefcase, Building, Cake, CalendarDays, Contact, HardDrive, Mail, Phone, User } from 'lucide-react';
+import { Briefcase, Building, Cake, CalendarDays, Contact, HardDrive, Mail, Phone, User, TrendingUp } from 'lucide-react';
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 function getAge(birthDateString: string) {
     const birthDate = new Date(birthDateString);
@@ -20,6 +29,8 @@ function getAge(birthDateString: string) {
 
 export default function PersonnelDetailPage({ params }: { params: { id: string } }) {
   const employee = allEmployees.find(e => e.id === params.id);
+  const currentYear = new Date().getFullYear();
+  const [selectedYear, setSelectedYear] = useState<number>(currentYear);
 
   if (!employee) {
     notFound();
@@ -32,6 +43,17 @@ export default function PersonnelDetailPage({ params }: { params: { id: string }
     year: 'numeric'
   });
   const age = getAge(employee.birthDate);
+
+  const performanceDataForYear = employee.performanceHistory.find(p => p.year === selectedYear)?.monthlyScores || [];
+
+  const chartConfig = {
+    score: {
+      label: "Performans Skoru",
+      color: "hsl(var(--primary))",
+    },
+  };
+
+  const availableYears = employee.performanceHistory.map(p => p.year).sort((a, b) => b - a);
 
   return (
     <div className="space-y-8">
@@ -140,6 +162,50 @@ export default function PersonnelDetailPage({ params }: { params: { id: string }
                           <p className="text-muted-foreground">Kullanılan</p>
                       </div>
                   </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between">
+                  <CardTitle className="flex items-center gap-2 text-xl">
+                      <TrendingUp className="h-5 w-5 text-primary" />
+                      Performans Geçmişi
+                  </CardTitle>
+                  <Select value={String(selectedYear)} onValueChange={(value) => setSelectedYear(Number(value))}>
+                      <SelectTrigger className="w-[120px]">
+                          <SelectValue placeholder="Yıl seçin" />
+                      </SelectTrigger>
+                      <SelectContent>
+                          {availableYears.map(year => (
+                              <SelectItem key={year} value={String(year)}>{year}</SelectItem>
+                          ))}
+                      </SelectContent>
+                  </Select>
+              </CardHeader>
+              <CardContent>
+                {performanceDataForYear.length > 0 ? (
+                  <ChartContainer config={chartConfig} className="h-[250px] w-full">
+                    <BarChart accessibilityLayer data={performanceDataForYear} margin={{ top: 20, right: 20, left: -10, bottom: 0 }}>
+                      <CartesianGrid vertical={false} />
+                      <XAxis
+                        dataKey="month"
+                        tickLine={false}
+                        tickMargin={10}
+                        axisLine={false}
+                        tickFormatter={(value) => value.slice(0, 3)}
+                      />
+                       <YAxis domain={[0, 100]} />
+                      <ChartTooltip
+                        cursor={false}
+                        content={<ChartTooltipContent indicator="line" />}
+                      />
+                      <Bar dataKey="score" fill="var(--color-score)" radius={4} />
+                    </BarChart>
+                  </ChartContainer>
+                ) : (
+                  <div className="flex items-center justify-center h-[250px] text-muted-foreground text-sm">
+                      {selectedYear} yılı için performans verisi bulunamadı.
+                  </div>
+                )}
               </CardContent>
             </Card>
         </div>
