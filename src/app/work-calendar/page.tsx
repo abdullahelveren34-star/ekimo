@@ -62,60 +62,67 @@ export default function WorkCalendarPage() {
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const { toast } = useToast();
 
-  const [newTaskDescription, setNewTaskDescription] = useState('');
-  const [newTaskEmployee, setNewTaskEmployee] = useState(currentUser.id);
-  const [newTaskType, setNewTaskType] = useState('Planlama');
-  const [newTaskPriority, setNewTaskPriority] = useState<TaskPriority>('Orta');
-  const [newTaskDueDate, setNewTaskDueDate] = useState('');
+  const [formDescription, setFormDescription] = useState('');
+  const [formEmployee, setFormEmployee] = useState(currentUser.id);
+  const [formType, setFormType] = useState('Planlama');
+  const [formPriority, setFormPriority] = useState<TaskPriority>('Orta');
+  const [formDueDate, setFormDueDate] = useState('');
 
   const selectedEmployee = allEmployees.find(emp => emp.id === selectedEmployeeId);
   const filteredTasks = tasks.filter(task => task.employeeId === selectedEmployeeId);
 
-  useEffect(() => {
-    if (isAddDialogOpen) {
-      setNewTaskEmployee(currentUser.id);
-    }
-  }, [isAddDialogOpen]);
-
   const resetForm = () => {
-    setNewTaskDescription('');
-    setNewTaskEmployee(currentUser.id);
-    setNewTaskType('Planlama');
-    setNewTaskPriority('Orta');
-    setNewTaskDueDate('');
+    setFormDescription('');
+    setFormEmployee(currentUser.id);
+    setFormType('Planlama');
+    setFormPriority('Orta');
+    setFormDueDate('');
   };
 
+  const handleOpenAddDialog = () => {
+    resetForm();
+    setIsAddDialogOpen(true);
+  };
+  
   const handleAddTask = () => {
-    if (!newTaskDescription || !newTaskEmployee || !newTaskDueDate) {
+    if (!formDescription || !formEmployee || !formDueDate) {
       toast({ variant: "destructive", title: "Eksik Bilgi", description: "Lütfen tüm zorunlu alanları doldurun." });
       return;
     }
     const newTask: Task = {
       id: Date.now(),
-      employeeId: newTaskEmployee,
-      description: newTaskDescription,
-      type: newTaskType,
+      employeeId: formEmployee,
+      description: formDescription,
+      type: formType,
       status: 'Beklemede',
-      priority: newTaskPriority,
-      dueDate: newTaskDueDate,
+      priority: formPriority,
+      dueDate: formDueDate,
     };
     setTasks(prevTasks => [...prevTasks, newTask]);
     toast({ title: "Görev Eklendi!", description: `"${newTask.description}" görevi başarıyla oluşturuldu.` });
-    resetForm();
     setIsAddDialogOpen(false);
+  };
+
+  const handleOpenEditDialog = (task: Task) => {
+    setEditingTask(task);
+    setFormDescription(task.description);
+    setFormEmployee(task.employeeId);
+    setFormType(task.type);
+    setFormPriority(task.priority);
+    setFormDueDate(task.dueDate);
+    setIsEditDialogOpen(true);
   };
 
   const handleUpdateTask = () => {
     if (!editingTask) return;
     setTasks(prev => prev.map(task => 
       task.id === editingTask.id 
-        ? { ...task, description: newTaskDescription, employeeId: newTaskEmployee, type: newTaskType, priority: newTaskPriority, dueDate: newTaskDueDate } 
+        ? { ...task, description: formDescription, employeeId: formEmployee, type: formType, priority: formPriority, dueDate: formDueDate } 
         : task
     ));
     toast({ title: "Görev Güncellendi!", description: `Görev başarıyla güncellendi.` });
-    setEditingTask(null);
-    resetForm();
     setIsEditDialogOpen(false);
+    setEditingTask(null);
   };
 
   const handleCompleteTask = (taskId: number) => {
@@ -127,46 +134,24 @@ export default function WorkCalendarPage() {
     setTasks(prev => prev.filter(task => task.id !== taskId));
     toast({ title: "Görev Silindi!", description: "Görev başarıyla silindi." });
   };
-
-  const handleEditClick = (task: Task) => {
-    setEditingTask(task);
-    setNewTaskDescription(task.description);
-    setNewTaskEmployee(task.employeeId);
-    setNewTaskType(task.type);
-    setNewTaskPriority(task.priority);
-    setNewTaskDueDate(task.dueDate);
-    setIsEditDialogOpen(true);
-  };
-
-  const handleDialogClose = (isOpen: boolean) => {
-      if (!isOpen) {
-          resetForm();
-          setEditingTask(null);
-          setIsAddDialogOpen(false);
-          setIsEditDialogOpen(false);
-      } else if (isAddDialogOpen) {
-          setIsAddDialogOpen(true);
-          setNewTaskEmployee(currentUser.id);
-      }
-  };
   
   const FormContent = () => (
     <div className="grid gap-6 py-4">
         <div className="grid gap-2">
             <Label htmlFor="task-description">Görev Açıklaması</Label>
-            <Textarea id="task-description" placeholder="Yapılacak işin detaylarını yazın..." value={newTaskDescription} onChange={(e) => setNewTaskDescription(e.target.value)} rows={5} />
+            <Textarea id="task-description" placeholder="Yapılacak işin detaylarını yazın..." value={formDescription} onChange={(e) => setFormDescription(e.target.value)} rows={5} />
         </div>
         <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
                 <Label htmlFor="task-employee">Atanacak Çalışan</Label>
-                <Select value={newTaskEmployee} onValueChange={setNewTaskEmployee}>
+                <Select value={formEmployee} onValueChange={setFormEmployee}>
                     <SelectTrigger id="task-employee"><SelectValue placeholder="Çalışan seçin..." /></SelectTrigger>
                     <SelectContent>{relevantEmployees.map(emp => <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>)}</SelectContent>
                 </Select>
             </div>
             <div className="grid gap-2">
                 <Label htmlFor="task-type">Görev Türü</Label>
-                <Select value={newTaskType} onValueChange={setNewTaskType}>
+                <Select value={formType} onValueChange={setFormType}>
                     <SelectTrigger id="task-type"><SelectValue placeholder="Tür seçin..." /></SelectTrigger>
                     <SelectContent>
                         <SelectItem value="Planlama">Planlama</SelectItem>
@@ -180,7 +165,7 @@ export default function WorkCalendarPage() {
         <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
                 <Label htmlFor="task-priority">Öncelik</Label>
-                <Select value={newTaskPriority} onValueChange={(v) => setNewTaskPriority(v as TaskPriority)}>
+                <Select value={formPriority} onValueChange={(v) => setFormPriority(v as TaskPriority)}>
                     <SelectTrigger id="task-priority"><SelectValue placeholder="Öncelik seçin..." /></SelectTrigger>
                     <SelectContent>
                         <SelectItem value="Düşük">Düşük</SelectItem>
@@ -192,7 +177,7 @@ export default function WorkCalendarPage() {
             </div>
             <div className="grid gap-2">
                 <Label htmlFor="task-due-date">Bitiş Tarihi</Label>
-                <Input id="task-due-date" type="date" value={newTaskDueDate} onChange={(e) => setNewTaskDueDate(e.target.value)} />
+                <Input id="task-due-date" type="date" value={formDueDate} onChange={(e) => setFormDueDate(e.target.value)} />
             </div>
         </div>
     </div>
@@ -208,14 +193,7 @@ export default function WorkCalendarPage() {
             <p className="text-muted-foreground mt-1">Çalışanların üretim ve planlama görevlerini yönetin.</p>
           </div>
         </div>
-        <Dialog open={isAddDialogOpen} onOpenChange={handleDialogClose}>
-          <DialogTrigger asChild><Button onClick={() => setIsAddDialogOpen(true)}><Plus className="mr-2 h-4 w-4" />Yeni Görev Ekle</Button></DialogTrigger>
-          <DialogContent className="sm:max-w-[480px]">
-            <DialogHeader><DialogTitle>Yeni Görev Oluştur</DialogTitle><DialogDescription>Aşağıdaki formu doldurarak yeni bir görev atayın.</DialogDescription></DialogHeader>
-            <FormContent />
-            <DialogFooter><Button type="button" variant="outline" onClick={() => setIsAddDialogOpen(false)}>İptal</Button><Button type="button" onClick={handleAddTask}>Görevi Kaydet</Button></DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <Button onClick={handleOpenAddDialog}><Plus className="mr-2 h-4 w-4" />Yeni Görev Ekle</Button>
       </header>
 
       <Card>
@@ -262,7 +240,7 @@ export default function WorkCalendarPage() {
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><GripVertical className="h-4 w-4" /></Button></DropdownMenuTrigger>
                           <DropdownMenuContent>
-                            <DropdownMenuItem onClick={() => handleEditClick(task)}><Edit className="mr-2 h-4 w-4" /> Düzenle</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleOpenEditDialog(task)}><Edit className="mr-2 h-4 w-4" /> Düzenle</DropdownMenuItem>
                             <DropdownMenuItem onClick={() => handleCompleteTask(task.id)}><CheckCircle className="mr-2 h-4 w-4" /> Tamamla</DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="text-red-500" onClick={() => handleDeleteTask(task.id)}><Trash2 className="mr-2 h-4 w-4" /> Sil</DropdownMenuItem>
@@ -280,7 +258,15 @@ export default function WorkCalendarPage() {
         </CardContent>
       </Card>
       
-      <Dialog open={isEditDialogOpen} onOpenChange={handleDialogClose}>
+      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+          <DialogContent className="sm:max-w-[480px]">
+            <DialogHeader><DialogTitle>Yeni Görev Oluştur</DialogTitle><DialogDescription>Aşağıdaki formu doldurarak yeni bir görev atayın.</DialogDescription></DialogHeader>
+            <FormContent />
+            <DialogFooter><Button type="button" variant="outline" onClick={() => setIsAddDialogOpen(false)}>İptal</Button><Button type="button" onClick={handleAddTask}>Görevi Kaydet</Button></DialogFooter>
+          </DialogContent>
+      </Dialog>
+      
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
           <DialogContent className="sm:max-w-[480px]">
             <DialogHeader><DialogTitle>Görevi Düzenle</DialogTitle><DialogDescription>Görevin detaylarını güncelleyin.</DialogDescription></DialogHeader>
             <FormContent />
