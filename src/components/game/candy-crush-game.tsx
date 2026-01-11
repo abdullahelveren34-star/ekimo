@@ -61,14 +61,26 @@ const GameLogo = () => (
 const DecorativeItems = () => (
     <>
       {/* Left Side Decorations */}
-      <Gem className="absolute -left-4 top-1/4 w-16 h-16 text-purple-500 opacity-20 transform -rotate-12 blur-sm pointer-events-none" />
-      <Star className="absolute left-10 top-2/3 w-12 h-12 text-yellow-500 opacity-20 transform rotate-20 blur-sm pointer-events-none" />
-      <Apple className="absolute left-2 bottom-8 w-10 h-10 text-green-500 opacity-20 transform -rotate-45 blur-sm pointer-events-none" />
-
+      <Gem className="absolute -left-4 top-1/4 w-16 h-16 text-purple-500 opacity-20 transform -rotate-12 pointer-events-none" />
+      <Star className="absolute left-10 top-2/3 w-12 h-12 text-yellow-500 opacity-20 transform rotate-20 pointer-events-none" />
+      <Apple className="absolute left-2 bottom-8 w-10 h-10 text-green-500 opacity-20 transform -rotate-45 pointer-events-none" />
+      <Cherry className="absolute left-20 top-10 w-8 h-8 text-pink-500 opacity-20 transform rotate-12 pointer-events-none" />
+      <Sun className="absolute left-0 top-1/2 w-10 h-10 text-orange-500 opacity-20 transform -rotate-12 pointer-events-none" />
+      <Moon className="absolute left-28 bottom-2 w-14 h-14 text-blue-500 opacity-20 transform rotate-45 pointer-events-none" />
+      <Heart className="absolute left-1/4 top-4 w-12 h-12 text-red-500 opacity-20 transform pointer-events-none" />
+      
       {/* Right Side Decorations */}
-      <Heart className="absolute -right-5 top-1/3 w-16 h-16 text-red-500 opacity-20 transform rotate-12 blur-sm pointer-events-none" />
-      <Moon className="absolute right-12 top-3/4 w-12 h-12 text-blue-500 opacity-20 transform -rotate-20 blur-sm pointer-events-none" />
-      <Sun className="absolute right-4 bottom-16 w-10 h-10 text-orange-500 opacity-20 transform rotate-45 blur-sm pointer-events-none" />
+      <Heart className="absolute -right-5 top-1/3 w-16 h-16 text-red-500 opacity-20 transform rotate-12 pointer-events-none" />
+      <Moon className="absolute right-12 top-3/4 w-12 h-12 text-blue-500 opacity-20 transform -rotate-20 pointer-events-none" />
+      <Sun className="absolute right-4 bottom-16 w-10 h-10 text-orange-500 opacity-20 transform rotate-45 pointer-events-none" />
+      <Gem className="absolute right-20 top-12 w-8 h-8 text-purple-500 opacity-20 transform -rotate-30 pointer-events-none" />
+      <Apple className="absolute right-0 top-3/4 w-10 h-10 text-green-500 opacity-20 transform rotate-12 pointer-events-none" />
+      <Star className="absolute right-28 bottom-4 w-14 h-14 text-yellow-500 opacity-20 transform -rotate-45 pointer-events-none" />
+      <Cherry className="absolute right-1/4 top-8 w-12 h-12 text-pink-500 opacity-20 transform -rotate-12 pointer-events-none" />
+
+       {/* Center-ish decorations */}
+      <Star className="absolute left-1/2 -translate-x-1/2 top-0 w-10 h-10 text-yellow-500 opacity-10 pointer-events-none" />
+      <Heart className="absolute left-1/2 -translate-x-1/2 bottom-0 w-10 h-10 text-red-500 opacity-10 pointer-events-none" />
     </>
 );
 
@@ -249,15 +261,13 @@ export const CandyCrushGame = () => {
             <CardContent className="flex flex-col items-center gap-6 p-6 relative">
                  <DecorativeItems />
                 <div className="flex flex-col md:flex-row items-center justify-center gap-8 w-full z-10">
-                    <div className="hidden md:flex flex-col items-center justify-center">
+                    <div className="flex flex-col items-center justify-center text-center">
                        <GameLogo />
-                       <div className="text-center mt-4">
-                            <div className={cn(
-                                "text-5xl font-bold text-primary transition-all duration-300",
-                                scoreUpdated && "score-updated"
-                            )}>{score}</div>
-                            <div className="text-sm text-muted-foreground">Puan</div>
-                        </div>
+                       <div className={cn(
+                           "text-5xl font-bold text-primary transition-all duration-300 mt-4",
+                           scoreUpdated && "score-updated"
+                       )}>{score}</div>
+                       <div className="text-sm text-muted-foreground">Puan</div>
                     </div>
                     
                     <div className="grid grid-cols-8 gap-1 p-2 bg-muted rounded-lg candy-crush-board">
@@ -267,7 +277,7 @@ export const CandyCrushGame = () => {
                                 <div
                                     key={index}
                                     className={cn(
-                                        "w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-md cursor-grab transition-all duration-300",
+                                        "w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-md cursor-grab",
                                         "bg-muted/30 shadow-lg hover:scale-110 active:scale-95 active:cursor-grabbing",
                                         "border-2 border-primary/50"
                                     )}
@@ -284,16 +294,6 @@ export const CandyCrushGame = () => {
                                 </div>
                             );
                         })}
-                    </div>
-                     <div className="flex md:hidden flex-col items-center z-10">
-                       <div className="relative">
-                          <GameLogo />
-                           <div className={cn(
-                                "absolute -bottom-4 left-1/2 -translate-x-1/2 text-5xl font-bold text-primary transition-all duration-300",
-                                scoreUpdated && "score-updated"
-                            )}>{score}</div>
-                       </div>
-                       <div className="text-sm text-muted-foreground mt-4">Puan</div>
                     </div>
                 </div>
 
