@@ -8,9 +8,15 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { allEmployees } from '@/lib/data';
+import { useToast } from '@/hooks/use-toast';
 
-const tasks = [
+const initialTasks = [
   { id: 1, employeeId: '24', description: 'Yaz koleksiyonu için kesim planını oluştur', type: 'Planlama', status: 'Beklemede', priority: 'Yüksek', dueDate: '2024-08-05' },
   { id: 2, employeeId: '28', description: '5. üretim bandındaki makine bakımını denetle', type: 'Üretim', status: 'Devam Ediyor', priority: 'Orta', dueDate: '2024-08-02' },
   { id: 3, employeeId: '24', description: 'Yeni gelen kumaşların stok girişini planla', type: 'Planlama', status: 'Tamamlandı', priority: 'Orta', dueDate: '2024-07-30' },
@@ -32,12 +38,60 @@ const statusColors = {
   'Tamamlandı': 'bg-green-500/20 text-green-400',
 };
 
+const relevantEmployees = allEmployees.filter(e => e.department === 'Üretim Planlama' || e.department === 'Üretim');
 
 export default function WorkCalendarPage() {
+  const [tasks, setTasks] = useState(initialTasks);
   const [selectedEmployeeId, setSelectedEmployeeId] = useState('24'); // Kaan Vural as default
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { toast } = useToast();
+
+  // New Task Form State
+  const [newTaskDescription, setNewTaskDescription] = useState('');
+  const [newTaskEmployee, setNewTaskEmployee] = useState('');
+  const [newTaskType, setNewTaskType] = useState('Planlama');
+  const [newTaskPriority, setNewTaskPriority] = useState('Orta');
+  const [newTaskDueDate, setNewTaskDueDate] = useState('');
+
 
   const selectedEmployee = allEmployees.find(emp => emp.id === selectedEmployeeId);
   const filteredTasks = tasks.filter(task => task.employeeId === selectedEmployeeId);
+
+  const handleAddTask = () => {
+    if (!newTaskDescription || !newTaskEmployee || !newTaskDueDate) {
+      toast({
+        variant: "destructive",
+        title: "Eksik Bilgi",
+        description: "Lütfen tüm zorunlu alanları doldurun.",
+      });
+      return;
+    }
+
+    const newTask = {
+      id: tasks.length + 1,
+      employeeId: newTaskEmployee,
+      description: newTaskDescription,
+      type: newTaskType,
+      status: 'Beklemede' as 'Beklemede',
+      priority: newTaskPriority as 'Yüksek' | 'Orta' | 'Düşük' | 'Kritik',
+      dueDate: newTaskDueDate,
+    };
+
+    setTasks(prevTasks => [...prevTasks, newTask]);
+    
+    toast({
+      title: "Görev Eklendi!",
+      description: `"${newTask.description}" görevi başarıyla oluşturuldu.`,
+    });
+
+    // Reset form and close dialog
+    setNewTaskDescription('');
+    setNewTaskEmployee('');
+    setNewTaskType('Planlama');
+    setNewTaskPriority('Orta');
+    setNewTaskDueDate('');
+    setIsDialogOpen(false);
+  };
 
   return (
     <div className="space-y-8">
@@ -49,10 +103,79 @@ export default function WorkCalendarPage() {
             <p className="text-muted-foreground mt-1">Çalışanların üretim ve planlama görevlerini yönetin.</p>
           </div>
         </div>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          Yeni Görev Ekle
-        </Button>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button>
+              <Plus className="mr-2 h-4 w-4" />
+              Yeni Görev Ekle
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[480px]">
+            <DialogHeader>
+              <DialogTitle>Yeni Görev Oluştur</DialogTitle>
+              <DialogDescription>
+                Aşağıdaki formu doldurarak yeni bir görev atayın.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-6 py-4">
+              <div className="grid gap-2">
+                <Label htmlFor="task-description">Görev Açıklaması</Label>
+                <Textarea id="task-description" placeholder="Yapılacak işin detaylarını yazın..." value={newTaskDescription} onChange={(e) => setNewTaskDescription(e.target.value)} />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                    <Label htmlFor="task-employee">Atanacak Çalışan</Label>
+                    <Select value={newTaskEmployee} onValueChange={setNewTaskEmployee}>
+                        <SelectTrigger id="task-employee">
+                        <SelectValue placeholder="Çalışan seçin..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                        {relevantEmployees.map(emp => (
+                            <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>
+                        ))}
+                        </SelectContent>
+                    </Select>
+                </div>
+                 <div className="grid gap-2">
+                    <Label htmlFor="task-type">Görev Türü</Label>
+                    <Select value={newTaskType} onValueChange={setNewTaskType}>
+                        <SelectTrigger id="task-type">
+                        <SelectValue placeholder="Tür seçin..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="Planlama">Planlama</SelectItem>
+                            <SelectItem value="Üretim">Üretim</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+              </div>
+               <div className="grid grid-cols-2 gap-4">
+                 <div className="grid gap-2">
+                    <Label htmlFor="task-priority">Öncelik</Label>
+                     <Select value={newTaskPriority} onValueChange={setNewTaskPriority}>
+                        <SelectTrigger id="task-priority">
+                        <SelectValue placeholder="Öncelik seçin..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="Düşük">Düşük</SelectItem>
+                            <SelectItem value="Orta">Orta</SelectItem>
+                            <SelectItem value="Yüksek">Yüksek</SelectItem>
+                             <SelectItem value="Kritik">Kritik</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="grid gap-2">
+                    <Label htmlFor="task-due-date">Bitiş Tarihi</Label>
+                    <Input id="task-due-date" type="date" value={newTaskDueDate} onChange={(e) => setNewTaskDueDate(e.target.value)} />
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>İptal</Button>
+              <Button type="button" onClick={handleAddTask}>Görevi Kaydet</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </header>
 
       <Card>
@@ -75,7 +198,7 @@ export default function WorkCalendarPage() {
                 <DropdownMenuLabel>Çalışan Seçin</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuRadioGroup value={selectedEmployeeId} onValueChange={setSelectedEmployeeId}>
-                  {allEmployees.filter(e => e.department === 'Üretim Planlama' || e.department === 'Üretim').map(emp => (
+                  {relevantEmployees.map(emp => (
                     <DropdownMenuRadioItem key={emp.id} value={emp.id}>{emp.name}</DropdownMenuRadioItem>
                   ))}
                 </DropdownMenuRadioGroup>
