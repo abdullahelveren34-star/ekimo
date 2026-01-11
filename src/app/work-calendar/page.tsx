@@ -239,7 +239,7 @@ export default function WorkCalendarPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Görev</TableHead>
+                  <TableHead className="text-primary">Görev</TableHead>
                   <TableHead className="w-[120px] text-primary">Tür</TableHead>
                   <TableHead className="w-[120px] text-primary">Öncelik</TableHead>
                   <TableHead className="w-[150px] text-primary">Durum</TableHead>
