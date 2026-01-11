@@ -19,44 +19,85 @@ const itemTypes = [
 const blankItem = { component: null, color: '' };
 
 const GameLogo = () => (
-    <svg width="180" height="100" viewBox="0 0 180 100" className="drop-shadow-lg">
-        <defs>
-            <linearGradient id="candy-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#ff8a00" />
-                <stop offset="100%" stopColor="#e52e71" />
-            </linearGradient>
-            <style>
-                {`@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');`}
-            </style>
-        </defs>
-        <text
-            fontFamily="'Pacifico', cursive"
-            fontSize="40"
-            fill="url(#candy-grad)"
-            stroke="#fff"
-            strokeWidth="2"
-            strokeLinejoin="round"
-            x="50%"
-            y="45%"
-            textAnchor="middle"
-        >
-            Candy
-        </text>
-        <text
-            fontFamily="'Pacifico', cursive"
-            fontSize="32"
-            fill="#a855f7" 
-            stroke="#fff"
-            strokeWidth="1.5"
-            strokeLinejoin="round"
-            x="50%"
-            y="80%"
-            textAnchor="middle"
-        >
-            Crush
-        </text>
-    </svg>
+    <div className="flex items-center justify-center -ml-8">
+        <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <filter id="drop-shadow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feDropShadow dx="2" dy="3" stdDeviation="2" floodColor="#000000" floodOpacity="0.2"/>
+                </filter>
+            </defs>
+            <g style={{ filter: 'url(#drop-shadow)' }}>
+                {/* Body */}
+                <circle cx="50" cy="65" r="30" fill="#A0522D"/>
+                
+                {/* Head */}
+                <circle cx="50" cy="35" r="25" fill="#CD853F"/>
+                
+                {/* Ears */}
+                <circle cx="30" cy="15" r="10" fill="#A0522D"/>
+                <circle cx="70" cy="15" r="10" fill="#A0522D"/>
+                <circle cx="30" cy="17" r="7" fill="#F4A460"/>
+                <circle cx="70" cy="17" r="7" fill="#F4A460"/>
+                
+                {/* Muzzle */}
+                <ellipse cx="50" cy="42" rx="15" ry="12" fill="#F4A460"/>
+                
+                {/* Nose */}
+                <path d="M50 38 a 4,3 0 0,1 0,6 a 4,3 0 0,1 0,-6" fill="#654321"/>
+                
+                {/* Eyes */}
+                <circle cx="42" cy="32" r="3" fill="#000000"/>
+                <circle cx="58" cy="32" r="3" fill="#000000"/>
+                
+                {/* Smile */}
+                <path d="M44 45 Q50 52, 56 45" stroke="#654321" strokeWidth="2" fill="none" strokeLinecap="round"/>
+
+                {/* Crossed Arms */}
+                <path d="M 30 60 C 40 55, 60 55, 70 60 L 75 75 C 60 70, 40 70, 25 75 Z" fill="#CD853F" />
+                <path d="M 30 60 C 35 62, 40 62, 45 60" stroke="#A0522D" strokeWidth="2" fill="none"/>
+                <path d="M 55 60 C 60 62, 65 62, 70 60" stroke="#A0522D" strokeWidth="2" fill="none"/>
+            </g>
+        </svg>
+        <svg width="180" height="100" viewBox="0 0 180 100" className="drop-shadow-lg">
+            <defs>
+                <linearGradient id="candy-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#ff8a00" />
+                    <stop offset="100%" stopColor="#e52e71" />
+                </linearGradient>
+                <style>
+                    {`@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');`}
+                </style>
+            </defs>
+            <text
+                fontFamily="'Pacifico', cursive"
+                fontSize="40"
+                fill="url(#candy-grad)"
+                stroke="#fff"
+                strokeWidth="2"
+                strokeLinejoin="round"
+                x="50%"
+                y="45%"
+                textAnchor="middle"
+            >
+                Candy
+            </text>
+            <text
+                fontFamily="'Pacifico', cursive"
+                fontSize="32"
+                fill="#a855f7" 
+                stroke="#fff"
+                strokeWidth="1.5"
+                strokeLinejoin="round"
+                x="50%"
+                y="80%"
+                textAnchor="middle"
+            >
+                Crush
+            </text>
+        </svg>
+    </div>
 );
+
 
 const DecorativeItems = () => (
     <>
@@ -237,18 +278,19 @@ export const CandyCrushGame = () => {
             newBoard[draggedItemIndex] = newBoard[replacedItemIndex];
             newBoard[replacedItemIndex] = draggedItem;
 
-            const isColumnOfFour = checkForColumnOfFour(newBoard);
-            const isRowOfFour = checkForRowOfFour(newBoard);
-            const isColumnOfThree = checkForColumnOfThree(newBoard);
-            const isRowOfThree = checkForRowOfThree(newBoard);
+            // Create a temporary board to check for matches without updating the score yet.
+            const tempBoard = [...newBoard];
+            const isColumnOfFour = checkForColumnOfFour(tempBoard);
+            const isRowOfFour = checkForRowOfFour(tempBoard);
+            const isColumnOfThree = checkForColumnOfThree(tempBoard);
+            const isRowOfThree = checkForRowOfThree(tempBoard);
             
             if (isRowOfThree || isRowOfFour || isColumnOfThree || isColumnOfFour) {
+                 // If the move is valid, update the real board and score will be updated by the checks in useEffect
                  setBoard(newBoard);
             } else {
-                const revertedBoard = [...board];
-                revertedBoard[replacedItemIndex] = newBoard[draggedItemIndex];
-                revertedBoard[draggedItemIndex] = newBoard[replacedItemIndex];
-                setBoard(revertedBoard);
+                // If not a valid move, revert the board state without changing score
+                // No need to create revertedBoard, just don't call setBoard(newBoard)
             }
         }
         
@@ -277,7 +319,7 @@ export const CandyCrushGame = () => {
                                 <div
                                     key={index}
                                     className={cn(
-                                        "w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-md cursor-grab",
+                                        "w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-md cursor-grab transition-all duration-300 ease-in-out",
                                         "bg-muted/30 shadow-lg hover:scale-110 active:scale-95 active:cursor-grabbing",
                                         "border-2 border-primary/50"
                                     )}
