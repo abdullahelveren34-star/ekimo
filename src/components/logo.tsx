@@ -1,48 +1,21 @@
 import { cn } from "@/lib/utils";
+import { Globe, Sparkles } from "lucide-react";
 
 export function Logo({ className }: { className?: string }) {
   return (
-    <svg
-      width="140"
-      height="40"
-      viewBox="0 0 140 40"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={cn("text-primary", className)}
-    >
-      <path
-        d="M24 16C24 11.5817 20.4183 8 16 8C11.5817 8 8 11.5817 8 16C8 20.4183 11.5817 24 16 24C18.4484 24 20.6381 23.0454 22.2033 21.5"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-      <path
-        d="M2 16H18"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-      <text
-        x="32"
-        y="18"
-        fontFamily="sans-serif"
-        fontSize="20"
-        fontWeight="bold"
-        fill="hsl(var(--sidebar-foreground))"
-      >
-        KIMO
-      </text>
-      <text
-        x="32"
-        y="32"
-        fontFamily="sans-serif"
-        fontSize="8"
-        fontWeight="normal"
-        fill="hsl(var(--sidebar-foreground))"
-        letterSpacing="0.5"
-      >
-        COMMUNICATION
-      </text>
-    </svg>
+    <div className={cn("flex items-center gap-2 text-primary", className)}>
+        <div className="relative">
+            <Globe className="h-10 w-10 text-primary" />
+            <Sparkles className="h-4 w-4 text-accent absolute -top-1 -right-1" />
+        </div>
+      <div className="flex flex-col">
+        <span className="text-2xl font-bold tracking-tighter text-foreground">
+          StellarCorp
+        </span>
+        <span className="text-xs -mt-1 text-muted-foreground">
+          INTERSTELLAR OPERATIONS
+        </span>
+      </div>
+    </div>
   );
 }

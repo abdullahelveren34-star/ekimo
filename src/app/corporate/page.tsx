@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Landmark, Target, Eye, Building2, GitBranch } from 'lucide-react';
+import { Landmark, Target, Eye, Building2, GitBranch, Rocket } from 'lucide-react';
 import React from 'react';
 import { departmentMembers } from '@/lib/data';
 
@@ -10,33 +10,21 @@ const getPersonByTitle = (title: string) => {
 
 const getDirectorForDepartment = (departmentName: string) => {
     const directorsAndManagers = Object.values(departmentMembers).flat().filter(
-        emp => emp.title.includes('Müdürü') || emp.title.includes('Direktörü')
+        emp => emp.title.includes('Müdürü') || emp.title.includes('Direktörü') || emp.title.includes('Sorumlusu') || emp.title.includes('Kaptanı')
     );
     return directorsAndManagers.find(dir => dir.department === departmentName)?.name || null;
 }
 
 const orgChartData = {
-  title: 'Yönetim Kurulu',
+  title: 'StellarCorp Konseyi',
   children: [
     {
-      title: 'Genel Müdür',
-      person: getPersonByTitle('Genel Müdür'),
+      title: 'CEO & Baş Kaşif',
+      person: getPersonByTitle('CEO & Baş Kaşif'),
       children: [
-        { title: 'Satış', person: getDirectorForDepartment('Satış') },
-        { title: 'Pazarlama', person: getDirectorForDepartment('Pazarlama') },
-        { title: 'Tasarım', person: getDirectorForDepartment('Tasarım') },
-        { title: 'Satınalma', person: getDirectorForDepartment('Satınalma') },
-        { title: 'Üretim Planlama', person: getDirectorForDepartment('Üretim Planlama') },
-        { title: 'Üretim', person: getDirectorForDepartment('Üretim') },
-        { title: 'Kalite ve Güvence', person: getDirectorForDepartment('Kalite ve Güvence') },
-        { title: 'Sosyal Uygunluk', person: getDirectorForDepartment('Sosyal Uygunluk') },
-        { title: 'Mali İşler', person: getDirectorForDepartment('Mali İşler') },
-        { title: 'Modelhane', person: getDirectorForDepartment('Modelhane') },
-        { title: 'Depolar', person: getDirectorForDepartment('Depolar') },
-        { title: 'Kesimhane', person: getDirectorForDepartment('Kesimhane') },
-        { title: 'Marka', person: getDirectorForDepartment('Marka') },
-        { title: 'İnsan Kaynakları', person: getDirectorForDepartment('İnsan Kaynakları') },
-        { title: 'İdari İşler', person: getDirectorForDepartment('İdari İşler') },
+        { title: 'Operasyonlar', person: getDirectorForDepartment('Operasyonlar') },
+        { title: 'Ar-Ge', person: getDirectorForDepartment('Ar-Ge') },
+        { title: 'Koloni Yönetimi', person: getDirectorForDepartment('Koloni Yönetimi') },
         { title: 'BT', person: getDirectorForDepartment('BT') },
       ],
     },
@@ -46,10 +34,10 @@ const orgChartData = {
 
 const OrgChartNode = ({ node }: { node: { title: string; person?: string | null; children?: any[] }}) => (
     <div className="relative flex flex-col items-center p-2">
-        <div className="bg-muted text-foreground p-2 rounded-lg shadow-sm border border-border inline-block text-center min-w-[120px] whitespace-nowrap">
-            <div>{node.title}</div>
+        <div className="bg-muted text-foreground p-2 rounded-lg shadow-sm border border-border inline-block text-center min-w-[140px] whitespace-nowrap">
+            <div className="font-headline">{node.title}</div>
             {node.person && (
-                <div className="text-orange-500 text-xs mt-1">{node.person}</div>
+                <div className="text-primary text-xs mt-1">{node.person}</div>
             )}
         </div>
         {node.children && node.children.length > 0 && (
@@ -76,13 +64,13 @@ const OrgChartNode = ({ node }: { node: { title: string; person?: string | null;
 
 export default function CorporatePage() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 font-headline">
       <header>
         <div className="flex items-center gap-3">
-          <Landmark className="h-8 w-8 text-primary" />
+          <Rocket className="h-8 w-8 text-primary" />
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Kurumsal</h1>
-            <p className="text-muted-foreground mt-1">Şirketimizin kimliği, değerleri ve hedefleri hakkında bilgiler.</p>
+            <h1 className="text-3xl font-bold text-foreground">StellarCorp Direktifleri</h1>
+            <p className="text-muted-foreground mt-1">Şirketimizin kimliği, değerleri ve galaktik hedefleri.</p>
           </div>
         </div>
       </header>
@@ -92,15 +80,15 @@ export default function CorporatePage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Building2 className="h-6 w-6 text-primary" />
-              Tarihçemiz
+              Tarihçemiz: Yeni Bir Başlangıç
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-muted-foreground">
             <p>
-              E-Kimo, 1990 yılında tekstil sektörüne yenilikçi bir soluk getirme vizyonuyla Zübeyir Dilek tarafından kuruldu. Isparta'da mütevazı bir atölyede başlayan yolculuğumuz, bugün onlarca ülkeye ihracat yapan, sektörün öncü ve saygın firmalarından biri haline gelmiştir.
+              StellarCorp, 21. yüzyılın ortalarında artan küresel krizler ve tükenen kaynaklar karşısında insanlığa yeni bir umut sunma vizyonuyla 2042 yılında kuruldu. Mars yörüngesindeki mütevazı bir istasyonda başlayan yolculuğumuz, bugün bilinen galaksinin sınırlarını zorlayan, yıldızlararası bir güç haline gelmiştir.
             </p>
             <p>
-              Kurulduğumuz ilk günden beri kaliteye, yeniliğe ve insan kaynağına yatırım yapmayı temel ilkemiz olarak benimsedik. Bu ilkeler doğrultusunda, teknolojiyi yakından takip ederek üretim süreçlerimizi sürekli iyileştirdik ve global pazarda rekabet gücümüzü artırdık.
+              Kurulduğumuz ilk günden beri en cesur zihinleri bir araya getirmeyi, bilinmeyeni keşfetmeyi ve teknolojinin sınırlarını zorlamayı temel ilkemiz olarak benimsedik. Bu ilkelerle, insanlığın geleceğini yıldızlarda arıyoruz.
             </p>
           </CardContent>
         </Card>
@@ -114,7 +102,7 @@ export default function CorporatePage() {
           </CardHeader>
           <CardContent className="space-y-4 text-muted-foreground">
             <p>
-              Müşteri beklentilerini en üst düzeyde karşılayan, çevreye ve topluma duyarlı, sürdürülebilir ve yenilikçi tekstil çözümleri sunmak. Çalışanlarımıza ilham veren, adil ve gelişim odaklı bir çalışma ortamı yaratarak, tüm paydaşlarımız için değer üretmektir.
+              İnsanlığın geleceğini güvence altına almak için yıldızlararası keşifler yapmak, yaşanabilir gezegenleri kolonileştirmek ve evrenin sırlarını açığa çıkarmak. Tüm operasyonlarımızda bilimsel merakı, etik değerleri ve evrensel barışı en üst düzeyde tutmaktır.
             </p>
           </CardContent>
         </Card>
@@ -128,7 +116,7 @@ export default function CorporatePage() {
           </CardHeader>
           <CardContent className="space-y-4 text-muted-foreground">
             <p>
-              Tasarım, teknoloji ve sürdürülebilirlik alanlarında küresel bir lider olmak. Yenilikçi ürünlerimiz ve güçlü markalarımızla dünya tekstil pazarında Türkiye'yi en iyi şekilde temsil eden, sektör trendlerini belirleyen ve ilham kaynağı olan bir kurum haline gelmektir.
+              İnsanlığı çok gezegenli bir tür haline getirerek galaktik bir medeniyetin temellerini atmak. Bilgi, teknoloji ve refahı tüm evrene yayan, yıldızlar arasında bir köprü görevi gören ve gelecek nesillere sonsuz bir olasılıklar evreni bırakan öncü kurum olmaktır.
             </p>
           </CardContent>
         </Card>

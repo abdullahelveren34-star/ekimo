@@ -14,7 +14,7 @@ export type Employee = {
     remaining: number;
   };
   equipment: {
-    type: 'Notebook' | 'Cep Telefonu' | 'Tablet' | 'Diğer';
+    type: 'Notebook' | 'Cep Telefonu' | 'Tablet' | 'Diğer' | 'Exo-Suit' | 'Lazer Kesici';
     model: string;
     serialNumber: string;
   }[];
@@ -32,105 +32,105 @@ export type Employee = {
 };
 
 export const employeeProfile = {
-  name: 'Ayşe Yılmaz',
-  title: 'Kıdemli İK Uzmanı',
-  email: 'ayse.yilmaz@example.com',
+  name: 'Jax Volan',
+  title: 'Kıdemli Operasyon Sorumlusu',
+  email: 'jax.volan@stellarcorp.io',
   phone: '555-123-4567',
   avatarUrl: 'https://picsum.photos/seed/1/100/100',
-  skills: ['İşe Alım', 'Performans Yönetimi', 'Çalışan İlişkileri', 'İK Analitiği', 'Eğitim ve Geliştirme'],
+  skills: ['Gezegen Keşfi', 'Stratejik Planlama', 'Kriz Yönetimi', 'Terraforming Temelleri', 'Xeno-biyoloji'],
   experience: [
     {
-      title: 'Kıdemli İK Uzmanı',
-      company: 'Teknoloji A.Ş.',
-      period: 'Ocak 2020 - Halen',
+      title: 'Kıdemli Operasyon Sorumlusu',
+      company: 'StellarCorp',
+      period: '2070 - Halen',
     },
     {
-      title: 'İK Uzmanı',
-      company: 'Çözüm Ltd.',
-      period: 'Haziran 2017 - Aralık 2019',
+      title: 'Keşif Subayı',
+      company: 'Mars Kolonisi İttifakı',
+      period: '2065 - 2070',
     },
   ],
 };
 
 export const boardMembers = [
   {
-    name: 'Zübeyir Dilek',
-    title: 'Yönetim Kurulu Başkanı',
+    name: 'Kaelen Vance',
+    title: 'CEO & Baş Kaşif',
     avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
   {
-    name: 'Neşe Ulu',
-    title: 'Yönetim Kurulu Başkan Yrd.',
+    name: 'Dr. Aris Thorne',
+    title: 'Baş Bilim Sorumlusu',
     avatarUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
   {
-    name: 'Mahmut Yılmaz',
-    title: 'Genel Müdür',
-    avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    name: 'Commander Eva Rostova',
+    title: 'Operasyon Direktörü',
+    avatarUrl: 'https://images.unsplash.com/photo-1554151228-14d9def656e4?q=80&w=1886&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
   {
-    name: 'Fatma Demir',
-    title: 'Üye',
-    avatarUrl: 'https://images.unsplash.com/photo-1554151228-14d9def656e4?q=80&w=1886&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    name: 'Joric Al-Fayed',
+    title: 'Baş Mühendis',
+    avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
 ];
 
 export const textileNews = [
   {
     id: 1,
-    title: 'Sürdürülebilir Kumaşlar Yükselişte',
-    description: 'Organik pamuk, bambu ve geri dönüştürülmüş materyaller gibi çevre dostu kumaşlar, 2024 moda trendlerinin merkezinde yer alıyor. Tüketiciler artık daha bilinçli seçimler yapıyor.',
-    imageUrl: 'https://picsum.photos/seed/textile1/600/400',
-    date: '24 Temmuz 2024',
-    imageHint: 'fabric textile',
+    title: 'Proxima Centauri B\'de Su İzi Bulundu',
+    description: 'Yeni nesil teleskoplarımız, Dünya\'ya en yakın exoplanet olan Proxima Centauri B\'nin atmosferinde önemli miktarda su buharı tespit etti. Kolonizasyon için umutlar arttı.',
+    imageUrl: 'https://images.unsplash.com/photo-1534294228306-bd54eb9a7ba8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    date: '15.08.2077',
+    imageHint: 'exoplanet water',
   },
   {
     id: 2,
-    title: 'Akıllı Tekstiller: Giyilebilir Teknolojinin Geleceği',
-    description: 'Sağlık verilerini izleyen, sıcaklığı ayarlayan ve hatta renk değiştiren kumaşlar artık bilim kurgu değil. Akıllı tekstil pazarı hızla büyüyor ve yeni inovasyonlar kapıda.',
-    imageUrl: 'https://picsum.photos/seed/textile2/600/400',
-    date: '22 Temmuz 2024',
-    imageHint: 'smart fabric',
+    title: 'Kepler-186f: İkinci Dünya mı?',
+    description: 'Kepler-186f gezegeninden gelen son veriler, yüzey sıcaklığının ve atmosferik basıncın yaşam için uygun aralıkta olduğunu gösteriyor. StellarCorp keşif filosu yola çıkmak için hazırlanıyor.',
+    imageUrl: 'https://images.unsplash.com/photo-1502134249126-9f3755a50d78?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    date: '12.08.2077',
+    imageHint: 'earth-like planet',
   },
   {
     id: 3,
-    title: 'Dijital Baskı Teknikleri Üretimi Nasıl Değiştiriyor?',
-    description: 'Geleneksel baskı yöntemlerine göre daha az su ve enerji tüketen dijital baskı, hem daha çevre dostu hem de tasarımcılara sınırsız olanaklar sunuyor. Kişiselleştirme hiç bu kadar kolay olmamıştı.',
-    imageUrl: 'https://picsum.photos/seed/textile3/600/400',
-    date: '20 Temmuz 2024',
-    imageHint: 'digital printing',
+    title: 'Gliese 581g\'de Gizemli Sinyaller',
+    description: 'Gliese 581g sisteminden gelen periyodik radyo sinyalleri, bilim dünyasında heyecan yarattı. Sinyallerin doğal bir kaynaktan mı yoksa bir medeniyetten mi geldiği araştırılıyor.',
+    imageUrl: 'https://images.unsplash.com/photo-1506443432602-ac2fcd6f54e0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    date: '10.08.2077',
+    imageHint: 'radio signals space',
   },
 ];
 
 export const companyNews = [
   {
     id: 1,
-    title: 'Sürdürülebilirlik Belgesi',
-    description: "Isparta'daki fabrikamız, sürdürülebilirlik alanında uluslararası geçerliliğe sahip yeni bir belge daha almaya hak kazandı.",
-    category: 'Başarı',
+    title: 'Yeni "Warp 5" Motoru Testleri Başarıyla Tamamlandı',
+    description: "Ar-Ge departmanımızın geliştirdiği yeni nesil 'Warp 5' motoru, yıldızlararası seyahat süresini %40 oranında kısaltacak.",
+    category: 'Teknoloji',
   },
   {
     id: 2,
-    title: "Madrid'de Yeni Mağaza",
-    description: "İspanya'daki büyümemiz devam ediyor! Barcelona'dan sonra şimdi de Madrid'de yeni ofis ve mağazamız açıldı.",
-    category: 'Genişleme',
+    title: "Centauri Sistemine İlk Koloni Gemisi Gönderildi",
+    description: "Yüzlerce kolonicinin bulunduğu 'Odyssey' adlı gemimiz, Proxima Centauri B gezegenine doğru 4 yıllık yolculuğuna başladı.",
+    category: 'Kolonizasyon',
   },
   {
     id: 3,
-    title: 'Yeni Markamız: X',
-    description: 'E-Kimo ailesi olarak yeni markamız "X"i sizlere sunmaktan gurur duyarız. Yenilikçi ve modern tasarımlar çok yakında!',
-    category: 'Yeni Marka',
+    title: 'StellarCorp, "Galaktik İttifak"a Katıldı',
+    description: 'Barışçıl keşif ve bilgi paylaşımını hedefleyen Galaktik İttifak\'ın kurucu üyelerinden biri olmaktan gurur duyarız.',
+    category: 'Diplomasi',
   },
   {
     id: 4,
-    title: 'Teknoloji Yatırımı',
-    description: 'Üretim hattımızı en son teknolojiye sahip makinelerle yenileyerek verimliliğimizi %20 artırdık.',
+    title: 'Yeni Terraforming Teknolojisi',
+    description: 'Atmosfer düzenleyici nano-botlarımız sayesinde, bir gezegeni yaşanabilir hale getirme süresini 50 yıla indirmeyi başardık.',
     category: 'İnovasyon',
   },
 ];
 
 const generatePerformanceHistory = () => {
-  const years = [2023, 2024, 2025];
+  const years = [2075, 2076, 2077];
   const months = ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"];
   
   return years.map(year => ({
@@ -154,99 +154,25 @@ const generatePerformanceHistory = () => {
   }));
 };
 
-
 export const departmentMembers: { [key: string]: Employee[] } = {
   'Yönetim': [
-    { id: 'zubeyir-dilek-id', name: 'Zübeyir Dilek', title: 'Yönetim Kurulu Başkanı', department: 'Yönetim', email: 'zubeyir.dilek@e-kimo.com', phone: '555-000-0001', avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1960-01-01', annualLeave: { total: 30, used: 10, remaining: 20 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: 'nese-ulu-id', name: 'Neşe Ulu', title: 'Yönetim Kurulu Başkan Yrd.', department: 'Yönetim', email: 'nese.ulu@e-kimo.com', phone: '555-000-0002', avatarUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1965-02-02', annualLeave: { total: 30, used: 5, remaining: 25 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: 'mahmut-yilmaz-id', name: 'Mahmut Yılmaz', title: 'Genel Müdür', department: 'Yönetim', email: 'mahmut.yilmaz@e-kimo.com', phone: '555-000-0003', avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1970-03-03', annualLeave: { total: 30, used: 8, remaining: 22 }, equipment: [], performanceHistory: generatePerformanceHistory() },
+    { id: 'kaelen-vance-id', name: 'Kaelen Vance', title: 'CEO & Baş Kaşif', department: 'Yönetim', email: 'k.vance@stellarcorp.io', phone: 'SC-001', avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '2025-01-01', annualLeave: { total: 30, used: 10, remaining: 20 }, equipment: [], performanceHistory: generatePerformanceHistory() },
+    { id: 'aris-thorne-id', name: 'Dr. Aris Thorne', title: 'Baş Bilim Sorumlusu', department: 'Yönetim', email: 'a.thorne@stellarcorp.io', phone: 'SC-002', avatarUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '2030-02-02', annualLeave: { total: 30, used: 5, remaining: 25 }, equipment: [], performanceHistory: generatePerformanceHistory() },
   ],
-  'Satış': [
-    { id: '1', name: 'Ahmet Yılmaz', title: 'Satış Müdürü', department: 'Satış', email: 'ahmet.yilmaz@e-kimo.com', phone: '555-111-1111', avatarUrl: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1985-03-15', annualLeave: { total: 20, used: 5, remaining: 15 }, equipment: [{ type: 'Cep Telefonu', model: 'iPhone 14', serialNumber: 'SN11111'}], performanceHistory: generatePerformanceHistory() },
-    { id: '2', name: 'Fatma Kaya', title: 'Satış Uzmanı', department: 'Satış', email: 'fatma.kaya@e-kimo.com', phone: '555-222-2222', avatarUrl: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1990-07-26', annualLeave: { total: 14, used: 10, remaining: 4 }, equipment: [{ type: 'Cep Telefonu', model: 'Samsung S23', serialNumber: 'SN22222'}], performanceHistory: generatePerformanceHistory() },
-    { id: '7', name: 'Mehmet Öztürk', title: 'Bölge Satış Sorumlusu', department: 'Satış', email: 'mehmet.ozturk@e-kimo.com', phone: '555-111-1112', avatarUrl: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1988-12-10', annualLeave: { total: 18, used: 8, remaining: 10 }, equipment: [{ type: 'Tablet', model: 'iPad Air', serialNumber: 'SN77777'}], performanceHistory: generatePerformanceHistory() },
-    { id: '8', name: 'Zeynep Şahin', title: 'İhracat Uzmanı', department: 'Satış', email: 'zeynep.sahin@e-kimo.com', phone: '555-222-2223', avatarUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1991-09-05', annualLeave: { total: 14, used: 4, remaining: 10 }, equipment: [{ type: 'Notebook', model: 'HP Spectre x360', serialNumber: 'SN88888'}], performanceHistory: generatePerformanceHistory() },
-    { id: '9', name: 'Mustafa Arslan', title: 'Satış Danışmanı', department: 'Satış', email: 'mustafa.arslan@e-kimo.com', phone: '555-111-1113', avatarUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1995-02-20', annualLeave: { total: 14, used: 1, remaining: 13 }, equipment: [], performanceHistory: generatePerformanceHistory() },
+  'Operasyonlar': [
+    { id: '1', name: 'Commander Eva Rostova', title: 'Operasyon Direktörü', department: 'Operasyonlar', email: 'e.rostova@stellarcorp.io', phone: 'SC-101', avatarUrl: 'https://images.unsplash.com/photo-1554151228-14d9def656e4?q=80&w=1886&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '2040-03-15', annualLeave: { total: 20, used: 5, remaining: 15 }, equipment: [{ type: 'Cep Telefonu', model: 'HoloCom v7', serialNumber: 'SN11111'}], performanceHistory: generatePerformanceHistory() },
+    { id: '2', name: 'Jax Volan', title: 'Filo Kaptanı', department: 'Operasyonlar', email: 'j.volan@stellarcorp.io', phone: 'SC-102', avatarUrl: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '2045-07-26', annualLeave: { total: 14, used: 10, remaining: 4 }, equipment: [{ type: 'Cep Telefonu', model: 'HoloCom v7', serialNumber: 'SN22222'}], performanceHistory: generatePerformanceHistory() },
   ],
-  'Pazarlama': [
-    { id: '3', name: 'Elif Aydın', title: 'Pazarlama Direktörü', department: 'Pazarlama', email: 'elif.aydin@e-kimo.com', phone: '555-333-3333', avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1982-05-25', annualLeave: { total: 22, used: 15, remaining: 7 }, equipment: [{ type: 'Notebook', model: 'MacBook Pro 16"', serialNumber: 'SN33333'}, { type: 'Cep Telefonu', model: 'iPhone 15 Pro', serialNumber: 'SN33334'}], performanceHistory: generatePerformanceHistory() },
-    { id: '10', name: 'Ozan Tekin', title: 'Dijital Pazarlama Uzmanı', department: 'Pazarlama', email: 'ozan.tekin@e-kimo.com', phone: '555-333-3334', avatarUrl: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1993-06-18', annualLeave: { total: 14, used: 7, remaining: 7 }, equipment: [{ type: 'Notebook', model: 'MacBook Air', serialNumber: 'SN10101'}], performanceHistory: generatePerformanceHistory() },
-    { id: '11', name: 'Selin Yıldız', title: 'İçerik Uzmanı', department: 'Pazarlama', email: 'selin.yildiz@e-kimo.com', phone: '555-333-3335', avatarUrl: 'https://images.unsplash.com/photo-1619895862022-09114b41f16f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1996-08-01', annualLeave: { total: 14, used: 5, remaining: 9 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '12', name: 'Kerem Aksoy', title: 'Sosyal Medya Yöneticisi', department: 'Pazarlama', email: 'kerem.aksoy@e-kimo.com', phone: '555-333-3336', avatarUrl: 'https://images.unsplash.com/photo-1595152772835-219674b2a8a6?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1994-04-12', annualLeave: { total: 14, used: 14, remaining: 0 }, equipment: [{ type: 'Cep Telefonu', model: 'Google Pixel 8', serialNumber: 'SN12121'}], performanceHistory: generatePerformanceHistory() },
-    { id: '13', name: 'Buse Demir', title: 'Marka Yöneticisi', department: 'Pazarlama', email: 'buse.demir@e-kimo.com', phone: '555-333-3337', avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1989-10-28', annualLeave: { total: 16, used: 10, remaining: 6 }, equipment: [{ type: 'Notebook', model: 'Dell XPS 13', serialNumber: 'SN13131'}], performanceHistory: generatePerformanceHistory() },
+  'Ar-Ge': [
+    { id: '3', name: 'Lena Petrova', title: 'Warp Motoru Uzmanı', department: 'Ar-Ge', email: 'l.petrova@stellarcorp.io', phone: 'SC-201', avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '2038-05-25', annualLeave: { total: 22, used: 15, remaining: 7 }, equipment: [{ type: 'Notebook', model: 'QuantumBook QX-2', serialNumber: 'SN33333'}], performanceHistory: generatePerformanceHistory() },
+    { id: '10', name: 'Kenji Tanaka', title: 'Terraforming Mühendisi', department: 'Ar-Ge', email: 'k.tanaka@stellarcorp.io', phone: 'SC-202', avatarUrl: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '2048-06-18', annualLeave: { total: 14, used: 7, remaining: 7 }, equipment: [{ type: 'Exo-Suit', model: 'Enviro-T1', serialNumber: 'SN10101'}], performanceHistory: generatePerformanceHistory() },
   ],
-   'Bağımsız': [],
-  'Tasarım': [
-    { id: '14', name: 'Yasemin Güler', title: 'Tasarım Lideri', department: 'Tasarım', email: 'yasemin.guler@e-kimo.com', phone: '555-444-4441', avatarUrl: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1987-07-14', annualLeave: { total: 20, used: 10, remaining: 10 }, equipment: [{ type: 'Notebook', model: 'iMac 24"', serialNumber: 'SN14141'}], performanceHistory: generatePerformanceHistory() },
-    { id: '15', name: 'Barış Efe', title: 'Moda Tasarımcısı', department: 'Tasarım', email: 'baris.efe@e-kimo.com', phone: '555-444-4442', avatarUrl: 'https://images.unsplash.com/photo-1521119989659-a83eee488004?q=80&w=1923&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1992-03-22', annualLeave: { total: 14, used: 6, remaining: 8 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '16', name: 'Ceren Işık', title: 'Grafik Tasarımcı', department: 'Tasarım', email: 'ceren.isik@e-kimo.com', phone: '555-444-4443', avatarUrl: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1997-12-01', annualLeave: { total: 14, used: 0, remaining: 14 }, equipment: [{ type: 'Tablet', model: 'Wacom Intuos Pro', serialNumber: 'SN16161'}], performanceHistory: generatePerformanceHistory() },
-    { id: '17', name: 'Deniz Gezgin', title: 'UI/UX Tasarımcısı', department: 'Tasarım', email: 'deniz.gezgin@e-kimo.com', phone: '555-444-4445', avatarUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1995-01-15', annualLeave: { total: 14, used: 5, remaining: 9 }, equipment: [{ type: 'Notebook', model: 'MacBook Pro 14"', serialNumber: 'SN17171'}], performanceHistory: generatePerformanceHistory() },
-    { id: '18', name: 'Ege Koral', title: 'Tasarım Asistanı', department: 'Tasarım', email: 'ege.koral@e-kimo.com', phone: '555-444-4446', avatarUrl: 'https://images.unsplash.com/photo-1500080209535-717dd4ebaa6b?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1999-11-09', annualLeave: { total: 14, used: 2, remaining: 12 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-  ],
-  'Satınalma': [
-    { id: '19', name: 'Fatih Polat', title: 'Satınalma Müdürü', department: 'Satınalma', email: 'fatih.polat@e-kimo.com', phone: '555-555-5551', avatarUrl: 'https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?q=80&w=1976&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1980-09-19', annualLeave: { total: 24, used: 20, remaining: 4 }, equipment: [{ type: 'Notebook', model: 'Lenovo ThinkPad X1', serialNumber: 'SN19191'}], performanceHistory: generatePerformanceHistory() },
-    { id: '20', name: 'Gamze Bulut', title: 'Satınalma Uzmanı', department: 'Satınalma', email: 'gamze.bulut@e-kimo.com', phone: '555-555-5552', avatarUrl: 'https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1990-03-03', annualLeave: { total: 14, used: 10, remaining: 4 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '21', name: 'Hakan Taş', title: 'Tedarik Zinciri Sorumlusu', department: 'Satınalma', email: 'hakan.tas@e-kimo.com', phone: '555-555-5553', avatarUrl: 'https://images.unsplash.com/photo-1548142813-c348350df52b?q=80&w=1889&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1985-12-12', annualLeave: { total: 20, used: 5, remaining: 15 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '22', name: 'Irem su', title: 'Satınalma Asistanı', department: 'Satınalma', email: 'irem.su@e-kimo.com', phone: '555-555-5554', avatarUrl: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?q=80&w=1727&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1998-07-21', annualLeave: { total: 14, used: 3, remaining: 11 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-  ],
-  'Üretim Planlama': [
-    { id: '23', name: 'Jale Tezcan', title: 'Planlama Müdürü', department: 'Üretim Planlama', email: 'jale.tezcan@e-kimo.com', phone: '555-666-6661', avatarUrl: 'https://images.unsplash.com/photo-1531123414780-f74242c2b052?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1984-06-06', annualLeave: { total: 20, used: 11, remaining: 9 }, equipment: [{ type: 'Notebook', model: 'HP EliteBook', serialNumber: 'SN23232'}], performanceHistory: generatePerformanceHistory() },
-    { id: '24', name: 'Kaan Vural', title: 'Üretim Planlama Mühendisi', department: 'Üretim Planlama', email: 'kaan.vural@e-kimo.com', phone: '555-666-6662', avatarUrl: 'https://images.unsplash.com/photo-1624298357597-fd92dfbec01d?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1991-04-14', annualLeave: { total: 14, used: 8, remaining: 6 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '25', name: 'Leman Sönmez', title: 'Planlama Uzmanı', department: 'Üretim Planlama', email: 'leman.sonmez@e-kimo.com', phone: '555-666-6663', avatarUrl: 'https://images.unsplash.com/photo-1521295945755-680c1b48b306?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1993-02-18', annualLeave: { total: 14, used: 7, remaining: 7 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '26', name: 'Murat Duman', title: 'Stok Kontrol Sorumlusu', department: 'Üretim Planlama', email: 'murat.duman@e-kimo.com', phone: '555-666-6664', avatarUrl: 'https://images.unsplash.com/photo-1590086782792-42dd2350140d?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1989-11-11', annualLeave: { total: 16, used: 15, remaining: 1 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-  ],
-  'Üretim': [
-    { id: '27', name: 'Nihal Ergin', title: 'Üretim Müdürü', department: 'Üretim', email: 'nihal.ergin@e-kimo.com', phone: '555-777-7771', avatarUrl: 'https://images.unsplash.com/photo-1529068755536-a5ade0dcb4e8?q=80&w=2081&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1979-01-20', annualLeave: { total: 26, used: 20, remaining: 6 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '28', name: 'Orhan Çelik', title: 'Vardiya Amiri', department: 'Üretim', email: 'orhan.celik@e-kimo.com', phone: '555-777-7772', avatarUrl: 'https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1986-10-10', annualLeave: { total: 20, used: 10, remaining: 10 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '29', name: 'Pınar Kurt', title: 'Makine Operatörü', department: 'Üretim', email: 'pinar.kurt@e-kimo.com', phone: '555-777-7773', avatarUrl: 'https://images.unsplash.com/photo-1558898479-33c0057a5d12?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1995-05-05', annualLeave: { total: 14, used: 5, remaining: 9 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '30', name: 'Rıza Sarı', title: 'Makine Operatörü', department: 'Üretim', email: 'riza.sari@e-kimo.com', phone: '555-777-7774', avatarUrl: 'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=1889&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1992-09-17', annualLeave: { total: 14, used: 12, remaining: 2 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '31', name: 'Sema Uçar', title: 'Kalite Kontrol Operatörü', department: 'Üretim', email: 'sema.ucar@e-kimo.com', phone: '555-777-7775', avatarUrl: 'https://images.unsplash.com/photo-1598550880863-4e8aa3d0ed14?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1996-11-23', annualLeave: { total: 14, used: 4, remaining: 10 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '32', name: 'Tufan Esen', title: 'Üretim İşçisi', department: 'Üretim', email: 'tufan.esen@e-kimo.com', phone: '555-777-7776', avatarUrl: 'https://images.unsplash.com/photo-1628890923662-2cb23c2a02a0?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1998-01-30', annualLeave: { total: 14, used: 1, remaining: 13 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '33', name: 'Uğur Güneş', title: 'Üretim İşçisi', department: 'Üretim', email: 'ugur.gunes@e-kimo.com', phone: '555-777-7777', avatarUrl: 'https://images.unsplash.com/photo-1615109398623-88346a601842?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1994-08-15', annualLeave: { total: 14, used: 9, remaining: 5 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-  ],
-  'Kalite ve Güvence': [
-    { id: '34', name: 'Vildan Atan', title: 'Kalite Güvence Müdürü', department: 'Kalite ve Güvence', email: 'vildan.atan@e-kimo.com', phone: '555-888-8881', avatarUrl: 'https://images.unsplash.com/photo-1573497491208-6b1acb260507?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1983-04-04', annualLeave: { total: 22, used: 12, remaining: 10 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '35', name: 'Yavuz Selim', title: 'Kalite Kontrol Mühendisi', department: 'Kalite ve Güvence', email: 'yavuz.selim@e-kimo.com', phone: '555-888-8882', avatarUrl: 'https://images.unsplash.com/photo-1566753323558-f4e0952af115?q=80&w=1921&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1990-09-09', annualLeave: { total: 14, used: 10, remaining: 4 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '36', name: 'Zara Zengin', title: 'Kalite Teknisyeni', department: 'Kalite ve Güvence', email: 'zara.zengin@e-kimo.com', phone: '555-888-8883', avatarUrl: 'https://images.unsplash.com/photo-1594744800828-85412a0f890c?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1995-10-10', annualLeave: { total: 14, used: 3, remaining: 11 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-  ],
-  'Sosyal Uygunluk': [
-    { id: '37', name: 'Ali Veli', title: 'Sosyal Uygunluk Uzmanı', department: 'Sosyal Uygunluk', email: 'ali.veli@e-kimo.com', phone: '555-999-9991', avatarUrl: 'https://images.unsplash.com/photo-1504593811423-6dd665756598?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1987-03-25', annualLeave: { total: 18, used: 18, remaining: 0 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-  ],
-  'Mali İşler': [
-    { id: 'bahar-candan-id', name: 'Bahar Candan', title: 'Mali İşler Direktörü', department: 'Mali İşler', email: 'bahar.candan@e-kimo.com', phone: '555-123-4561', avatarUrl: 'https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1978-11-05', annualLeave: { total: 26, used: 15, remaining: 11 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '39', name: 'Cemalettin Sezer', title: 'Muhasebe Müdürü', department: 'Mali İşler', email: 'cemalettin.sezer@e-kimo.com', phone: '555-123-4562', avatarUrl: 'https://images.unsplash.com/photo-1639149888905-fb39731f2e6c?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1982-02-14', annualLeave: { total: 22, used: 10, remaining: 12 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '40', name: 'Derya Deniz', title: 'Finans Uzmanı', department: 'Mali İşler', email: 'derya.deniz@e-kimo.com', phone: '555-123-4563', avatarUrl: 'https://images.unsplash.com/photo-1610276198568-eb6d0ff53e48?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1994-07-07', annualLeave: { total: 14, used: 7, remaining: 7 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '41', name: 'Emre Aslan', title: 'Muhasebe Elemanı', department: 'Mali İşler', email: 'emre.aslan@e-kimo.com', phone: '555-123-4564', avatarUrl: 'https://images.unsplash.com/photo-1599842057874-37393e9342df?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1997-01-01', annualLeave: { total: 14, used: 2, remaining: 12 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-  ],
-  'Modelhane': [
-    { id: '42', name: 'Figen Yüksek', title: 'Modelist', department: 'Modelhane', email: 'figen.yuksek@e-kimo.com', phone: '555-234-5671', avatarUrl: 'https://images.unsplash.com/photo-1525134479668-1bee5c7c6845?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1988-08-08', annualLeave: { total: 18, used: 8, remaining: 10 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '43', name: 'Gökhan Türk', title: 'Modelist Yardımcısı', department: 'Modelhane', email: 'gokhan.turk@e-kimo.com', phone: '555-234-5672', avatarUrl: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1996-06-26', annualLeave: { total: 14, used: 6, remaining: 8 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-  ],
-  'Depolar': [
-    { id: '44', name: 'Halil İbrahim', title: 'Depo Sorumlusu', department: 'Depolar', email: 'halil.ibrahim@e-kimo.com', phone: '555-345-6781', avatarUrl: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1981-05-19', annualLeave: { total: 24, used: 14, remaining: 10 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '45', name: 'İlknur Güzel', title: 'Depo Elemanı', department: 'Depolar', email: 'ilknur.guzel@e-kimo.com', phone: '555-345-6782', avatarUrl: 'https://images.unsplash.com/photo-1599233120325-096a6016142c?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1993-09-30', annualLeave: { total: 14, used: 10, remaining: 4 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-  ],
-  'Kesimhane': [
-    { id: '46', name: 'Kemal Sunal', title: 'Kesimhane Sorumlusu', department: 'Kesimhane', email: 'kemal.sunal@e-kimo.com', phone: '555-456-7891', avatarUrl: 'https://images.unsplash.com/photo-1605369572399-05d8d533924f?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1984-10-11', annualLeave: { total: 20, used: 10, remaining: 10 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-  ],
-  'Marka': [
-    { id: '47', name: 'Leyla Gencer', title: 'Marka Direktörü', department: 'Marka', email: 'leyla.gencer@e-kimo.com', phone: '555-567-8901', avatarUrl: 'https://images.unsplash.com/photo-1621784563330-42DC568403a3?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1980-12-12', annualLeave: { total: 26, used: 6, remaining: 20 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-  ],
-  'İnsan Kaynakları': [
-    { id: 'izlem-manduz-id', name: 'İzlem Manduz', title: 'İK Müdürü', department: 'İnsan Kaynakları', email: 'izlem.manduz@e-kimo.com', phone: '555-444-4444', avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1985-04-23', annualLeave: { total: 20, used: 5, remaining: 15 }, equipment: [{ type: 'Notebook', model: 'Dell XPS 15', serialNumber: 'SN44444'}], performanceHistory: generatePerformanceHistory() },
-    { id: '5', name: 'Can Boz', title: 'İK Uzmanı', department: 'İnsan Kaynakları', email: 'can.boz@e-kimo.com', phone: '555-555-5555', avatarUrl: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1992-11-30', annualLeave: { total: 14, used: 2, remaining: 12 }, equipment: [{ type: 'Notebook', model: 'Lenovo ThinkPad', serialNumber: 'SN55555'}], performanceHistory: generatePerformanceHistory() },
-    { id: '48', name: 'Merve Çetin', title: 'İşe Alım Uzmanı', department: 'İnsan Kaynakları', email: 'merve.cetin@e-kimo.com', phone: '555-444-4446', avatarUrl: 'https://images.unsplash.com/photo-1532074205216-d0e1f4b87368?q=80&w=1941&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1993-07-19', annualLeave: { total: 14, used: 11, remaining: 3 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '49', name: 'Nazlı Özer', title: 'Bordro ve Özlük İşleri Uzmanı', department: 'İnsan Kaynakları', email: 'nazli.ozer@e-kimo.com', phone: '555-444-4447', avatarUrl: 'https://images.unsplash.com/photo-1599842057874-37393e9342df?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1990-01-05', annualLeave: { total: 16, used: 10, remaining: 6 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-  ],
-  'İdari İşler': [
-    { id: '50', name: 'Osman Gök', title: 'İdari İşler Müdürü', department: 'İdari İşler', email: 'osman.gok@e-kimo.com', phone: '555-678-9012', avatarUrl: 'https://images.unsplash.com/photo-1520409364224-63400afe26e5?q=80&w=1959&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%3D', birthDate: '1975-08-20', annualLeave: { total: 28, used: 20, remaining: 8 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '51', name: 'Peri Tozu', title: 'Resepsiyonist', department: 'İdari İşler', email: 'peri.tozu@e-kimo.com', phone: '555-678-9013', avatarUrl: 'https://images.unsplash.com/photo-1601288496920-b6154fe3626a?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1999-03-03', annualLeave: { total: 14, used: 1, remaining: 13 }, equipment: [], performanceHistory: generatePerformanceHistory() },
+  'Koloni Yönetimi': [
+     { id: 'izlem-manduz-id', name: 'Zara Kessler', title: 'Koloni Yöneticisi', department: 'Koloni Yönetimi', email: 'z.kessler@stellarcorp.io', phone: 'SC-301', avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '2042-04-23', annualLeave: { total: 20, used: 5, remaining: 15 }, equipment: [{ type: 'Notebook', model: 'StellarPad Pro', serialNumber: 'SN44444'}], performanceHistory: generatePerformanceHistory() },
+     { id: '5', name: 'Rico Valdez', title: 'Güvenlik Şefi', department: 'Koloni Yönetimi', email: 'r.valdez@stellarcorp.io', phone: 'SC-302', avatarUrl: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '2047-11-30', annualLeave: { total: 14, used: 2, remaining: 12 }, equipment: [{ type: 'Lazer Kesici', model: 'Pulse Rifle X-2', serialNumber: 'SN55555'}], performanceHistory: generatePerformanceHistory() },
   ],
   'BT': [
-    { id: 'abdullah-elveren-id', name: 'Abdullah Elveren', title: 'Grup IT Direktörü', department: 'BT', email: 'abdullah.elveren@e-kimo.com', phone: '555-666-6666', avatarUrl: 'https://images.unsplash.com/photo-1557862921-37829c790f19?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1980-01-01', annualLeave: { total: 25, used: 10, remaining: 15 }, equipment: [{ type: 'Notebook', model: 'MacBook Pro 14"', serialNumber: 'SN66666'}, { type: 'Cep Telefonu', model: 'iPhone 15 Pro Max', serialNumber: 'SN66667'}], performanceHistory: generatePerformanceHistory() },
-    { id: '52', name: 'Rana Kaplan', title: 'Yazılım Geliştirme Uzmanı', department: 'BT', email: 'rana.kaplan@e-kimo.com', phone: '555-666-6667', avatarUrl: 'https://images.unsplash.com/photo-1542103749-8ef59b94f47e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1992-06-11', annualLeave: { total: 14, used: 7, remaining: 7 }, equipment: [{ type: 'Notebook', model: 'Dell Alienware', serialNumber: 'SN52525'}], performanceHistory: generatePerformanceHistory() },
-    { id: '53', name: 'Salih Eren', title: 'Sistem ve Ağ Uzmanı', department: 'BT', email: 'salih.eren@e-kimo.com', phone: '555-666-6668', avatarUrl: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1988-10-02', annualLeave: { total: 18, used: 8, remaining: 10 }, equipment: [{ type: 'Notebook', model: 'Asus ROG', serialNumber: 'SN53535'}], performanceHistory: generatePerformanceHistory() },
-    { id: '54', name: 'Tuba Dal', title: 'BT Destek Uzmanı', department: 'BT', email: 'tuba.dal@e-kimo.com', phone: '555-666-6669', avatarUrl: 'https://images.unsplash.com/photo-1629425733761-caae3b5f2e50?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '1996-05-16', annualLeave: { total: 14, used: 14, remaining: 0 }, equipment: [], performanceHistory: generatePerformanceHistory() },
+    { id: 'abdullah-elveren-id', name: 'Cortex', title: 'Merkezi Yapay Zeka', department: 'BT', email: 'cortex@stellarcorp.io', phone: 'N/A', avatarUrl: 'https://images.unsplash.com/photo-1557862921-37829c790f19?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', birthDate: '2060-01-01', annualLeave: { total: 999, used: 0, remaining: 999 }, equipment: [], performanceHistory: generatePerformanceHistory() },
   ],
 };
 
@@ -254,60 +180,60 @@ export const allEmployees = Object.values(departmentMembers).flat();
 
 export const approverUser = {
   id: 'izlem-manduz-id',
-  name: 'İzlem Manduz',
-  title: 'İK Müdürü',
+  name: 'Zara Kessler',
+  title: 'Koloni Yöneticisi',
   avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-  email: 'izlem.manduz@e-kimo.com'
+  email: 'z.kessler@stellarcorp.io'
 };
 
 export const currentUser = {
   id: 'abdullah-elveren-id',
-  name: 'Abdullah Elveren',
-  title: 'Grup Bilgi Teknolojileri Direktörü',
+  name: 'Cortex',
+  title: 'Merkezi Yapay Zeka',
   avatarUrl: 'https://images.unsplash.com/photo-1557862921-37829c790f19?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%3D',
-  email: 'abdullah.elveren@e-kimo.com'
+  email: 'cortex@stellarcorp.io'
 };
 
 export const employeeOfTheMonth = {
-  name: 'Elif Aydın',
-  title: 'Pazarlama Direktörü',
-  avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-  department: 'Pazarlama',
-  reason: 'Bu ay gösterdiği olağanüstü liderlik, yenilikçi pazarlama stratejileri ve ekibine ilham veren pozitif enerjisi sayesinde ayın personeli seçilmiştir. Özellikle yeni ürün lansmanındaki başarısı takdire şayandır.'
+  name: 'Jax Volan',
+  title: 'Filo Kaptanı',
+  avatarUrl: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  department: 'Operasyonlar',
+  reason: 'Andromeda Nebulası\'ndaki anomaliyi araştırırken gösterdiği üstün cesaret ve liderlik, ayrıca "Goliath" adlı gaz devinin yörüngesindeki zengin Xenon yataklarını keşfettiği için Ayın Kaşifi seçilmiştir.'
 };
 
 export const jobPostings = [
   {
     id: 1,
-    title: 'Kıdemli React Geliştiricisi',
-    department: 'Teknoloji',
-    location: 'İstanbul, Türkiye',
+    title: 'Kıdemli Xeno-Biyolog',
+    department: 'Ar-Ge',
+    location: 'Proxima Centauri B Kolonisi',
     type: 'Tam Zamanlı',
-    description: 'Yenilikçi web projelerimizde görev alacak, en az 5 yıl deneyimli kıdemli React geliştiricisi arıyoruz.',
+    description: 'Yeni keşfedilen gezegenlerdeki flora ve faunayı inceleyecek, en az 5 yıl saha deneyimli Xeno-Biyolog arıyoruz.',
   },
   {
     id: 2,
-    title: 'Pazarlama Uzmanı',
-    department: 'Pazarlama',
-    location: 'Uzaktan',
+    title: 'Terraforming Operatörü',
+    department: 'Koloni Yönetimi',
+    location: 'Kepler-186f (Aday Gezegen)',
     type: 'Tam Zamanlı',
-    description: 'Dijital pazarlama kampanyalarımızı yönetecek, yaratıcı ve analitik düşünebilen bir pazarlama uzmanı arayışımız bulunmaktadır.',
+    description: 'Atmosfer jeneratörlerini ve ekosistem düzenleyicilerini yönetecek, cesur ve adaptif operatörler aranıyor.',
   },
   {
     id: 3,
-    title: 'Ürün Tasarımcısı',
-    department: 'Tasarım',
-    location: 'Ankara, Türkiye',
-    type: 'Yarı Zamanlı',
-    description: 'Kullanıcı odaklı tasarımlar yapacak, mobil ve web arayüzleri konusunda deneyimli ürün tasarımcısı arıyoruz.',
+    title: 'Yıldız Gemisi Pilotu',
+    department: 'Operasyonlar',
+    location: 'Güneş Sistemi (Merkez Filo)',
+    type: 'Tam Zamanlı',
+    description: 'Yeni nesil "Venture" sınıfı keşif gemilerini kullanacak, yıldızlararası seyrüsefer konusunda deneyimli pilotlar arıyoruz.',
   },
     {
     id: 4,
-    title: 'İnsan Kaynakları Uzmanı',
-    department: 'İK',
-    location: 'Bursa, Türkiye',
+    title: 'Koloni Güvenlik Subayı',
+    department: 'Koloni Yönetimi',
+    location: 'Titan Uzay İstasyonu',
     type: 'Tam Zamanlı',
-    description: 'İşe alım, performans yönetimi ve çalışan ilişkileri süreçlerinde görev alacak deneyimli bir İK uzmanı arıyoruz.',
+    description: 'Koloninin ve personelin güvenliğini sağlayacak, kriz yönetimi ve taktiksel operasyonlarda yetenekli subaylar aranıyor.',
   },
 ];
 
