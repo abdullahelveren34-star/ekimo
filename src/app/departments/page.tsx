@@ -38,7 +38,7 @@ const departments = [
   { name: 'Satış', icon: TrendingUp, color: 'text-green-500' },
   { name: 'Pazarlama', icon: Megaphone, color: 'text-blue-500' },
   { name: 'Bağımsız', icon: Briefcase, color: 'text-gray-500' },
-  { name: 'Tasarım', icon: Palette, color: 'text-purple-500' },
+  { name: 'Tasarım', icon: Palette, color: 'text-pink-500' },
   { name: 'Satınalma', icon: ShoppingCart, color: 'text-orange-500' },
   { name: 'Üretim Planlama', icon: CalendarCog, color: 'text-cyan-500' },
   { name: 'Üretim', icon: Factory, color: 'text-yellow-500' },
