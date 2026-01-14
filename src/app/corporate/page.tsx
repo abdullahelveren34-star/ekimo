@@ -1,5 +1,7 @@
+'use client';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Landmark, Target, Eye, Building2, GitBranch, Rocket } from 'lucide-react';
+import { Landmark, Target, Eye, Building2, GitBranch } from 'lucide-react';
 import React from 'react';
 import { departmentMembers } from '@/lib/data';
 
@@ -10,22 +12,22 @@ const getPersonByTitle = (title: string) => {
 
 const getDirectorForDepartment = (departmentName: string) => {
     const directorsAndManagers = Object.values(departmentMembers).flat().filter(
-        emp => emp.title.includes('Müdürü') || emp.title.includes('Direktörü') || emp.title.includes('Sorumlusu') || emp.title.includes('Kaptanı')
+        emp => emp.title.includes('Müdürü') || emp.title.includes('Direktörü') || emp.title.includes('Sorumlusu')
     );
     return directorsAndManagers.find(dir => dir.department === departmentName)?.name || null;
 }
 
 const orgChartData = {
-  title: 'StellarCorp Konseyi',
+  title: 'Yönetim Kurulu',
   children: [
     {
-      title: 'CEO & Baş Kaşif',
-      person: getPersonByTitle('CEO & Baş Kaşif'),
+      title: 'Yönetim Kurulu Başkanı',
+      person: getPersonByTitle('Yönetim Kurulu Başkanı'),
       children: [
-        { title: 'Operasyonlar', person: getDirectorForDepartment('Operasyonlar') },
-        { title: 'Ar-Ge', person: getDirectorForDepartment('Ar-Ge') },
-        { title: 'Koloni Yönetimi', person: getDirectorForDepartment('Koloni Yönetimi') },
-        { title: 'BT', person: getDirectorForDepartment('BT') },
+        { title: 'Satış & Pazarlama', person: getDirectorForDepartment('Satış') },
+        { title: 'Üretim', person: getDirectorForDepartment('Üretim') },
+        { title: 'Tasarım', person: getDirectorForDepartment('Tasarım') },
+        { title: 'Mali İşler', person: getDirectorForDepartment('Mali İşler') },
       ],
     },
   ],
@@ -35,7 +37,7 @@ const orgChartData = {
 const OrgChartNode = ({ node }: { node: { title: string; person?: string | null; children?: any[] }}) => (
     <div className="relative flex flex-col items-center p-2">
         <div className="bg-muted text-foreground p-2 rounded-lg shadow-sm border border-border inline-block text-center min-w-[140px] whitespace-nowrap">
-            <div className="font-headline">{node.title}</div>
+            <div className="font-semibold">{node.title}</div>
             {node.person && (
                 <div className="text-primary text-xs mt-1">{node.person}</div>
             )}
@@ -64,13 +66,13 @@ const OrgChartNode = ({ node }: { node: { title: string; person?: string | null;
 
 export default function CorporatePage() {
   return (
-    <div className="space-y-8 font-headline">
+    <div className="space-y-8">
       <header>
         <div className="flex items-center gap-3">
-          <Rocket className="h-8 w-8 text-primary" />
+          <Landmark className="h-8 w-8 text-primary" />
           <div>
-            <h1 className="text-3xl font-bold text-foreground">StellarCorp Direktifleri</h1>
-            <p className="text-muted-foreground mt-1">Şirketimizin kimliği, değerleri ve galaktik hedefleri.</p>
+            <h1 className="text-3xl font-bold text-foreground">Kurumsal Kimlik</h1>
+            <p className="text-muted-foreground mt-1">Şirketimizin değerleri, geçmişi ve hedefleri.</p>
           </div>
         </div>
       </header>
@@ -80,15 +82,15 @@ export default function CorporatePage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Building2 className="h-6 w-6 text-primary" />
-              Tarihçemiz: Yeni Bir Başlangıç
+              Tarihçemiz
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-muted-foreground">
             <p>
-              StellarCorp, 21. yüzyılın ortalarında artan küresel krizler ve tükenen kaynaklar karşısında insanlığa yeni bir umut sunma vizyonuyla 2042 yılında kuruldu. Mars yörüngesindeki mütevazı bir istasyonda başlayan yolculuğumuz, bugün bilinen galaksinin sınırlarını zorlayan, yıldızlararası bir güç haline gelmiştir.
+              1985 yılında küçük bir atölyede başlayan E-Kimo'nun yolculuğu, bugün sektörün öncü firmalarından biri olma gururunu yaşamaktadır. Kalite ve yeniliği her zaman ön planda tutarak, Türk tekstilini dünyaya tanıtan bir marka haline geldik.
             </p>
             <p>
-              Kurulduğumuz ilk günden beri en cesur zihinleri bir araya getirmeyi, bilinmeyeni keşfetmeyi ve teknolojinin sınırlarını zorlamayı temel ilkemiz olarak benimsedik. Bu ilkelerle, insanlığın geleceğini yıldızlarda arıyoruz.
+              Kurulduğumuz ilk günden beri en büyük yatırımımız insana ve teknolojiye oldu. Bu sayede, değişen moda akımlarına hızla adapte olarak global pazarda rekabet gücümüzü koruduk.
             </p>
           </CardContent>
         </Card>
@@ -102,7 +104,7 @@ export default function CorporatePage() {
           </CardHeader>
           <CardContent className="space-y-4 text-muted-foreground">
             <p>
-              İnsanlığın geleceğini güvence altına almak için yıldızlararası keşifler yapmak, yaşanabilir gezegenleri kolonileştirmek ve evrenin sırlarını açığa çıkarmak. Tüm operasyonlarımızda bilimsel merakı, etik değerleri ve evrensel barışı en üst düzeyde tutmaktır.
+              Yüksek kaliteli, sürdürülebilir ve yenilikçi tekstil ürünleri üreterek müşteri memnuniyetini en üst düzeyde tutmak. Çalışanlarımıza adil, güvenli ve gelişim odaklı bir çalışma ortamı sunarak sektörde öncü olmaktır.
             </p>
           </CardContent>
         </Card>
@@ -116,7 +118,7 @@ export default function CorporatePage() {
           </CardHeader>
           <CardContent className="space-y-4 text-muted-foreground">
             <p>
-              İnsanlığı çok gezegenli bir tür haline getirerek galaktik bir medeniyetin temellerini atmak. Bilgi, teknoloji ve refahı tüm evrene yayan, yıldızlar arasında bir köprü görevi gören ve gelecek nesillere sonsuz bir olasılıklar evreni bırakan öncü kurum olmaktır.
+              Modayı teknolojiyle birleştirerek, "akıllı tekstil" alanında dünya lideri olmak. Üretim süreçlerimizin tamamını çevre dostu hale getirerek gelecek nesillere daha yaşanabilir bir dünya bırakmaktır.
             </p>
           </CardContent>
         </Card>

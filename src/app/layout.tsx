@@ -8,8 +8,8 @@ import { FirebaseClientProvider } from '@/firebase';
 import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
 
 export const metadata: Metadata = {
-  title: 'StellarCorp',
-  description: 'Interstellar Operations Command Center',
+  title: 'E-Kimo HR Portal',
+  description: 'İnsan Kaynakları Yönetim Portalı',
 };
 
 export default function RootLayout({
@@ -19,12 +19,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="tr" className="dark">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-      </head>
-      <body className="font-body antialiased" style={{ fontFamily: "'Inter', sans-serif" }}>
+       <head>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&family=Pacifico&display=swap" rel="stylesheet" />
+        </head>
+      <body className="font-sans antialiased" style={{ fontFamily: "'Inter', sans-serif" }}>
         <FirebaseClientProvider>
           <FirebaseErrorListener />
           <SidebarProvider>

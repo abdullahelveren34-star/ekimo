@@ -1,21 +1,25 @@
 import { cn } from "@/lib/utils";
-import { Globe, Sparkles } from "lucide-react";
 
 export function Logo({ className }: { className?: string }) {
   return (
-    <div className={cn("flex items-center gap-2 text-primary", className)}>
-        <div className="relative">
-            <Globe className="h-10 w-10 text-primary" />
-            <Sparkles className="h-4 w-4 text-accent absolute -top-1 -right-1" />
-        </div>
-      <div className="flex flex-col">
-        <span className="text-2xl font-bold tracking-tighter text-foreground">
-          StellarCorp
-        </span>
-        <span className="text-xs -mt-1 text-muted-foreground">
-          INTERSTELLAR OPERATIONS
-        </span>
+    <div className={cn("flex items-center gap-3 font-bold", className)}>
+      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-6 w-6"
+        >
+          <path d="M12 2L2 7l10 5 10-5-10-5z" />
+          <path d="M2 17l10 5 10-5" />
+          <path d="M2 12l10 5 10-5" />
+        </svg>
       </div>
+      <h1 className="text-xl font-bold" style={{fontFamily: "'Poppins', sans-serif"}}>E-Kimo</h1>
     </div>
   );
 }
