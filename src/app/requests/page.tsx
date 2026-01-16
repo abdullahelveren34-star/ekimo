@@ -122,7 +122,7 @@ export default function RequestsPage() {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="text-3xl font-bold text-foreground">Talepler</h1>
+        <h1 className="text-3xl font-bold text-primary">Talepler</h1>
         <p className="text-muted-foreground mt-1">Personel taleplerini oluşturun ve yönetin.</p>
       </header>
 
@@ -201,6 +201,7 @@ export default function RequestsPage() {
                     <SelectItem value="excuse">Mazeret İzni (Evlilik, Doğum, Ölüm vb.)</SelectItem>
                     <SelectItem value="sick">Raporlu İzin</SelectItem>
                     <SelectItem value="unpaid">Ücretsiz İzin</SelectItem>
+                    <SelectItem value="overtime">Fazla Mesai</SelectItem>
                     <SelectItem value="other">Diğer</SelectItem>
                   </SelectContent>
                 </Select>
@@ -256,7 +257,7 @@ export default function RequestsPage() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="expense-amount">Tutar</Label>
-                    <Input id="expense-amount" type="number" placeholder="0.00 TL" value={expenseAmount} onChange={(e) => setExpenseAmount(e.target.value)} />
+                    <Input id="expense-amount" type="number" placeholder="0.00" value={expenseAmount} onChange={(e) => setExpenseAmount(e.target.value)} />
                   </div>
               </div>
               <div className="space-y-2">
