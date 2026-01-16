@@ -31,6 +31,8 @@ export default function RequestsPage() {
   const [leaveType, setLeaveType] = useState('');
   const [leaveStartDate, setLeaveStartDate] = useState('');
   const [leaveEndDate, setLeaveEndDate] = useState('');
+  const [leaveStartTime, setLeaveStartTime] = useState('');
+  const [leaveEndTime, setLeaveEndTime] = useState('');
   const [leaveDescription, setLeaveDescription] = useState('');
 
   // Expense State
@@ -71,6 +73,8 @@ export default function RequestsPage() {
     setLeaveType('');
     setLeaveStartDate('');
     setLeaveEndDate('');
+    setLeaveStartTime('');
+    setLeaveEndTime('');
     setLeaveDescription('');
     setExpenseType('');
     setExpenseAmount('');
@@ -216,6 +220,18 @@ export default function RequestsPage() {
                   <Input id="leave-end-date" type="date" value={leaveEndDate} onChange={(e) => setLeaveEndDate(e.target.value)} />
                 </div>
               </div>
+              {leaveType === 'overtime' && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="leave-start-time">Başlangıç Saati</Label>
+                        <Input id="leave-start-time" type="time" value={leaveStartTime} onChange={(e) => setLeaveStartTime(e.target.value)} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="leave-end-time">Bitiş Saati</Label>
+                        <Input id="leave-end-time" type="time" value={leaveEndTime} onChange={(e) => setLeaveEndTime(e.target.value)} />
+                    </div>
+                </div>
+              )}
                <div className="space-y-2">
                 <Label htmlFor="leave-description">Açıklama</Label>
                 <Textarea id="leave-description" placeholder="İzin talebinizin nedenini kısaca açıklayınız..." value={leaveDescription} onChange={(e) => setLeaveDescription(e.target.value)} />
@@ -227,7 +243,14 @@ export default function RequestsPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={() => handleSubmit('İzin', { leaveType, startDate: leaveStartDate, endDate: leaveEndDate, description: leaveDescription })} disabled={!firestore}>İzin Talebi Gönder</Button>
+              <Button onClick={() => handleSubmit('İzin', { 
+                leaveType, 
+                startDate: leaveStartDate, 
+                endDate: leaveEndDate, 
+                startTime: leaveStartTime,
+                endTime: leaveEndTime,
+                description: leaveDescription 
+              })} disabled={!firestore}>İzin Talebi Gönder</Button>
             </CardFooter>
           </Card>
         </TabsContent>

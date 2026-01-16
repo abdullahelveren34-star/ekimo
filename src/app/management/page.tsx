@@ -111,6 +111,8 @@ export default function ManagementPage() {
           {renderDetail('İzin Türü', details.leaveType)}
           {renderDetail('Başlangıç Tarihi', details.startDate ? new Date(details.startDate).toLocaleDateString('tr-TR') : null)}
           {renderDetail('Bitiş Tarihi', details.endDate ? new Date(details.endDate).toLocaleDateString('tr-TR') : null)}
+          {details.leaveType === 'Fazla Mesai' && renderDetail('Başlangıç Saati', details.startTime)}
+          {details.leaveType === 'Fazla Mesai' && renderDetail('Bitiş Saati', details.endTime)}
           {commonDetails}
         </>;
       case 'Masraf':
@@ -150,7 +152,7 @@ export default function ManagementPage() {
         <div className="flex items-center gap-3">
           <Shield className="h-8 w-8 text-primary" />
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Yönetim Onay Paneli</h1>
+            <h1 className="text-3xl font-bold text-primary">Yönetim Onay Paneli</h1>
             <p className="text-muted-foreground mt-1">
               {isLoading ? 'Bekleyen talepler yükleniyor...' : `Onayınızı bekleyen ${requests?.length || 0} talep bulunuyor.`}
             </p>

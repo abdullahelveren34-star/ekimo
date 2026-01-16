@@ -16,6 +16,8 @@ export type RequestDetails = {
     leaveType?: string;
     startDate?: string;
     endDate?: string;
+    startTime?: string;
+    endTime?: string;
     // Expense request
     expenseType?: string;
     amount?: string;
