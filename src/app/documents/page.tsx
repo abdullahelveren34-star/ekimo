@@ -5,7 +5,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookOpen, ClipboardCheck, FileText, Youtube, Award, CheckCircle, UserCheck, Scale } from 'lucide-react';
+import { BookOpen, ClipboardCheck, FileText, Youtube, Award, CheckCircle, UserCheck, Scale, PenSquare } from 'lucide-react';
 import React, { useState } from 'react';
 import {
   Dialog,
@@ -392,6 +392,22 @@ const ratingDescriptions: { [key: number]: string } = {
   5: "Olağanüstü Performans"
 };
 
+const surveyQuestions = [
+    { id: 'satisfaction', label: 'Genel olarak şirketimizde çalışmaktan ne kadar memnunsunuz?' },
+    { id: 'leadership', label: 'Yöneticinizin liderlik ve iletişim becerilerini nasıl değerlendirirsiniz?' },
+    { id: 'culture', label: 'Şirket kültürümüzün ve çalışma ortamımızın pozitif olduğunu düşünüyor musunuz?' },
+    { id: 'development', label: 'Kariyer gelişimi ve eğitim fırsatlarının yeterli olduğunu düşünüyor musunuz?' },
+    { id: 'worklife', label: 'Şirketteki iş-yaşam dengesinden memnun musunuz?' },
+];
+
+const surveyRatingDescriptions: { [key: number]: string } = {
+  1: "Kesinlikle Katılmıyorum",
+  2: "Katılmıyorum",
+  3: "Kararsızım",
+  4: "Katılıyorum",
+  5: "Kesinlikle Katılıyorum"
+};
+
 
 export default function DocumentsPage() {
     const { toast } = useToast();
@@ -420,6 +436,13 @@ export default function DocumentsPage() {
             description: `Değerlendirme formu İnsan Kaynakları Yöneticisi (${hrManager.email}) adresine başarıyla gönderilmiştir.`,
         });
     };
+
+    const handleSurveySubmit = () => {
+        toast({
+            title: 'Anket Gönderildi!',
+            description: 'Değerli geri bildirimleriniz için teşekkür ederiz. Anketiniz anonim olarak kaydedilmiştir.',
+        });
+    };
     
   return (
     <div className="space-y-8">
@@ -434,7 +457,7 @@ export default function DocumentsPage() {
       </header>
       
       <Tabs defaultValue="training" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <div className="group relative flex items-center justify-center">
             <TabsTrigger value="training" className="w-full transition-transform duration-200 group-hover:scale-105 group-hover:text-primary">
               <BookOpen className="mr-2 h-4 w-4 text-blue-500" />
@@ -451,6 +474,12 @@ export default function DocumentsPage() {
            <TabsTrigger value="performance" className="w-full transition-transform duration-200 group-hover:scale-105 group-hover:text-primary">
             <UserCheck className="mr-2 h-4 w-4 text-purple-500" />
             Performans Değerlendirme
+          </TabsTrigger>
+          </div>
+           <div className="group relative flex items-center justify-center">
+           <TabsTrigger value="survey" className="w-full transition-transform duration-200 group-hover:scale-105 group-hover:text-primary">
+            <PenSquare className="mr-2 h-4 w-4 text-amber-500" />
+            Anketler
           </TabsTrigger>
           </div>
         </TabsList>
@@ -645,11 +674,58 @@ export default function DocumentsPage() {
                 </CardFooter>
             </Card>
         </TabsContent>
+
+        <TabsContent value="survey">
+            <Card className="mt-6">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-3 text-2xl">
+                        <PenSquare className="h-7 w-7 text-primary" />
+                        Şirket Değerlendirme Anketi
+                    </CardTitle>
+                    <CardDescription>
+                        Geri bildirimleriniz anonimdir ve şirketimizi daha iyi bir yer haline getirmek için kullanılacaktır. 
+                        Lütfen aşağıdaki soruları dürüstçe yanıtlayınız.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-8">
+                     <div className="space-y-6 p-6 border rounded-lg bg-background">
+                         <h3 className="font-semibold text-lg text-primary border-b pb-2">Genel Değerlendirme</h3>
+                         <div className="space-y-6">
+                            {surveyQuestions.map(question => (
+                                <div key={question.id} className="space-y-3">
+                                    <Label className="font-medium">{question.label}</Label>
+                                    <RadioGroup className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
+                                        {Object.entries(surveyRatingDescriptions).map(([value, desc]) => (
+                                             <div key={value} className="flex items-center space-x-2">
+                                                <RadioGroupItem value={value} id={`${question.id}-${value}`} />
+                                                <Label htmlFor={`${question.id}-${value}`} className="cursor-pointer text-sm font-normal">{value} - {desc}</Label>
+                                            </div>
+                                        ))}
+                                    </RadioGroup>
+                                </div>
+                            ))}
+                         </div>
+                    </div>
+                     <div className="space-y-6 p-6 border rounded-lg bg-background">
+                         <h3 className="font-semibold text-lg text-primary border-b pb-2">Açık Uçlu Geri Bildirim</h3>
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                                <Label htmlFor="strengths-survey">Şirketimizin en sevdiğiniz yönleri nelerdir?</Label>
+                                <Textarea id="strengths-survey" placeholder="Takım ruhu, sosyal olanaklar, yönetim şeffaflığı vb." rows={5} />
+                            </div>
+                             <div className="space-y-2">
+                                <Label htmlFor="development-areas-survey">Şirketimizde geliştirilmesini önerdiğiniz alanlar nelerdir?</Label>
+                                <Textarea id="development-areas-survey" placeholder="Eğitim olanakları, iletişim süreçleri, fiziksel çalışma koşulları vb." rows={5} />
+                            </div>
+                         </div>
+                    </div>
+                </CardContent>
+                <CardFooter>
+                    <Button size="lg" onClick={handleSurveySubmit}>Anketi Gönder</Button>
+                </CardFooter>
+            </Card>
+        </TabsContent>
       </Tabs>
     </div>
   );
 }
-
-    
-
-    
