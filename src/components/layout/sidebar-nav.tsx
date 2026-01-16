@@ -29,6 +29,7 @@ import {
   Shield,
   Landmark,
   CalendarCheck,
+  Leaf,
 } from 'lucide-react';
 import { useFirebase, useCollection } from '@/firebase';
 import { collection, query, where } from 'firebase/firestore';
@@ -45,6 +46,7 @@ const navItems = [
   { href: '/bt-requests', label: 'BT Talepleri', icon: Server, color: 'text-gray-500' },
   { href: '/documents', label: 'Eğitim & Dokümanlar', icon: FileText, color: 'text-indigo-500' },
   { href: '/corporate', label: 'Kurumsal', icon: Landmark, color: 'text-purple-500' },
+  { href: '/sustainability', label: 'Sürdürülebilirlik', icon: Leaf, color: 'text-green-600' },
   { href: '/work-calendar', label: 'İş Takvim ve Planlama', icon: CalendarCheck, color: 'text-rose-500' },
   { href: '/management', label: 'Yönetim', icon: Shield, id: 'management', color: 'text-red-500' },
 ];
@@ -137,5 +139,3 @@ export function SidebarNav() {
     </>
   );
 }
-
-    
