@@ -28,7 +28,7 @@ import {
   Users,
   Shield,
   Landmark,
-  CalendarCheck,
+  Plane,
   Leaf,
 } from 'lucide-react';
 import { useFirebase, useCollection } from '@/firebase';
@@ -47,7 +47,7 @@ const navItems = [
   { href: '/documents', label: 'Eğitim & Dokümanlar', icon: FileText, color: 'text-indigo-500' },
   { href: '/corporate', label: 'Kurumsal', icon: Landmark, color: 'text-purple-500' },
   { href: '/sustainability', label: 'Sürdürülebilirlik', icon: Leaf, color: 'text-green-600' },
-  { href: '/work-calendar', label: 'İş Takvim ve Planlama', icon: CalendarCheck, color: 'text-rose-500' },
+  { href: '/work-calendar', label: 'Görevlendirme', icon: Plane, color: 'text-rose-500' },
   { href: '/management', label: 'Yönetim', icon: Shield, id: 'management', color: 'text-red-500' },
 ];
 

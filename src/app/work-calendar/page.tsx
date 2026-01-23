@@ -2,318 +2,221 @@
 'use client';
 
 import { useState } from 'react';
-import { CalendarCheck, ChevronDown, Plus, Tag, Edit, Trash2, CheckCircle, GripVertical } from 'lucide-react';
+import { Plane, Plus } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from '@/components/ui/dropdown-menu';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { allEmployees, currentUser } from '@/lib/data';
+import { allEmployees } from '@/lib/data';
+import { useToast } from '@/hooks/use-toast';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
-type TaskStatus = 'Beklemede' | 'Devam Ediyor' | 'Tamamlandı';
-type TaskPriority = 'Düşük' | 'Orta' | 'Yüksek' | 'Kritik';
-type TaskType = 'Planlama' | 'İş Takip' | 'Operasyon' | 'Sayım' | 'Bakım';
 
-interface Task {
+type AssignmentStatus = 'Planlandı' | 'Devam Ediyor' | 'Tamamlandı' | 'İptal Edildi';
+
+interface Assignment {
     id: number;
     employeeId: string;
+    location: string;
+    assignmentType: string;
     description: string;
-    type: TaskType;
-    status: TaskStatus;
-    priority: TaskPriority;
-    dueDate: string;
+    startDate: string;
+    endDate: string;
+    status: AssignmentStatus;
 }
 
-const initialTasks: Task[] = [
-  { id: 1, employeeId: '24', description: 'Yaz koleksiyonu için kesim planını oluştur', type: 'Planlama', status: 'Beklemede' as const, priority: 'Yüksek' as const, dueDate: '2024-08-05' },
-  { id: 2, employeeId: '28', description: '5. üretim bandındaki makine bakımını denetle', type: 'Bakım', status: 'Devam Ediyor' as const, priority: 'Orta' as const, dueDate: '2024-08-02' },
-  { id: 3, employeeId: '24', description: 'Yeni gelen kumaşların stok girişini planla', type: 'Sayım', status: 'Tamamlandı' as const, priority: 'Orta' as const, dueDate: '2024-07-30' },
-  { id: 4, employeeId: '27', description: 'Haftalık üretim hedeflerini gözden geçir ve raporla', type: 'İş Takip', status: 'Beklemede' as const, priority: 'Yüksek' as const, dueDate: '2024-08-01' },
-  { id: 5, employeeId: '28', description: 'Vardiya devir teslim prosedürlerini kontrol et', type: 'Operasyon', status: 'Devam Ediyor' as const, priority: 'Düşük' as const, dueDate: '2024-08-01' },
-  { id: 6, employeeId: '23', description: 'Sonraki ayın hammadde ihtiyacını belirle', type: 'Planlama', status: 'Beklemede' as const, priority: 'Kritik' as const, dueDate: '2024-08-10' },
+const initialAssignments: Assignment[] = [
+  { id: 1, employeeId: '1', location: 'Milano, İtalya', assignmentType: 'Fuar Katılımı', description: 'Premiere Vision Sonbahar/Kış Fuarı', startDate: '2024-09-10', endDate: '2024-09-14', status: 'Planlandı' },
+  { id: 2, employeeId: '6', location: 'Dhaka, Bangladeş', assignmentType: 'Tedarikçi Denetimi', description: 'ABC Apparels fabrika denetimi ve yeni sezon anlaşmaları.', startDate: '2024-08-15', endDate: '2024-08-22', status: 'Devam Ediyor' },
+  { id: 3, employeeId: '14', location: 'New York, ABD', assignmentType: 'Müşteri Ziyareti', description: 'Büyük mağaza zincirleri ile yeni koleksiyon sunumları.', startDate: '2024-07-20', endDate: '2024-07-25', status: 'Tamamlandı' },
+  { id: 4, employeeId: '19', location: 'Porto, Portekiz', assignmentType: 'Kalite Kontrol', description: 'Yüksek adetli ceket üretiminin yerinde kalite kontrolü.', startDate: '2024-09-01', endDate: '2024-09-07', status: 'Planlandı' },
+  { id: 5, employeeId: '4', location: 'Londra, İngiltere', assignmentType: 'Pazar Araştırması', description: 'Rakip analizi ve yeni trendlerin yerinde incelenmesi.', startDate: '2024-08-05', endDate: '2024-08-09', status: 'Planlandı' },
 ];
 
-const priorityColors: Record<TaskPriority, string> = {
-  'Yüksek': 'bg-red-500/10 text-red-700 border-red-500/20',
-  'Orta': 'bg-yellow-500/10 text-yellow-700 border-yellow-500/20',
-  'Düşük': 'bg-blue-500/10 text-blue-700 border-blue-500/20',
-  'Kritik': 'bg-red-700 text-white border-red-900',
-};
-
-const statusColors: Record<TaskStatus, string> = {
-  'Beklemede': 'bg-gray-500/20 text-gray-400',
-  'Devam Ediyor': 'bg-blue-500/20 text-blue-400',
+const statusColors: Record<AssignmentStatus, string> = {
+  'Planlandı': 'bg-blue-500/20 text-blue-400',
+  'Devam Ediyor': 'bg-yellow-500/20 text-yellow-400',
   'Tamamlandı': 'bg-green-500/20 text-green-400',
+  'İptal Edildi': 'bg-red-500/20 text-red-400',
 };
 
-const typeColors: Record<TaskType, string> = {
-    'Planlama': 'bg-purple-500/10 text-purple-700 border-purple-500/20',
-    'İş Takip': 'bg-cyan-500/10 text-cyan-700 border-cyan-500/20',
-    'Operasyon': 'bg-green-500/10 text-green-700 border-green-500/20',
-    'Sayım': 'bg-amber-500/10 text-amber-700 border-amber-500/20',
-    'Bakım': 'bg-orange-500/10 text-orange-700 border-orange-500/20',
-};
+const assignmentTypes = [
+    'Fuar Katılımı',
+    'Tedarikçi Denetimi',
+    'Müşteri Ziyareti',
+    'Pazar Araştırması',
+    'Koleksiyon Sunumu',
+    'Kalite Kontrol (Yurt Dışı Üretim)',
+];
 
-const relevantEmployees = allEmployees.filter(e => e.department === 'Üretim Planlama' || e.department === 'Üretim' || e.department === 'BT');
-
-interface FormContentProps {
-  formDescription: string;
-  setFormDescription: (value: string) => void;
-  formEmployee: string;
-  setFormEmployee: (value: string) => void;
-  formType: TaskType;
-  setFormType: (value: TaskType) => void;
-  formPriority: TaskPriority;
-  setFormPriority: (value: TaskPriority) => void;
-  formDueDate: string;
-  setFormDueDate: (value: string) => void;
-}
-
-const FormContent = ({
-  formDescription, setFormDescription,
-  formEmployee, setFormEmployee,
-  formType, setFormType,
-  formPriority, setFormPriority,
-  formDueDate, setFormDueDate
-}: FormContentProps) => (
-  <div className="grid gap-6 py-4">
-      <div className="grid gap-2">
-          <Label htmlFor="task-description">Görev Açıklaması</Label>
-          <Textarea id="task-description" placeholder="Yapılacak işin detaylarını yazın..." value={formDescription} onChange={(e) => setFormDescription(e.target.value)} rows={5} />
-      </div>
-      <div className="grid grid-cols-2 gap-4">
-          <div className="grid gap-2">
-              <Label htmlFor="task-employee">Atanacak Çalışan</Label>
-              <Select value={formEmployee} onValueChange={setFormEmployee}>
-                  <SelectTrigger id="task-employee"><SelectValue placeholder="Çalışan seçin..." /></SelectTrigger>
-                  <SelectContent>{relevantEmployees.map(emp => <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>)}</SelectContent>
-              </Select>
-          </div>
-          <div className="grid gap-2">
-              <Label htmlFor="task-type">Görev Türü</Label>
-              <Select value={formType} onValueChange={(v) => setFormType(v as TaskType)}>
-                  <SelectTrigger id="task-type"><SelectValue placeholder="Tür seçin..." /></SelectTrigger>
-                  <SelectContent>
-                      <SelectItem value="Planlama">Planlama</SelectItem>
-                      <SelectItem value="İş Takip">İş Takip</SelectItem>
-                      <SelectItem value="Operasyon">Operasyon</SelectItem>
-                      <SelectItem value="Sayım">Sayım</SelectItem>
-                      <SelectItem value="Bakım">Bakım</SelectItem>
-                  </SelectContent>
-              </Select>
-          </div>
-      </div>
-      <div className="grid grid-cols-2 gap-4">
-          <div className="grid gap-2">
-              <Label htmlFor="task-priority">Öncelik</Label>
-              <Select value={formPriority} onValueChange={(v) => setFormPriority(v as TaskPriority)}>
-                  <SelectTrigger id="task-priority"><SelectValue placeholder="Öncelik seçin..." /></SelectTrigger>
-                  <SelectContent>
-                      <SelectItem value="Düşük">Düşük</SelectItem>
-                      <SelectItem value="Orta">Orta</SelectItem>
-                      <SelectItem value="Yüksek">Yüksek</SelectItem>
-                      <SelectItem value="Kritik">Kritik</SelectItem>
-                  </SelectContent>
-              </Select>
-          </div>
-          <div className="grid gap-2">
-              <Label htmlFor="task-due-date">Bitiş Tarihi</Label>
-              <Input id="task-due-date" type="date" value={formDueDate} onChange={(e) => setFormDueDate(e.target.value)} />
-          </div>
-      </div>
-  </div>
-);
-
-
-export default function WorkCalendarPage() {
-  const [tasks, setTasks] = useState<Task[]>(initialTasks);
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState(currentUser.id);
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [editingTask, setEditingTask] = useState<Task | null>(null);
-
-  const [formDescription, setFormDescription] = useState('');
-  const [formEmployee, setFormEmployee] = useState(currentUser.id);
-  const [formType, setFormType] = useState<TaskType>('Planlama');
-  const [formPriority, setFormPriority] = useState<TaskPriority>('Orta');
-  const [formDueDate, setFormDueDate] = useState('');
-
-  const selectedEmployee = allEmployees.find(emp => emp.id === selectedEmployeeId);
-  const filteredTasks = tasks.filter(task => task.employeeId === selectedEmployeeId);
-
-  const resetForm = () => {
-    setFormDescription('');
-    setFormEmployee(currentUser.id);
-    setFormType('Planlama');
-    setFormPriority('Orta');
-    setFormDueDate('');
-  };
-
-  const handleOpenAddDialog = () => {
-    resetForm();
-    setIsAddDialogOpen(true);
-  };
+export default function AssignmentPage() {
+  const { toast } = useToast();
+  const [assignments, setAssignments] = useState<Assignment[]>(initialAssignments);
   
-  const handleAddTask = () => {
-    if (!formDescription || !formEmployee || !formDueDate) {
-      return;
+  // Form state
+  const [employeeId, setEmployeeId] = useState('');
+  const [assignmentType, setAssignmentType] = useState('');
+  const [location, setLocation] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [description, setDescription] = useState('');
+
+  const handleAddAssignment = () => {
+    if (!employeeId || !assignmentType || !location || !startDate || !endDate || !description) {
+        toast({
+            variant: "destructive",
+            title: "Hata!",
+            description: "Lütfen tüm alanları eksiksiz doldurun.",
+        });
+        return;
     }
-    const newTask: Task = {
+    
+    const newAssignment: Assignment = {
       id: Date.now(),
-      employeeId: formEmployee,
-      description: formDescription,
-      type: formType,
-      status: 'Beklemede',
-      priority: formPriority,
-      dueDate: formDueDate,
+      employeeId,
+      assignmentType,
+      location,
+      startDate,
+      endDate,
+      description,
+      status: 'Planlandı',
     };
-    setTasks(prevTasks => [...prevTasks, newTask]);
-    setIsAddDialogOpen(false);
-  };
+    
+    setAssignments(prev => [newAssignment, ...prev]);
+    
+    toast({
+      title: "Başarılı!",
+      description: "Yeni görevlendirme başarıyla oluşturuldu.",
+    });
 
-  const handleOpenEditDialog = (task: Task) => {
-    setEditingTask(task);
-    setFormDescription(task.description);
-    setFormEmployee(task.employeeId);
-    setFormType(task.type);
-    setFormPriority(task.priority);
-    setFormDueDate(task.dueDate);
-    setIsEditDialogOpen(true);
-  };
-
-  const handleUpdateTask = () => {
-    if (!editingTask) return;
-    setTasks(prev => prev.map(task => 
-      task.id === editingTask.id 
-        ? { ...task, description: formDescription, employeeId: formEmployee, type: formType, priority: formPriority, dueDate: formDueDate } 
-        : task
-    ));
-    setIsEditDialogOpen(false);
-    setEditingTask(null);
-  };
-
-  const handleCompleteTask = (taskId: number) => {
-    setTasks(prev => prev.map(task => task.id === taskId ? { ...task, status: 'Tamamlandı' } : task));
-  };
-
-  const handleDeleteTask = (taskId: number) => {
-    setTasks(prev => prev.filter(task => task.id !== taskId));
+    // Reset form
+    setEmployeeId('');
+    setAssignmentType('');
+    setLocation('');
+    setStartDate('');
+    setEndDate('');
+    setDescription('');
   };
   
 
   return (
     <div className="space-y-8">
-      <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <header>
         <div className="flex items-center gap-3">
-          <CalendarCheck className="h-8 w-8 text-primary" />
+          <Plane className="h-8 w-8 text-primary" />
           <div>
-            <h1 className="text-3xl font-bold text-foreground">İş Takvim ve Planlama</h1>
-            <p className="text-muted-foreground mt-1">Çalışanların üretim ve planlama görevlerini yönetin.</p>
+            <h1 className="text-3xl font-bold text-primary">Dış Görevlendirme Yönetimi</h1>
+            <p className="text-muted-foreground mt-1">Yurt içi ve yurt dışı personel görevlendirmelerini planlayın ve takip edin.</p>
           </div>
         </div>
-        <Button onClick={handleOpenAddDialog}><Plus className="mr-2 h-4 w-4" />Yeni Görev Ekle</Button>
       </header>
 
-      <Card>
-        <CardHeader>
-          <div className="flex justify-between items-center">
-            <div>
-              <CardTitle>Görev Listesi</CardTitle>
-              <CardDescription>
-                {selectedEmployee ? (
-                  <><span className="font-bold text-primary">{selectedEmployee.name}</span> için atanan görevler.</>
-                ) : (
-                  'Bir çalışan seçin.'
-                )}
-              </CardDescription>
-            </div>
-             <DropdownMenu>
-              <DropdownMenuTrigger asChild><Button variant="outline">{selectedEmployee?.name || 'Çalışan Seç'}<ChevronDown className="ml-2 h-4 w-4" /></Button></DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>Çalışan Seçin</DropdownMenuLabel><DropdownMenuSeparator />
-                <DropdownMenuRadioGroup value={selectedEmployeeId} onValueChange={setSelectedEmployeeId}>
-                  {relevantEmployees.map(emp => <DropdownMenuRadioItem key={emp.id} value={emp.id}>{emp.name}</DropdownMenuRadioItem>)}
-                </DropdownMenuRadioGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="border rounded-lg">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="text-primary">Görev</TableHead>
-                  <TableHead className="w-[120px] text-primary">Tür</TableHead>
-                  <TableHead className="w-[120px] text-primary">Öncelik</TableHead>
-                  <TableHead className="w-[150px] text-primary">Durum</TableHead>
-                  <TableHead className="w-[150px] text-primary">Bitiş Tarihi</TableHead>
-                  <TableHead className="w-[100px] text-right text-primary">İşlemler</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredTasks.length > 0 ? (
-                  filteredTasks.map(task => (
-                    <TableRow key={task.id}>
-                      <TableCell className="font-medium">{task.description}</TableCell>
-                      <TableCell><Badge variant="outline" className={`flex items-center gap-1.5 ${typeColors[task.type]}`}><Tag className="h-3 w-3" />{task.type}</Badge></TableCell>
-                      <TableCell><Badge variant="outline" className={priorityColors[task.priority]}>{task.priority}</Badge></TableCell>
-                      <TableCell><Badge className={`pointer-events-none ${statusColors[task.status]}`}>{task.status}</Badge></TableCell>
-                      <TableCell>{new Date(task.dueDate).toLocaleDateString('tr-TR')}</TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><GripVertical className="h-4 w-4" /></Button></DropdownMenuTrigger>
-                          <DropdownMenuContent>
-                            <DropdownMenuItem onClick={() => handleOpenEditDialog(task)}><Edit className="mr-2 h-4 w-4" /> Düzenle</DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleCompleteTask(task.id)}><CheckCircle className="mr-2 h-4 w-4" /> Tamamla</DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-500" onClick={() => handleDeleteTask(task.id)}><Trash2 className="mr-2 h-4 w-4" /> Sil</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <Card className="lg:col-span-1">
+            <CardHeader>
+                <CardTitle>Yeni Görevlendirme</CardTitle>
+                <CardDescription>Yeni bir dış görevlendirme oluşturun.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+                 <div className="space-y-2">
+                    <Label htmlFor="employee">Personel</Label>
+                    <Select value={employeeId} onValueChange={setEmployeeId}>
+                        <SelectTrigger id="employee"><SelectValue placeholder="Görevlendirilecek personeli seçin..." /></SelectTrigger>
+                        <SelectContent>
+                            {allEmployees.map(emp => <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                 </div>
+                 <div className="space-y-2">
+                    <Label htmlFor="assignment-type">Görev Türü</Label>
+                    <Select value={assignmentType} onValueChange={setAssignmentType}>
+                        <SelectTrigger id="assignment-type"><SelectValue placeholder="Görev türünü seçin..." /></SelectTrigger>
+                        <SelectContent>
+                            {assignmentTypes.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                 </div>
+                 <div className="space-y-2">
+                    <Label htmlFor="location">Görev Yeri (Şehir/Ülke)</Label>
+                    <Input id="location" placeholder="Örn: Paris, Fransa" value={location} onChange={e => setLocation(e.target.value)} />
+                 </div>
+                 <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="start-date">Başlangıç Tarihi</Label>
+                        <Input id="start-date" type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="end-date">Bitiş Tarihi</Label>
+                        <Input id="end-date" type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />
+                    </div>
+                 </div>
+                 <div className="space-y-2">
+                    <Label htmlFor="description">Görevin Açıklaması</Label>
+                    <Textarea id="description" placeholder="Görevin amacı ve detayları hakkında bilgi verin." value={description} onChange={e => setDescription(e.target.value)} />
+                 </div>
+                 <Button onClick={handleAddAssignment} className="w-full">
+                     <Plus className="mr-2 h-4 w-4" />
+                     Görevlendirme Oluştur
+                 </Button>
+            </CardContent>
+          </Card>
+          
+          <Card className="lg:col-span-2">
+            <CardHeader>
+                <CardTitle>Mevcut Görevlendirmeler</CardTitle>
+                <CardDescription>Planlanan ve devam eden görevlendirmelerin listesi.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="border rounded-lg">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Personel</TableHead>
+                      <TableHead>Görev Yeri</TableHead>
+                      <TableHead>Görev Türü</TableHead>
+                      <TableHead>Tarih Aralığı</TableHead>
+                      <TableHead>Durum</TableHead>
                     </TableRow>
-                  ))
-                ) : (
-                  <TableRow><TableCell colSpan={6} className="h-48 text-center text-muted-foreground">Bu çalışana atanmış görev bulunmamaktadır.</TableCell></TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </CardContent>
-      </Card>
-      
-      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-          <DialogContent className="sm:max-w-[480px]">
-            <DialogHeader><DialogTitle>Yeni Görev Oluştur</DialogTitle><DialogDescription>Aşağıdaki formu doldurarak yeni bir görev atayın.</DialogDescription></DialogHeader>
-            <FormContent
-                formDescription={formDescription} setFormDescription={setFormDescription}
-                formEmployee={formEmployee} setFormEmployee={setFormEmployee}
-                formType={formType} setFormType={setFormType}
-                formPriority={formPriority} setFormPriority={setFormPriority}
-                formDueDate={formDueDate} setFormDueDate={setFormDueDate}
-            />
-            <DialogFooter><Button type="button" variant="outline" onClick={() => setIsAddDialogOpen(false)}>İptal</Button><Button type="button" onClick={handleAddTask}>Görevi Kaydet</Button></DialogFooter>
-          </DialogContent>
-      </Dialog>
-      
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-          <DialogContent className="sm:max-w-[480px]">
-            <DialogHeader><DialogTitle>Görevi Düzenle</DialogTitle><DialogDescription>Görevin detaylarını güncelleyin.</DialogDescription></DialogHeader>
-            <FormContent
-                formDescription={formDescription} setFormDescription={setFormDescription}
-                formEmployee={formEmployee} setFormEmployee={setFormEmployee}
-                formType={formType} setFormType={setFormType}
-                formPriority={formPriority} setFormPriority={setFormPriority}
-                formDueDate={formDueDate} setFormDueDate={setFormDueDate}
-            />
-            <DialogFooter><Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>İptal</Button><Button type="button" onClick={handleUpdateTask}>Değişiklikleri Kaydet</Button></DialogFooter>
-          </DialogContent>
-      </Dialog>
+                  </TableHeader>
+                  <TableBody>
+                    {assignments.length > 0 ? (
+                      assignments.map(task => {
+                        const employee = allEmployees.find(e => e.id === task.employeeId);
+                        return (
+                        <TableRow key={task.id}>
+                           <TableCell>
+                             <div className="flex items-center gap-3">
+                               <Avatar className="h-9 w-9">
+                                 <AvatarImage src={employee?.avatarUrl} alt={employee?.name} />
+                                 <AvatarFallback>{employee?.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                               </Avatar>
+                               <div>
+                                  <div className="font-medium">{employee?.name || 'Bilinmiyor'}</div>
+                                  <div className="text-xs text-muted-foreground">{employee?.title}</div>
+                               </div>
+                             </div>
+                           </TableCell>
+                          <TableCell>{task.location}</TableCell>
+                          <TableCell><Badge variant="outline">{task.assignmentType}</Badge></TableCell>
+                          <TableCell className="text-xs">
+                              {new Date(task.startDate).toLocaleDateString('tr-TR')} - {new Date(task.endDate).toLocaleDateString('tr-TR')}
+                          </TableCell>
+                          <TableCell><Badge className={`pointer-events-none ${statusColors[task.status]}`}>{task.status}</Badge></TableCell>
+                        </TableRow>
+                      )})
+                    ) : (
+                      <TableRow><TableCell colSpan={5} className="h-48 text-center text-muted-foreground">Mevcut görevlendirme bulunmamaktadır.</TableCell></TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+      </div>
     </div>
   );
 }
