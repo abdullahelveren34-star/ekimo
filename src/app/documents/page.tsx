@@ -5,7 +5,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookOpen, ClipboardCheck, FileText, Youtube, Award, CheckCircle, UserCheck, Scale, PenSquare } from 'lucide-react';
+import { BookOpen, ClipboardCheck, FileText, Youtube, Award, CheckCircle, UserCheck, Scale, PenSquare, BookText } from 'lucide-react';
 import React, { useState } from 'react';
 import {
   Dialog,
@@ -374,6 +374,49 @@ const sopDocuments = [
   },
 ];
 
+const handbooks = [
+  {
+    id: 1,
+    title: 'Çalışan El Kitabı',
+    description: 'Şirket politikaları, çalışma kuralları, sosyal haklar ve genel davranış beklentilerini içeren temel rehber.',
+    category: 'Genel',
+    version: 'v3.0',
+    lastUpdated: '01.08.2024',
+  },
+  {
+    id: 2,
+    title: 'İş Sağlığı ve Güvenliği El Kitabı',
+    description: 'Tüm çalışanların uyması gereken İSG kuralları, risk analizleri ve acil durum prosedürleri.',
+    category: 'İSG',
+    version: 'v2.5',
+    lastUpdated: '15.06.2024',
+  },
+  {
+    id: 3,
+    title: 'Kalite Yönetim Sistemi El Kitabı',
+    description: 'ISO 9001 standardı kapsamında şirketimizin kalite politikası, hedefleri ve süreçlerini tanımlar.',
+    category: 'Kalite',
+    version: 'v1.8',
+    lastUpdated: '20.07.2024',
+  },
+  {
+    id: 4,
+    title: 'Bilgi Güvenliği El Kitabı',
+    description: 'Şirket verilerinin korunması, siber güvenlik politikaları ve kişisel verilerin işlenmesi (KVKK) hakkında bilgiler.',
+    category: 'BT & Uyum',
+    version: 'v1.2',
+    lastUpdated: '10.05.2024',
+  },
+   {
+    id: 5,
+    title: 'Yönetici El Kitabı',
+    description: 'Yöneticiler için liderlik, performans yönetimi, ekip motivasyonu ve idari süreçler hakkında özel rehber.',
+    category: 'Yönetim',
+    version: 'v1.0',
+    lastUpdated: '30.07.2024',
+  },
+];
+
 const competencies = [
     { id: 'communication', label: 'İletişim Becerileri' },
     { id: 'teamwork', label: 'Takım Çalışması ve İşbirliği' },
@@ -450,14 +493,14 @@ export default function DocumentsPage() {
         <div className="flex items-center gap-3">
           <FileText className="h-8 w-8 text-primary" />
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Doküman Merkezi</h1>
+            <h1 className="text-3xl font-bold text-primary">Doküman Merkezi</h1>
             <p className="text-muted-foreground mt-1">Eğitim materyallerine, prosedürlere ve değerlendirme formlarına buradan ulaşın.</p>
           </div>
         </div>
       </header>
       
       <Tabs defaultValue="training" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <div className="group relative flex items-center justify-center">
             <TabsTrigger value="training" className="w-full transition-transform duration-200 group-hover:scale-105 group-hover:text-primary">
               <BookOpen className="mr-2 h-4 w-4 text-blue-500" />
@@ -480,6 +523,12 @@ export default function DocumentsPage() {
            <TabsTrigger value="survey" className="w-full transition-transform duration-200 group-hover:scale-105 group-hover:text-primary">
             <PenSquare className="mr-2 h-4 w-4 text-amber-500" />
             Anketler
+          </TabsTrigger>
+          </div>
+          <div className="group relative flex items-center justify-center">
+           <TabsTrigger value="handbooks" className="w-full transition-transform duration-200 group-hover:scale-105 group-hover:text-primary">
+            <BookText className="mr-2 h-4 w-4 text-orange-500" />
+            El Kitapları
           </TabsTrigger>
           </div>
         </TabsList>
@@ -725,6 +774,31 @@ export default function DocumentsPage() {
                 </CardFooter>
             </Card>
         </TabsContent>
+
+        <TabsContent value="handbooks">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+            {handbooks.map((doc) => (
+              <Card key={doc.id} className="flex flex-col">
+                <CardHeader>
+                  <CardTitle className="text-lg">{doc.title}</CardTitle>
+                  <CardDescription>{doc.category} Departmanı</CardDescription>
+                </CardHeader>
+                <CardContent className="flex-grow">
+                  <p className="text-sm text-muted-foreground">{doc.description}</p>
+                </CardContent>
+                <CardFooter className="flex justify-between items-center text-xs text-muted-foreground">
+                   <div>
+                     <span>Versiyon: {doc.version}</span>
+                     <span className="mx-2">|</span>
+                     <span>{doc.lastUpdated}</span>
+                   </div>
+                   <Button variant="secondary" size="sm">Görüntüle</Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        </TabsContent>
+
       </Tabs>
     </div>
   );
