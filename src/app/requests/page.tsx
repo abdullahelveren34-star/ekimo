@@ -203,6 +203,7 @@ export default function RequestsPage() {
                   <SelectContent>
                     <SelectItem value="annual">Yıllık İzin</SelectItem>
                     <SelectItem value="excuse">Mazeret İzni (Evlilik, Doğum, Ölüm vb.)</SelectItem>
+                    <SelectItem value="birthday">Doğum Günü İzni</SelectItem>
                     <SelectItem value="sick">Raporlu İzin</SelectItem>
                     <SelectItem value="unpaid">Ücretsiz İzin</SelectItem>
                     <SelectItem value="overtime">Fazla Mesai</SelectItem>
@@ -569,5 +570,4 @@ export default function RequestsPage() {
     </div>
   );
 }
-
     
