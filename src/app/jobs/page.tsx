@@ -9,7 +9,7 @@ export default function JobsPage() {
     <div className="space-y-8">
       <header className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">İş İlanları</h1>
+          <h1 className="text-3xl font-bold text-primary">İş İlanları</h1>
           <p className="text-muted-foreground mt-1">Şirketimizdeki açık pozisyonları keşfedin.</p>
         </div>
         <Button>

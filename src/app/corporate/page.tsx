@@ -71,7 +71,7 @@ export default function CorporatePage() {
         <div className="flex items-center gap-3">
           <Landmark className="h-8 w-8 text-primary" />
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Kurumsal Kimlik</h1>
+            <h1 className="text-3xl font-bold text-primary">Kurumsal Kimlik</h1>
             <p className="text-muted-foreground mt-1">Şirketimizin değerleri, geçmişi ve hedefleri.</p>
           </div>
         </div>

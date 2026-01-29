@@ -69,7 +69,7 @@ export default function BTRequestsPage() {
         <div className="flex items-center gap-3">
           <Server className="h-8 w-8 text-primary" />
           <div>
-            <h1 className="text-3xl font-bold text-foreground">BT Talepleri</h1>
+            <h1 className="text-3xl font-bold text-primary">BT Talepleri</h1>
             <p className="text-muted-foreground mt-1">Bilgi Teknolojileri departmanına yönelik taleplerinizi buradan oluşturun.</p>
           </div>
         </div>

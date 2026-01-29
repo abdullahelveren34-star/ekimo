@@ -38,7 +38,7 @@ const departments = [
   { name: 'Satış', icon: TrendingUp, color: 'text-green-500' },
   { name: 'Pazarlama', icon: Megaphone, color: 'text-blue-500' },
   { name: 'Bağımsız', icon: Briefcase, color: 'text-gray-500' },
-  { name: 'Tasarım', icon: Palette, color: 'text-pink-500' },
+  { name: 'Tasarım', icon: Palette, color: 'text-pink-400' },
   { name: 'Satınalma', icon: ShoppingCart, color: 'text-orange-500' },
   { name: 'Üretim Planlama', icon: CalendarCog, color: 'text-cyan-500' },
   { name: 'Üretim', icon: Factory, color: 'text-yellow-500' },
@@ -72,7 +72,7 @@ export default function DepartmentsPage() {
         <div className="flex items-center gap-3">
           <Users className="h-8 w-8 text-primary" />
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Departmanlar</h1>
+            <h1 className="text-3xl font-bold text-primary">Departmanlar</h1>
             <p className="text-muted-foreground mt-1">Şirket departmanlarını ve çalışanlarını görüntüleyin.</p>
           </div>
         </div>

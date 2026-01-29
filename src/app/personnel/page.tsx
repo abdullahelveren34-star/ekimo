@@ -50,7 +50,7 @@ export default function PersonnelPage() {
         <div className="flex items-center gap-3">
           <Users className="h-8 w-8 text-primary" />
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Personel Listesi</h1>
+            <h1 className="text-3xl font-bold text-primary">Personel Listesi</h1>
             <p className="text-muted-foreground mt-1">Şirket çalışanlarını görüntüleyin ve yönetin.</p>
           </div>
         </div>

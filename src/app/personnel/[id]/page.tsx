@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { notFound } from 'next/navigation';
 import { allEmployees } from '@/lib/data';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -15,6 +15,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 
 function getAge(birthDateString: string) {
     const birthDate = new Date(birthDateString);
@@ -30,21 +31,26 @@ function getAge(birthDateString: string) {
 
 export default function PersonnelDetailPage({ params }: { params: { id: string } }) {
   const employee = allEmployees.find(e => e.id === params.id);
-  const currentYear = new Date().getFullYear();
-  const [selectedYear, setSelectedYear] = useState<number>(currentYear);
+  const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
+  const [clientSideData, setClientSideData] = useState<{ age: number; formattedBirthDate: string } | null>(null);
+
+  useEffect(() => {
+    if (employee) {
+      const age = getAge(employee.birthDate);
+      const birthDate = new Date(employee.birthDate);
+      const formattedBirthDate = birthDate.toLocaleDateString('tr-TR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+      setClientSideData({ age, formattedBirthDate });
+    }
+  }, [employee]);
 
   if (!employee) {
     notFound();
   }
   
-  const birthDate = new Date(employee.birthDate);
-  const formattedBirthDate = birthDate.toLocaleDateString('tr-TR', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  });
-  const age = getAge(employee.birthDate);
-
   const performanceDataForYear = employee.performanceHistory.find(p => p.year === selectedYear)?.monthlyScores || [];
 
   const chartConfig = {
@@ -66,7 +72,7 @@ export default function PersonnelDetailPage({ params }: { params: { id: string }
             <AvatarFallback>{employee.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
           </Avatar>
           <div>
-            <h1 className="text-3xl font-bold text-foreground">{employee.name}</h1>
+            <h1 className="text-3xl font-bold text-primary">{employee.name}</h1>
             <p className="text-xl text-muted-foreground">{employee.title}</p>
             <p className="text-md text-primary">{employee.department} Departmanı</p>
           </div>
@@ -87,7 +93,11 @@ export default function PersonnelDetailPage({ params }: { params: { id: string }
                     <div className="flex items-center gap-3">
                         <Cake className="h-4 w-4 text-muted-foreground" />
                         <strong>Doğum Tarihi:</strong>
-                        <span>{formattedBirthDate} ({age} yaşında)</span>
+                        {clientSideData ? (
+                          <span>{clientSideData.formattedBirthDate} ({clientSideData.age} yaşında)</span>
+                        ) : (
+                          <Skeleton className="h-5 w-40" />
+                        )}
                     </div>
                  </div>
               </CardContent>
