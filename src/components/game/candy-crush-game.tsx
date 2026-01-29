@@ -64,9 +64,6 @@ const GameLogo = () => (
                     <stop offset="0%" stopColor="#ff8a00" />
                     <stop offset="100%" stopColor="#e52e71" />
                 </linearGradient>
-                <style>
-                    {`@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');`}
-                </style>
             </defs>
             <text
                 fontFamily="'Pacifico', cursive"
