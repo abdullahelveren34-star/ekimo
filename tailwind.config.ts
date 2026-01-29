@@ -17,9 +17,9 @@ const config: Config = {
     },
     extend: {
        fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        heading: ['Poppins', 'sans-serif'],
-        cursive: ['Pacifico', 'cursive'],
+        sans: ['var(--font-inter)', 'sans-serif'],
+        heading: ['var(--font-poppins)', 'sans-serif'],
+        cursive: ['var(--font-pacifico)', 'cursive'],
       },
       colors: {
         border: 'hsl(var(--border))',
