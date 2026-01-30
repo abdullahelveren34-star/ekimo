@@ -1,5 +1,3 @@
-// This file is machine-generated - edit at your own risk!
-
 'use server';
 
 /**
@@ -12,8 +10,9 @@
  * @typedef {Object} AIResumeScreeningOutput - The return type for the aiResumeScreening function.
  */
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { defineFlow, generate } from 'genkit';
+import { z } from 'zod';
+import { geminiPro } from '../genkit';
 
 const AIResumeScreeningInputSchema = z.object({
   resumeText: z
@@ -55,20 +54,19 @@ export async function aiResumeScreening(input: AIResumeScreeningInput): Promise<
   return aiResumeScreeningFlow(input);
 }
 
-const aiResumeScreeningPrompt = ai.definePrompt({
-  name: 'aiResumeScreeningPrompt',
-  input: {schema: AIResumeScreeningInputSchema},
-  output: {schema: AIResumeScreeningOutputSchema},
-  prompt: `You are an AI resume screening tool that analyzes resumes based on job descriptions and keywords.
+const aiResumeScreeningFlow = defineFlow(
+  {
+    name: 'aiResumeScreeningFlow',
+    inputSchema: AIResumeScreeningInputSchema,
+    outputSchema: AIResumeScreeningOutputSchema,
+  },
+  async (input) => {
+    const prompt = `You are an AI resume screening tool that analyzes resumes based on job descriptions and keywords.
 
-  Job Description: {{{jobDescription}}}
-  Keywords: {{{keywords}}}
+  Job Description: ${input.jobDescription}
+  Keywords: ${input.keywords}
   Resume:
-  {{#if resumeText}}
-  {{{resumeText}}}
-  {{else}}
-  No resume text provided.
-  {{/if}}
+  ${input.resumeText || 'No resume text provided.'}
 
   Based on the job description, keywords, and resume, provide the following:
   1. Suitability Score (0-100): A numerical score indicating how well the candidate matches the job requirements.
@@ -76,17 +74,16 @@ const aiResumeScreeningPrompt = ai.definePrompt({
   3. Feedback: Constructive feedback on the resume, including areas for improvement and any missing skills or experiences.
 
   Ensure that the Suitability Score is between 0 and 100, and the Key Qualifications and Feedback are concise and relevant to the job requirements and keywords.
-`,
-});
+`;
 
-const aiResumeScreeningFlow = ai.defineFlow(
-  {
-    name: 'aiResumeScreeningFlow',
-    inputSchema: AIResumeScreeningInputSchema,
-    outputSchema: AIResumeScreeningOutputSchema,
-  },
-  async input => {
-    const {output} = await aiResumeScreeningPrompt(input);
-    return output!;
+    const response = await generate({
+      model: geminiPro,
+      prompt: prompt,
+      output: {
+        schema: AIResumeScreeningOutputSchema,
+      },
+    });
+
+    return response.output()!;
   }
 );
