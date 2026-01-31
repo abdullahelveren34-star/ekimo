@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { boardMembers, textileNews, companyNews, departmentMembers, employeeOfTheMonth } from '@/lib/data';
+import { boardMembers, textileNews, companyNews, departmentMembers, employeeOfTheMonth, type Employee } from '@/lib/data';
 import Image from 'next/image';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Badge } from '@/components/ui/badge';
@@ -11,13 +11,6 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Cake, Gift, Star, Send } from 'lucide-react';
 import { CandyCrushGame } from '@/components/game/candy-crush-game';
-
-type Employee = {
-  name: string;
-  title: string;
-  avatarUrl: string;
-  birthDate: string;
-};
 
 export default function HomePage() {
   const chairman = boardMembers.find(member => member.title === 'Yönetim Kurulu Başkanı');

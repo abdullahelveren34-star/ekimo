@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Plane, Plus } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { allEmployees } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Skeleton } from '@/components/ui/skeleton';
 
 
 type AssignmentStatus = 'Planlandı' | 'Devam Ediyor' | 'Tamamlandı' | 'İptal Edildi';
@@ -52,6 +53,26 @@ const assignmentTypes = [
     'Koleksiyon Sunumu',
     'Kalite Kontrol (Yurt Dışı Üretim)',
 ];
+
+const FormattedDateRange = ({ startDate, endDate }: { startDate: string; endDate: string }) => {
+    const [formattedDate, setFormattedDate] = useState<string | null>(null);
+
+    useEffect(() => {
+        // This effect runs only on the client, after hydration
+        const start = new Date(startDate).toLocaleDateString('tr-TR');
+        const end = new Date(endDate).toLocaleDateString('tr-TR');
+        setFormattedDate(`${start} - ${end}`);
+    }, [startDate, endDate]);
+
+    // Render a skeleton on the server and during initial client render
+    if (!formattedDate) {
+        return <Skeleton className="h-4 w-[130px]" />;
+    }
+
+    // Render the formatted date on the client after the effect has run
+    return <>{formattedDate}</>;
+};
+
 
 export default function AssignmentPage() {
   const { toast } = useToast();
@@ -203,7 +224,7 @@ export default function AssignmentPage() {
                           <TableCell>{task.location}</TableCell>
                           <TableCell><Badge variant="outline">{task.assignmentType}</Badge></TableCell>
                           <TableCell className="text-xs">
-                              {new Date(task.startDate).toLocaleDateString('tr-TR')} - {new Date(task.endDate).toLocaleDateString('tr-TR')}
+                              <FormattedDateRange startDate={task.startDate} endDate={task.endDate} />
                           </TableCell>
                           <TableCell><Badge className={`pointer-events-none ${statusColors[task.status]}`}>{task.status}</Badge></TableCell>
                         </TableRow>

@@ -130,18 +130,19 @@ const generatePerformanceHistory = () => {
   
   return years.map(year => ({
     year,
-    monthlyScores: months.map(month => {
-      const workQuality = Math.floor(Math.random() * 41) + 55; // 55-95
-      const communication = Math.floor(Math.random() * 41) + 50; // 50-90
-      const responsibility = Math.floor(Math.random() * 36) + 60; // 60-95
-      const average = Math.floor(Math.random() * 11) + 75; // 75-85
+    monthlyScores: months.map((month, index) => {
+      // Use index to create deterministic, pseudo-random values to avoid hydration mismatch
+      const workQuality = (7 * index + 55 + year % 10) % 41 + 55;
+      const communication = (5 * index + 50 + year % 10) % 41 + 50;
+      const responsibility = (6 * index + 60 + year % 10) % 36 + 60;
+      const average = (3 * index + 75 + year % 10) % 11 + 75;
       const target = 85;
       
       return {
         month,
-        workQuality: workQuality > 100 ? 100 : workQuality,
-        communication: communication > 100 ? 100 : communication,
-        responsibility: responsibility > 100 ? 100 : responsibility,
+        workQuality,
+        communication,
+        responsibility,
         target,
         average,
       };
@@ -227,7 +228,7 @@ export const departmentMembers: { [key: string]: Employee[] } = {
   ],
 };
 
-export const allEmployees = Object.values(departmentMembers).flat();
+export const allEmployees: Employee[] = Object.values(departmentMembers).flat();
 
 export const approverUser = {
   id: 'izlem-manduz-id',

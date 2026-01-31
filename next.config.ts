@@ -1,2 +1,1 @@
-// This file is intentionally left empty.
-// The configuration has been moved to next.config.mjs to resolve a startup issue.
+// This file is no longer used. Configuration has been moved to next.config.js.
