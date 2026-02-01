@@ -72,4 +72,30 @@ git push -u origin main
 
 ---
 
+### Projeyi Firebase Hosting'e Yükleme (Deployment)
+
+Projeniz, `firebase deploy` komutu ile kolayca yayınlanmaya hazırdır.
+
+**Adım 1: Manuel Yükleme (Önerilen İlk Adım)**
+
+Otomatik GitHub entegrasyonunda sorun yaşarsanız, projenizi önce manuel olarak yüklemeyi deneyin. Bu, en hızlı ve en güvenilir yöntemdir:
+
+```bash
+firebase deploy --only hosting
+```
+
+Bu komut, projenizi derleyip Firebase Hosting'e yükleyecektir. Yükleme tamamlandığında size özel bir URL verilecektir.
+
+**Adım 2: Otomatik Yükleme (GitHub Actions) Kurulumu**
+
+Eğer `firebase init hosting:github` komutu sırasında `Service account ... does not exist` gibi bir hata alırsanız, bu durum kodlarınızla ilgili bir sorun **DEĞİLDİR**. Bu, Google Cloud projenizdeki yetki ayarlarıyla ilgilidir ve Firebase CLI'ın, GitHub için otomatik olarak bir servis hesabı oluşturmasını engeller.
+
+**Çözüm Önerileri:**
+
+*   **Yetkilerinizi Kontrol Edin:** Google Cloud projenizde "Owner" (Sahip) veya "Editor" (Düzenleyici) gibi geniş yetkilere sahip olduğunuzdan emin olun.
+*   **Önce Manuel Yükleme:** Genellikle, yukarıdaki `firebase deploy` komutuyla ilk yüklemeyi yaptıktan sonra, GitHub entegrasyonunu (`firebase init hosting:github`) tekrar denemek sorunu çözebilir.
+*   **Manuel Kurulum:** Otomatik kurulum yerine, GitHub Actions'ı Firebase ve GitHub konsolları üzerinden manuel olarak bağlayabilirsiniz.
+
+---
+
 Eğer bu adımlardan birinde hata alırsanız, lütfen aldığınız hatayı benimle paylaşın. Size daha iyi yardımcı olabilmek için hangi adımda ve ne tür bir hatayla karşılaştığınızı bilmem önemli.
