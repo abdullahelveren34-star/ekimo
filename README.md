@@ -4,9 +4,70 @@ Bu, Firebase Studio'da oluşturulmuş bir Next.js başlangıç projesidir. Başl
 
 ---
 
-## Projeyi GitHub'a Bağlama Rehberi
+## Projeyi Firebase CLI ile Canlıya Alma (Adım Adım Rehber)
 
-Bu rehber, projenizi kendi GitHub hesabınıza nasıl bağlayacağınızı ve kodlarınızı nasıl kaydedeceğinizi adım adım anlatır. Bu işlemleri sizin yerinize yapamam, çünkü bu komutların sizin bilgisayarınızda çalıştırılması gerekmektedir.
+Bu rehber, projenizi internette yayınlamak için Firebase Komut Satırı Arayüzü'nü (CLI) kullanarak nasıl yükleyeceğinizi adım adım anlatır.
+
+**ÖNEMLİ:** Bu komutları sizin yerinize ben çalıştıramam. Bu adımların, **proje dosyaları bilgisayarınıza indirildikten sonra**, proje klasörünün içindeki bir terminalde (komut istemi) sizin tarafınızdan çalıştırılması gerekmektedir.
+
+### Gereksinimler
+
+1.  **Kodlar Bilgisayarınızda:** Proje dosyalarının tamamının bilgisayarınızda bir klasörde olduğundan emin olun.
+2.  **Node.js ve npm Yüklü:** Bilgisayarınızda [Node.js](https://nodejs.org/en) (npm ile birlikte gelir) yüklü olmalıdır.
+
+---
+
+### Adım 1: Firebase CLI Kurulumu ve Giriş
+
+(Eğer daha önce yaptıysanız bu adımı atlayabilirsiniz.)
+
+Firebase araçlarını kullanabilmek için önce onları yüklemeli ve hesabınıza giriş yapmalısınız.
+
+```bash
+# Terminalinizi açın ve bu komutu çalıştırın:
+npm install -g firebase-tools
+
+# Ardından Firebase hesabınıza giriş yapın:
+firebase login
+```
+Bu komut tarayıcınızda bir giriş sayfası açacaktır.
+
+---
+
+### Adım 2: Proje Bağımlılıklarını Yükleme
+
+Projenin çalışması için gerekli olan paketleri yükleyin. Bu adım, projenizi ilk kez kuruyorsanız gereklidir.
+
+```bash
+# Proje klasörünüzün içindeyken (package.json dosyasının olduğu yerde) bu komutu çalıştırın:
+npm install
+```
+
+---
+
+### Adım 3: Projeyi Firebase'e Yükleme (Deploy)
+
+Artık hazırsınız. Bu tek komut, projenizi otomatik olarak derleyecek ve Firebase Hosting'e yükleyecektir.
+
+```bash
+# Proje klasörünüzün içindeyken bu komutu çalıştırın:
+firebase deploy --only hosting
+```
+
+Yükleme işlemi birkaç dakika sürebilir. Tamamlandığında, terminal size sitenizin canlı URL'sini (`Hosting URL: https://...`) verecektir. Bu adrese giderek projenizi internette görebilirsiniz!
+
+---
+
+### Sorun Giderme
+
+*   **"Not in a Firebase project" Hatası:** Eğer `firebase deploy` komutu sırasında `Error: Not in a Firebase project directory` gibi bir hata alırsanız, proje klasörünüzün Firebase projenize bağlı olduğundan emin olun. Şu komutla bağlantıyı kurabilirsiniz: `firebase use --add`, ardından listeden projenizi (`studio-4024231416-ba40f`) seçin.
+*   **Yetki Hataları:** Eğer GitHub Actions kurulumu sırasında veya başka bir aşamada `Service Account does not exist` gibi yetki hataları alırsanız, bu durum Google Cloud projenizdeki izinlerle ilgilidir. Bu durumda en güvenilir çözüm, bu rehberdeki gibi manuel olarak `firebase deploy` komutunu kullanmaktır.
+
+---
+## Projeyi GitHub'a Bağlama Rehberi
+(Bu bölüm, kodlarınızı ayrıca GitHub'da saklamak isterseniz diye eklenmiştir.)
+
+Bu rehber, projenizi kendi GitHub hesabınıza nasıl bağlayacağınızı ve kodlarınızı nasıl kaydedeceğinizi adım adım anlatır.
 
 ### Ön Gereksinimler
 
@@ -24,8 +85,6 @@ Aşağıdaki komutları **proje klasörünüzün içindeki terminalde** sırası
 
 **Adım 1: Yerel Depoyu Başlatma**
 
-Bu komut, proje klasörünüzü bir Git deposuna dönüştürür. Bu komutu proje başına sadece bir kez çalıştırmanız yeterlidir.
-
 ```bash
 git init -b main
 ```
@@ -33,8 +92,6 @@ git init -b main
 ---
 
 **Adım 2: Tüm Dosyaları Eklemek**
-
-Bu komut, projedeki tüm dosyaların versiyon takibi için hazırlanmasını sağlar.
 
 ```bash
 git add .
@@ -44,8 +101,6 @@ git add .
 
 **Adım 3: İlk Versiyonu Kaydetmek (Commit)**
 
-Bu komut, projenizin o anki halini "İlk proje versiyonu" açıklamasıyla kaydeder.
-
 ```bash
 git commit -m "Initial project commit from Firebase Studio"
 ```
@@ -53,8 +108,6 @@ git commit -m "Initial project commit from Firebase Studio"
 ---
 
 **Adım 4: GitHub Deponuzu Uzak Sunucu Olarak Eklemek**
-
-Bu komut, bilgisayarınızdaki projeye, kodları nereye göndereceğini öğretir. `KULLANICI_ADINIZ` ve `DEPO_ADINIZ` kısımlarını değiştirmelisiniz.
 
 ```bash
 git remote add origin https://github.com/KULLANICI_ADINIZ/DEPO_ADINIZ.git
@@ -64,38 +117,8 @@ git remote add origin https://github.com/KULLANICI_ADINIZ/DEPO_ADINIZ.git
 
 **Adım 5: Kodları GitHub'a Yüklemek (Push)**
 
-Son adım! Bu komut, kaydettiğiniz tüm kodları GitHub'daki deponuza yükler.
-
 ```bash
 git push -u origin main
 ```
-
 ---
-
-### Projeyi Firebase Hosting'e Yükleme (Deployment)
-
-Projeniz, `firebase deploy` komutu ile kolayca yayınlanmaya hazırdır.
-
-**Adım 1: Manuel Yükleme (Önerilen İlk Adım)**
-
-Otomatik GitHub entegrasyonunda sorun yaşarsanız, projenizi önce manuel olarak yüklemeyi deneyin. Bu, en hızlı ve en güvenilir yöntemdir:
-
-```bash
-firebase deploy --only hosting
-```
-
-Bu komut, projenizi derleyip Firebase Hosting'e yükleyecektir. Yükleme tamamlandığında size özel bir URL verilecektir.
-
-**Adım 2: Otomatik Yükleme (GitHub Actions) Kurulumu**
-
-Eğer `firebase init hosting:github` komutu sırasında `Service account ... does not exist` gibi bir hata alırsanız, bu durum kodlarınızla ilgili bir sorun **DEĞİLDİR**. Bu, Google Cloud projenizdeki yetki ayarlarıyla ilgilidir ve Firebase CLI'ın, GitHub için otomatik olarak bir servis hesabı oluşturmasını engeller.
-
-**Çözüm Önerileri:**
-
-*   **Yetkilerinizi Kontrol Edin:** Google Cloud projenizde "Owner" (Sahip) veya "Editor" (Düzenleyici) gibi geniş yetkilere sahip olduğunuzdan emin olun.
-*   **Önce Manuel Yükleme:** Genellikle, yukarıdaki `firebase deploy` komutuyla ilk yüklemeyi yaptıktan sonra, GitHub entegrasyonunu (`firebase init hosting:github`) tekrar denemek sorunu çözebilir.
-*   **Manuel Kurulum:** Otomatik kurulum yerine, GitHub Actions'ı Firebase ve GitHub konsolları üzerinden manuel olarak bağlayabilirsiniz.
-
----
-
 Eğer bu adımlardan birinde hata alırsanız, lütfen aldığınız hatayı benimle paylaşın. Size daha iyi yardımcı olabilmek için hangi adımda ve ne tür bir hatayla karşılaştığınızı bilmem önemli.
