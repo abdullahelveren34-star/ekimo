@@ -1,27 +1,43 @@
 # Firebase Studio
 
-Bu, Firebase Studio'da oluşturulmuş bir Next.js başlangıç projesidir. Başlamak için `src/app/page.tsx` dosyasına göz atın.
+Bu, Firebase Studio'da oluşturulmuş bir Next.js başlangıç projesidir.
 
 ---
 
-## Projeyi Firebase CLI ile Canlıya Alma (Adım Adım Rehber)
+## Projenizi Canlıya Alma ve Yönetme Rehberi
 
-Bu rehber, projenizi internette yayınlamak için Firebase Komut Satırı Arayüzü'nü (CLI) kullanarak nasıl yükleyeceğinizi adım adım anlatır.
+Bu rehber, projenizi hem Firebase'e yükleyerek canlıya almak hem de kodlarınızı bir GitHub deposunda yönetmek için gereken tüm adımları içerir.
 
-**ÖNEMLİ:** Bu komutları sizin yerinize ben çalıştıramam. Bu adımların, **proje dosyaları bilgisayarınıza indirildikten sonra**, proje klasörünün içindeki bir terminalde (komut istemi) sizin tarafınızdan çalıştırılması gerekmektedir.
+**ÖNEMLİ:** Aşağıdaki komutları sizin yerinize ben çalıştıramam. Tüm adımların, **proje dosyaları bilgisayarınıza indirildikten sonra**, proje klasörünün içindeki bir terminalde (komut istemi) sizin tarafınızdan çalıştırılması gerekmektedir.
 
-### Gereksinimler
+---
 
-1.  **Kodlar Bilgisayarınızda:** Proje dosyalarının tamamının bilgisayarınızda bir klasörde olduğundan emin olun.
+### **Adım 0: Kodları Bilgisayarınıza Almak (En Önemli Adım!)**
+
+Şu anda projenizin tüm kodları sadece bu geliştirme ortamında bulunmaktadır. GitHub'a yüklemek veya canlıya almak için öncelikle bu kodların bir kopyasının sizin bilgisayarınızda olması gerekir.
+
+Bu ortamda otomatik bir "İndir" veya "ZIP olarak dışa aktar" özelliği **bulunmamaktadır**. Bu nedenle, aşağıdaki adımları izleyerek dosyaları manuel olarak bilgisayarınıza almanız gerekmektedir:
+
+1.  **Ana Proje Klasörü Oluşturun:** Bilgisayarınızda `ekimo-hr-portal` gibi bir isimle boş bir klasör oluşturun.
+2.  **Dosya ve Klasör Yapısını Oluşturun:** Bu sohbetin sağladığı dosya listesini referans alarak, oluşturduğunuz ana klasörün içinde aynı dosya ve klasör yapısını (örneğin `src`, `src/app`, `src/components` vb.) oluşturun.
+3.  **İçerikleri Kopyalayıp Yapıştırın:** Her bir dosyanın içeriğini bu sohbet arayüzünden kopyalayın ve bilgisayarınızda oluşturduğunuz ilgili boş dosyanın içine yapıştırın ve kaydedin. (Örn: `package.json` içeriğini kopyalayıp, bilgisayarınızdaki `package.json` dosyasına yapıştırın).
+
+Bu adımı tamamladığınızda, projenin tam bir kopyası bilgisayarınızda olacaktır. Artık aşağıdaki adımlara geçebilirsiniz.
+
+---
+
+### **Bölüm 1: Projeyi Firebase ile Canlıya Alma (Deployment)**
+
+Bu bölüm, projenizi internette yayınlamak için Firebase Komut Satırı Arayüzü'nü (CLI) nasıl kullanacağınızı anlatır.
+
+#### Gereksinimler
+
+1.  **Kodlar Bilgisayarınızda:** Yukarıdaki "Adım 0"ı tamamladığınızdan emin olun.
 2.  **Node.js ve npm Yüklü:** Bilgisayarınızda [Node.js](https://nodejs.org/en) (npm ile birlikte gelir) yüklü olmalıdır.
 
----
-
-### Adım 1: Firebase CLI Kurulumu ve Giriş
+#### Adım 1.1: Firebase CLI Kurulumu ve Giriş
 
 (Eğer daha önce yaptıysanız bu adımı atlayabilirsiniz.)
-
-Firebase araçlarını kullanabilmek için önce onları yüklemeli ve hesabınıza giriş yapmalısınız.
 
 ```bash
 # Terminalinizi açın ve bu komutu çalıştırın:
@@ -30,95 +46,62 @@ npm install -g firebase-tools
 # Ardından Firebase hesabınıza giriş yapın:
 firebase login
 ```
-Bu komut tarayıcınızda bir giriş sayfası açacaktır.
 
----
-
-### Adım 2: Proje Bağımlılıklarını Yükleme
-
-Projenin çalışması için gerekli olan paketleri yükleyin. Bu adım, projenizi ilk kez kuruyorsanız gereklidir.
+#### Adım 1.2: Proje Bağımlılıklarını Yükleme
 
 ```bash
 # Proje klasörünüzün içindeyken (package.json dosyasının olduğu yerde) bu komutu çalıştırın:
 npm install
 ```
 
----
-
-### Adım 3: Projeyi Firebase'e Yükleme (Deploy)
-
-Artık hazırsınız. Bu tek komut, projenizi otomatik olarak derleyecek ve Firebase Hosting'e yükleyecektir.
+#### Adım 1.3: Projeyi Firebase'e Yükleme (Deploy)
 
 ```bash
 # Proje klasörünüzün içindeyken bu komutu çalıştırın:
 firebase deploy --only hosting
 ```
-
-Yükleme işlemi birkaç dakika sürebilir. Tamamlandığında, terminal size sitenizin canlı URL'sini (`Hosting URL: https://...`) verecektir. Bu adrese giderek projenizi internette görebilirsiniz!
-
----
-
-### Sorun Giderme
-
-*   **"Not in a Firebase project" Hatası:** Eğer `firebase deploy` komutu sırasında `Error: Not in a Firebase project directory` gibi bir hata alırsanız, proje klasörünüzün Firebase projenize bağlı olduğundan emin olun. Şu komutla bağlantıyı kurabilirsiniz: `firebase use --add`, ardından listeden projenizi (`studio-4024231416-ba40f`) seçin.
-*   **Yetki Hataları:** Eğer GitHub Actions kurulumu sırasında veya başka bir aşamada `Service Account does not exist` gibi yetki hataları alırsanız, bu durum Google Cloud projenizdeki izinlerle ilgilidir. Bu durumda en güvenilir çözüm, bu rehberdeki gibi manuel olarak `firebase deploy` komutunu kullanmaktır.
-
----
-## Projeyi GitHub'a Bağlama Rehberi
-(Bu bölüm, kodlarınızı ayrıca GitHub'da saklamak isterseniz diye eklenmiştir.)
-
-Bu rehber, projenizi kendi GitHub hesabınıza nasıl bağlayacağınızı ve kodlarınızı nasıl kaydedeceğinizi adım adım anlatır.
-
-### Ön Gereksinimler
-
-1.  **Kodlar Bilgisayarınızda:** Proje dosyalarını bilgisayarınıza indirdiğinizden emin olun.
-2.  **Git Yüklü:** Bilgisayarınızda [Git](https://git-scm.com/downloads) programının yüklü olması gerekir.
-3.  **Boş GitHub Deposu:** GitHub.com üzerinde **içi boş** yeni bir depo (repository) oluşturmuş olmalısınız. (Depoyu oluştururken "Add a README file" gibi seçenekleri İŞARETLEMEYİN).
-
-### Adım Adım Komutlar
-
-Aşağıdaki komutları **proje klasörünüzün içindeki terminalde** sırasıyla çalıştırmanız gerekmektedir.
-
-**ÖNEMLİ:** Komutlardaki `KULLANICI_ADINIZ` ve `DEPO_ADINIZ` kısımlarını kendi bilgilerinizle değiştirmeyi unutmayın.
+Yükleme tamamlandığında, terminal size sitenizin canlı URL'sini (`Hosting URL: https://...`) verecektir.
 
 ---
 
-**Adım 1: Yerel Depoyu Başlatma**
+### **Bölüm 2: Projeyi GitHub'a Bağlama (Versiyon Kontrolü)**
+
+Bu bölüm, kodlarınızı kendi GitHub hesabınıza nasıl bağlayacağınızı ve kaydedeceğinizi anlatır.
+
+#### Gereksinimler
+
+1.  **Git Yüklü:** Bilgisayarınızda [Git](https://git-scm.com/downloads) programının yüklü olması gerekir.
+2.  **Boş GitHub Deposu:** GitHub.com üzerinde **içi boş** yeni bir depo (repository) oluşturmuş olmalısınız. (Depoyu oluştururken "Add a README file" gibi seçenekleri İŞARETLEMEYİN).
+
+#### Adım 2.1: Yerel Depoyu Başlatma
 
 ```bash
+# Proje klasörünüzün içindeyken terminalde bu komutu çalıştırın:
 git init -b main
 ```
 
----
-
-**Adım 2: Tüm Dosyaları Eklemek**
+#### Adım 2.2: Tüm Dosyaları Eklemek
 
 ```bash
 git add .
 ```
 
----
-
-**Adım 3: İlk Versiyonu Kaydetmek (Commit)**
+#### Adım 2.3: İlk Versiyonu Kaydetmek (Commit)
 
 ```bash
 git commit -m "Initial project commit from Firebase Studio"
 ```
 
----
-
-**Adım 4: GitHub Deponuzu Uzak Sunucu Olarak Eklemek**
+#### Adım 2.4: GitHub Deponuzu Uzak Sunucu Olarak Eklemek
 
 ```bash
+# KULLANICI_ADINIZ ve DEPO_ADINIZ kısımlarını kendi bilgilerinizle değiştirin.
 git remote add origin https://github.com/KULLANICI_ADINIZ/DEPO_ADINIZ.git
 ```
 
----
-
-**Adım 5: Kodları GitHub'a Yüklemek (Push)**
+#### Adım 2.5: Kodları GitHub'a Yüklemek (Push)
 
 ```bash
 git push -u origin main
 ```
----
-Eğer bu adımlardan birinde hata alırsanız, lütfen aldığınız hatayı benimle paylaşın. Size daha iyi yardımcı olabilmek için hangi adımda ve ne tür bir hatayla karşılaştığınızı bilmem önemli.
+Bu komuttan sonra GitHub deponuzu yenilediğinizde tüm kodlarınızın orada olduğunu göreceksiniz.
