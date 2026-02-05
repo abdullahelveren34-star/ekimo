@@ -16,6 +16,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
 import { toast } from '@/hooks/use-toast';
 import { Wand2, Loader2, Star, ThumbsDown } from 'lucide-react';
+import { Label } from '@/components/ui/label';
 
 const formSchema = z.object({
   jobDescription: z.string().min(50, 'İş tanımı en az 50 karakter olmalıdır.'),
