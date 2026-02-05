@@ -51,8 +51,8 @@ const OrgChartNode = ({ node }: { node: { title: string; person?: string | null;
                          {/* Horizontal line */}
                         <div className="absolute top-0 left-0 w-full h-px bg-border"></div>
                         {/* Hide ends for single child */}
-                        {node.children.length > 1 && index === 0 && <div className="absolute top-0 left-1/2 w-1/2 h-px bg-background"></div>}
-                        {node.children.length > 1 && index === node.children.length - 1 && <div className="absolute top-0 left-0 w-1/2 h-px bg-background"></div>}
+                        {node.children && node.children.length > 1 && index === 0 && <div className="absolute top-0 left-1/2 w-1/2 h-px bg-background"></div>}
+                        {node.children && node.children.length > 1 && index === node.children.length - 1 && <div className="absolute top-0 left-0 w-1/2 h-px bg-background"></div>}
                         {/* Vertical line to child */}
                         <div className="absolute -top-5 left-1/2 -translate-x-1/2 h-5 w-px bg-border"></div>
                         <OrgChartNode node={child} />
