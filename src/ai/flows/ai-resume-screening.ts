@@ -10,7 +10,7 @@
  * @typedef {Object} AIResumeScreeningOutput - The return type for the aiResumeScreening function.
  */
 
-import { ai, geminiPro } from '@/ai/genkit';
+import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 
 const AIResumeScreeningInputSchema = z.object({
@@ -76,7 +76,7 @@ const aiResumeScreeningFlow = ai.defineFlow(
 `;
 
     const response = await ai.generate({
-      model: geminiPro,
+      model: 'googleai/gemini-pro',
       prompt: prompt,
       output: {
         schema: AIResumeScreeningOutputSchema,
