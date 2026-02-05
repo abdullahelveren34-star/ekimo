@@ -10,9 +10,8 @@
  * @typedef {Object} AIResumeScreeningOutput - The return type for the aiResumeScreening function.
  */
 
-import { defineFlow, generate } from 'genkit';
+import { ai, geminiPro } from '@/ai/genkit';
 import { z } from 'zod';
-import { geminiPro } from '../genkit';
 
 const AIResumeScreeningInputSchema = z.object({
   resumeText: z
@@ -54,7 +53,7 @@ export async function aiResumeScreening(input: AIResumeScreeningInput): Promise<
   return aiResumeScreeningFlow(input);
 }
 
-const aiResumeScreeningFlow = defineFlow(
+const aiResumeScreeningFlow = ai.defineFlow(
   {
     name: 'aiResumeScreeningFlow',
     inputSchema: AIResumeScreeningInputSchema,
@@ -76,7 +75,7 @@ const aiResumeScreeningFlow = defineFlow(
   Ensure that the Suitability Score is between 0 and 100, and the Key Qualifications and Feedback are concise and relevant to the job requirements and keywords.
 `;
 
-    const response = await generate({
+    const response = await ai.generate({
       model: geminiPro,
       prompt: prompt,
       output: {
@@ -84,6 +83,6 @@ const aiResumeScreeningFlow = defineFlow(
       },
     });
 
-    return response.output()!;
+    return response.output!;
   }
 );
