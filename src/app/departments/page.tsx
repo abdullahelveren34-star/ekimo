@@ -121,7 +121,7 @@ export default function DepartmentsPage() {
                             <Link href={`/personnel/${member.id}`} className="flex items-center gap-4 p-2 rounded-md hover:bg-muted transition-colors" onClick={handleCloseDialog}>
                                 <Avatar className="h-12 w-12">
                                 <AvatarImage src={member.avatarUrl} alt={member.name} />
-                                <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                                <AvatarFallback>{member.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
                                 </Avatar>
                                 <div>
                                 <p className="font-semibold">{member.name}</p>

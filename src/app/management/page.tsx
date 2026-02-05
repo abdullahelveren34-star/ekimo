@@ -198,7 +198,7 @@ export default function ManagementPage() {
                             <div className="flex items-center gap-3">
                               <Avatar>
                                 <AvatarImage src={employee?.avatarUrl} alt={employee?.name} />
-                                <AvatarFallback>{employee?.name ? employee.name.split(' ').map(n => n[0]).join('') : '?'}</AvatarFallback>
+                                <AvatarFallback>{employee?.name ? employee.name.split(' ').map((n: string) => n[0]).join('') : '?'}</AvatarFallback>
                               </Avatar>
                               <div>
                                 <p className="font-medium">{employee?.name || 'Bilinmeyen Çalışan'}</p>

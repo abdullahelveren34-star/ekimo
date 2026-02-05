@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -213,7 +212,7 @@ export default function AssignmentPage() {
                              <div className="flex items-center gap-3">
                                <Avatar className="h-9 w-9">
                                  <AvatarImage src={employee?.avatarUrl} alt={employee?.name} />
-                                 <AvatarFallback>{employee?.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                                 <AvatarFallback>{employee?.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
                                </Avatar>
                                <div>
                                   <div className="font-medium">{employee?.name || 'Bilinmiyor'}</div>

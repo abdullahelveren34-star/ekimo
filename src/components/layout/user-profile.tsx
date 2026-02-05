@@ -17,7 +17,7 @@ export function UserProfile() {
                     </div>
                     <Avatar>
                         <AvatarImage src={currentUser.avatarUrl} alt={currentUser.name} />
-                        <AvatarFallback>{currentUser.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                        <AvatarFallback>{currentUser.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
                     </Avatar>
                 </Button>
             </DropdownMenuTrigger>

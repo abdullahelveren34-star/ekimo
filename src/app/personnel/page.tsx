@@ -90,7 +90,7 @@ export default function PersonnelPage() {
                   <CardContent className="p-6 flex flex-col items-center justify-center">
                     <Avatar className="h-24 w-24 mx-auto mb-4">
                       <AvatarImage src={employee.avatarUrl} alt={employee.name} />
-                      <AvatarFallback>{employee.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                      <AvatarFallback>{employee.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
                     </Avatar>
                     <h3 className="font-semibold text-lg">{employee.name}</h3>
                     <p className="text-muted-foreground text-sm">{employee.title}</p>

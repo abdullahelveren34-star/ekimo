@@ -153,7 +153,7 @@ export default function HomePage() {
             <div className="flex items-center gap-6">
               <Avatar className="h-24 w-24 border-2 border-primary">
                 <AvatarImage src={employeeOfTheMonth.avatarUrl} alt={employeeOfTheMonth.name} />
-                <AvatarFallback>{employeeOfTheMonth.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                <AvatarFallback>{employeeOfTheMonth.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
               </Avatar>
               <div className="space-y-2">
                 <h3 className="text-xl font-bold">{employeeOfTheMonth.name}</h3>
@@ -182,7 +182,7 @@ export default function HomePage() {
                     <div className="flex items-center gap-4">
                       <Avatar>
                         <AvatarImage src={person.avatarUrl} alt={person.name} />
-                        <AvatarFallback>{person.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                        <AvatarFallback>{person.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
                       </Avatar>
                       <div>
                         <p className="font-semibold">{person.name}</p>
