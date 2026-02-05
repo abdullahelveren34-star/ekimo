@@ -137,4 +137,3 @@ git push -u origin main
 ```
 
 Bu komuttan sonra GitHub deponuzu yenilediğinizde tüm kodlarınızın orada olduğunu göreceksiniz.
-```
