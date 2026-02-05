@@ -58,12 +58,15 @@ npm install
 
 #### Adım 1.3: Projeyi Canlıya Hazırlama (Build)
 
-Bu **kritik bir adımdır**. Bu komut, Next.js projenizi canlıya alınmaya hazır, optimize edilmiş ve küçültülmüş bir versiyona dönüştürür. Sonuçlar `.next` adında bir klasöre yazılır. Firebase bu klasörü kullanarak sitenizi yayınlar.
+Bu **kritik bir adımdır**. Bu komut, Next.js projenizi canlıya alınmaya hazır, optimize edilmiş ve küçültülmüş bir versiyona dönüştürür. 
 
 ```bash
 # Proje klasörünüzün içindeyken bu komutu çalıştırın:
 npm run build
 ```
+
+> **ÖNEMLİ NOT: 'out' Klasörü Hakkında**
+> Bu komutu çalıştırdıktan sonra bir `out` klasörü **oluşturulmayacaktır**. Bu bir hata değildir! Bu proje, sunucu tarafı özelliklere sahip modern bir Next.js uygulaması olduğu için, tüm derlenmiş dosyalar `out` yerine `.next` klasörü içine yerleştirilir. Firebase, bu kurulumu otomatik olarak tanır ve yayınlamak için `.next` klasörünü kullanır.
 
 #### Adım 1.4: Projeyi Firebase'e Yükleme (Deploy)
 
