@@ -155,9 +155,11 @@ export default function ReportingPage() {
 
   const handleExportToPdf = async () => {
     const { jsPDF } = await import('jspdf');
-    const autoTable = (await import('jspdf-autotable')).default;
+    // Import for side-effects to attach autoTable plugin
+    await import('jspdf-autotable');
     
-    const doc = new jsPDF();
+    // Cast to any to access the autoTable method
+    const doc = new jsPDF() as any; 
     
     // Add Logo and Main Title
     doc.addImage(logoBase64, 'PNG', 14, 10, 15, 15);
@@ -186,20 +188,23 @@ export default function ReportingPage() {
         tableRows.push(reqData);
     });
 
-    autoTable(doc, {
+    // Use the autoTable method attached to the doc instance
+    doc.autoTable({
         head: [tableColumn],
         body: tableRows,
         startY: 35,
         theme: 'grid',
-        headStyles: { fillColor: [24, 6, 95] }, // Example color: Dark Blue
-        styles: { font: 'Helvetica', fontStyle: 'normal' },
+        headStyles: { fillColor: [24, 6, 95] },
+        // Note: The built-in jsPDF fonts have limited support for Turkish characters.
+        // Some characters might not render correctly in the PDF.
+        // Excel export does not have this limitation.
     });
 
     doc.save(`${activeTab}_Raporu.pdf`);
 
     toast({
         title: 'PDF Raporu İndirildi',
-        description: `${activeTab} raporu başarıyla dışa aktarıldı.`,
+        description: `PDF dışa aktarma işlemi tamamlandı.`,
     });
   };
 
