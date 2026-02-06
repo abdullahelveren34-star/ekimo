@@ -12,10 +12,19 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { mockApprovalRequests } from '@/lib/mock-requests';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Download } from 'lucide-react';
+import { Download, FileSpreadsheet, FileText } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
+import * as XLSX from 'xlsx';
 
 
 const statusColors: { [key: string]: string } = {
@@ -119,14 +128,65 @@ export default function ReportingPage() {
   };
   const PIE_COLORS = ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40"];
 
-  const handleExport = (reportType: string) => {
-    toast({
-        title: 'Rapor Dışa Aktarılıyor...',
-        description: `${reportType} raporu oluşturuluyor ve indirilecek.`,
+  const handleExportToExcel = () => {
+    const dataToExport = filteredData.map(req => {
+        const employee = getEmployeeById(req.employeeId);
+        return {
+            'Çalışan': employee?.name || req.details.employeeName || 'Bilinmiyor',
+            'Talep Türü': req.requestType,
+            'Talep Tarihi': req.requestDate ? new Date(req.requestDate).toLocaleDateString('tr-TR') : '-',
+            'Onay Tarihi': req.approvalDate ? new Date(req.approvalDate).toLocaleDateString('tr-TR') : '-',
+            'Durum': req.status,
+            'Açıklama': req.details.description || ''
+        };
     });
-    // In a real app, you would generate a CSV/Excel file here.
-    console.log(`Exporting ${reportType} report...`, filteredData);
-  }
+
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Rapor");
+    XLSX.writeFile(workbook, `${activeTab}_Raporu.xlsx`);
+    toast({
+        title: 'Excel Raporu İndirildi',
+        description: `${activeTab} raporu başarıyla dışa aktarıldı.`,
+    });
+  };
+
+  const handleExportToPdf = () => {
+    const doc = new jsPDF();
+    
+    const tableColumn = ["Çalışan", "Talep Türü", "Talep Tarihi", "Onay Tarihi", "Durum"];
+    const tableRows: (string|undefined)[][] = [];
+
+    filteredData.forEach(req => {
+        const employee = getEmployeeById(req.employeeId);
+        const reqData = [
+            employee?.name || req.details.employeeName || 'Bilinmiyor',
+            req.requestType,
+            req.requestDate ? new Date(req.requestDate).toLocaleDateString('tr-TR') : '-',
+            req.approvalDate ? new Date(req.approvalDate).toLocaleDateString('tr-TR') : '-',
+            req.status,
+        ];
+        tableRows.push(reqData);
+    });
+
+    // @ts-ignore
+    doc.autoTable({
+        head: [tableColumn],
+        body: tableRows,
+        startY: 20,
+        theme: 'grid',
+        headStyles: { fillColor: [34, 113, 76] },
+        styles: { font: 'Helvetica', fontStyle: 'normal' },
+    });
+
+    doc.text(`${activeTab} Raporu`, 14, 15);
+    doc.save(`${activeTab}_Raporu.pdf`);
+
+    toast({
+        title: 'PDF Raporu İndirildi',
+        description: `${activeTab} raporu başarıyla dışa aktarıldı.`,
+    });
+  };
 
   return (
     <div className="space-y-8">
@@ -150,10 +210,24 @@ export default function ReportingPage() {
                     <h2 className="text-2xl font-bold text-foreground">
                         {type === 'Tümü' ? 'Genel Rapor Özeti' : `${type} Talepleri Raporu`}
                     </h2>
-                    <Button onClick={() => handleExport(type)}>
-                        <Download className="mr-2 h-4 w-4" />
-                        {type === 'Tümü' ? 'Tüm Raporu Dışa Aktar' : `${type} Raporunu Dışa Aktar`}
-                    </Button>
+                     <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button>
+                                <Download className="mr-2 h-4 w-4" />
+                                Raporu Dışa Aktar
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem onClick={handleExportToExcel}>
+                                <FileSpreadsheet className="mr-2 h-4 w-4" />
+                                <span>Excel olarak dışa aktar</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={handleExportToPdf}>
+                                <FileText className="mr-2 h-4 w-4" />
+                                <span>PDF olarak dışa aktar</span>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
                 
                 <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -308,5 +382,3 @@ export default function ReportingPage() {
     </div>
   );
 }
-
-    
