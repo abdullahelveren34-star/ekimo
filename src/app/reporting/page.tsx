@@ -12,7 +12,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { mockApprovalRequests } from '@/lib/mock-requests';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Download, FileSpreadsheet, FileText } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
@@ -22,6 +21,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Download, FileSpreadsheet, FileText } from 'lucide-react';
 
 
 const statusColors: { [key: string]: string } = {
@@ -155,11 +155,9 @@ export default function ReportingPage() {
 
   const handleExportToPdf = async () => {
     const { jsPDF } = await import('jspdf');
-    // Import for side-effects to attach autoTable plugin
-    await import('jspdf-autotable');
+    const autoTable = (await import('jspdf-autotable')).default;
     
-    // Cast to any to access the autoTable method
-    const doc = new jsPDF() as any; 
+    const doc = new jsPDF();
     
     // Add Logo and Main Title
     doc.addImage(logoBase64, 'PNG', 14, 10, 15, 15);
@@ -188,8 +186,7 @@ export default function ReportingPage() {
         tableRows.push(reqData);
     });
 
-    // Use the autoTable method attached to the doc instance
-    doc.autoTable({
+    autoTable(doc, {
         head: [tableColumn],
         body: tableRows,
         startY: 35,
