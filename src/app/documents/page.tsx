@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookOpen, ClipboardCheck, FileText, Youtube, Award, CheckCircle, UserCheck, Scale, PenSquare, BookText } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -456,6 +456,11 @@ export default function DocumentsPage() {
     const { toast } = useToast();
     const [completedTrainings, setCompletedTrainings] = useState<Set<number>>(new Set());
     const hrManager = allEmployees.find(emp => emp.title === 'İK Müdürü');
+    const [evaluationPeriod, setEvaluationPeriod] = useState('');
+
+    useEffect(() => {
+        setEvaluationPeriod(new Date().toISOString().substring(0, 7));
+    }, []);
 
     const handleGenerateCertificate = (trainingId: number, trainingTitle: string) => {
         setCompletedTrainings(prev => new Set(prev).add(trainingId));
@@ -658,7 +663,12 @@ export default function DocumentsPage() {
                             </div>
                              <div className="space-y-2">
                                 <Label htmlFor="evaluation-period">Değerlendirme Dönemi</Label>
-                                <Input id="evaluation-period" type="month" defaultValue={new Date().toISOString().substring(0, 7)} />
+                                <Input 
+                                    id="evaluation-period" 
+                                    type="month" 
+                                    value={evaluationPeriod}
+                                    onChange={(e) => setEvaluationPeriod(e.target.value)} 
+                                />
                             </div>
                          </div>
                     </div>
