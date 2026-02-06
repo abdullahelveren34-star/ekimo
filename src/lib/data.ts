@@ -149,56 +149,37 @@ export const departmentMembers: { [key: string]: Employee[] } = {
   'Satış': [
     { id: '1', name: 'Ahmet Yılmaz', title: 'Satış Direktörü', department: 'Satış', email: 'ahmet.yilmaz@e-kimo.com', phone: '555-111-2233', birthDate: '1985-04-12', annualLeave: { total: 20, used: 5, remaining: 15 }, equipment: [{ type: 'Cep Telefonu', model: 'iPhone 14', serialNumber: 'SN11111'}], performanceHistory: generatePerformanceHistory() },
     { id: '2', name: 'Buse Çetin', title: 'Satış Müdürü', department: 'Satış', email: 'buse.cetin@e-kimo.com', phone: '555-111-2234', birthDate: '1992-08-26', annualLeave: { total: 14, used: 10, remaining: 4 }, equipment: [{ type: 'Cep Telefonu', model: 'iPhone 13', serialNumber: 'SN22222'}], performanceHistory: generatePerformanceHistory() },
-    { id: '101', name: 'Ozan Tekin', title: 'Bölge Satış Sorumlusu', department: 'Satış', email: 'ozan.tekin@e-kimo.com', phone: '555-111-2235', birthDate: '1991-07-15', annualLeave: { total: 16, used: 8, remaining: 8 }, equipment: [{ type: 'Cep Telefonu', model: 'Samsung Galaxy S22', serialNumber: 'SN10101'}], performanceHistory: generatePerformanceHistory() },
-    { id: '102', name: 'Selinay Kurt', title: 'Kurumsal Satış Uzmanı', department: 'Satış', email: 'selinay.kurt@e-kimo.com', phone: '555-111-2236', birthDate: '1994-01-22', annualLeave: { total: 14, used: 7, remaining: 7 }, equipment: [{ type: 'Cep Telefonu', model: 'iPhone 13', serialNumber: 'SN10202'}], performanceHistory: generatePerformanceHistory() },
-    { id: '103', name: 'Barış Arslan', title: 'Satış Destek Uzmanı', department: 'Satış', email: 'baris.arslan@e-kimo.com', phone: '555-111-2237', birthDate: '1996-10-10', annualLeave: { total: 14, used: 2, remaining: 12 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '104', name: 'Gizem Önal', title: 'E-Ticaret Satış Sorumlusu', department: 'Satış', email: 'gizem.onal@e-kimo.com', phone: '555-111-2238', birthDate: '1993-05-03', annualLeave: { total: 14, used: 9, remaining: 5 }, equipment: [], performanceHistory: generatePerformanceHistory() },
   ],
   'Pazarlama': [
     { id: '3', name: 'Elif Aydın', title: 'Pazarlama Direktörü', department: 'Pazarlama', email: 'elif.aydin@e-kimo.com', phone: '555-222-3344', birthDate: '1988-05-25', annualLeave: { total: 22, used: 15, remaining: 7 }, equipment: [{ type: 'Notebook', model: 'MacBook Pro 14"', serialNumber: 'SN33333'}], performanceHistory: generatePerformanceHistory() },
     { id: '4', name: 'Kerem Işık', title: 'Dijital Pazarlama Müdürü', department: 'Pazarlama', email: 'kerem.isik@e-kimo.com', phone: '555-222-3345', birthDate: '1995-02-17', annualLeave: { total: 14, used: 4, remaining: 10 }, equipment: [{ type: 'Notebook', model: 'Dell XPS 15', serialNumber: 'SN44444'}], performanceHistory: generatePerformanceHistory() },
-    { id: '105', name: 'Deniz Aksoy', title: 'Sosyal Medya Uzmanı', department: 'Pazarlama', email: 'deniz.aksoy@e-kimo.com', phone: '555-222-3346', birthDate: '1997-09-12', annualLeave: { total: 14, used: 1, remaining: 13 }, equipment: [{ type: 'Tablet', model: 'iPad Air', serialNumber: 'SN10505'}], performanceHistory: generatePerformanceHistory() },
-    { id: '106', name: 'Emre Şen', title: 'İçerik Uzmanı', department: 'Pazarlama', email: 'emre.sen@e-kimo.com', phone: '555-222-3347', birthDate: '1995-12-01', annualLeave: { total: 14, used: 5, remaining: 9 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '107', name: 'Ceyda Erol', title: 'Marka Yöneticisi', department: 'Pazarlama', email: 'ceyda.erol@e-kimo.com', phone: '555-222-3348', birthDate: '1992-03-30', annualLeave: { total: 15, used: 10, remaining: 5 }, equipment: [{ type: 'Notebook', model: 'Microsoft Surface Laptop', serialNumber: 'SN10707'}], performanceHistory: generatePerformanceHistory() },
   ],
   'Bağımsız': [],
   'Tasarım': [
     { id: '5', name: 'Can Boz', title: 'Tasarımcı', department: 'Tasarım', email: 'can.boz@e-kimo.com', phone: '555-333-4455', birthDate: '1993-11-30', annualLeave: { total: 14, used: 2, remaining: 12 }, equipment: [{ type: 'Tablet', model: 'iPad Pro 12.9"', serialNumber: 'SN55555'}], performanceHistory: generatePerformanceHistory() },
     { id: '14', name: 'Yasemin Güler', title: 'Baş Tasarımcı', department: 'Tasarım', email: 'yasemin.guler@e-kimo.com', phone: '555-333-4456', birthDate: '1989-10-01', annualLeave: { total: 20, used: 8, remaining: 12 }, equipment: [{ type: 'Notebook', model: 'MacBook Pro 16"', serialNumber: 'SN14141'}], performanceHistory: generatePerformanceHistory() },
-    { id: '108', name: 'İrem Sancak', title: 'Grafik Tasarımcı', department: 'Tasarım', email: 'irem.sancak@e-kimo.com', phone: '555-333-4457', birthDate: '1998-07-21', annualLeave: { total: 14, used: 0, remaining: 14 }, equipment: [{ type: 'Tablet', model: 'Wacom Cintiq', serialNumber: 'SN10808'}], performanceHistory: generatePerformanceHistory() },
-    { id: '109', name: 'Tolga Çam', title: 'Moda Tasarımcısı', department: 'Tasarım', email: 'tolga.cam@e-kimo.com', phone: '555-333-4458', birthDate: '1995-04-14', annualLeave: { total: 14, used: 7, remaining: 7 }, equipment: [], performanceHistory: generatePerformanceHistory() },
   ],
   'Satınalma': [
     { id: '6', name: 'Fatma Şahin', title: 'Satınalma Müdürü', department: 'Satınalma', email: 'fatma.sahin@e-kimo.com', phone: '555-444-5566', birthDate: '1990-01-20', annualLeave: { total: 18, used: 18, remaining: 0 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '110', name: 'Kadir Mert', title: 'Satınalma Uzmanı', department: 'Satınalma', email: 'kadir.mert@e-kimo.com', phone: '555-444-5567', birthDate: '1989-06-09', annualLeave: { total: 20, used: 15, remaining: 5 }, equipment: [], performanceHistory: generatePerformanceHistory() },
   ],
   'Üretim Planlama': [
     { id: '23', name: 'Mustafa Kemal Öztürk', title: 'Üretim Planlama Sorumlusu', department: 'Üretim Planlama', email: 'mkozturk@e-kimo.com', phone: '555-555-1234', birthDate: '1988-03-15', annualLeave: { total: 20, used: 10, remaining: 10 }, equipment: [{type: 'Notebook', model: 'Lenovo ThinkPad', serialNumber: 'SN23232'}], performanceHistory: generatePerformanceHistory()},
-    { id: '24', name: 'Ayşe Yıldırım', title: 'Planlama Uzmanı', department: 'Üretim Planlama', email: 'ayse.yildirim@e-kimo.com', phone: '555-555-5678', birthDate: '1993-07-20', annualLeave: { total: 14, used: 5, remaining: 9 }, equipment: [{type: 'Notebook', model: 'HP EliteBook', serialNumber: 'SN24242'}], performanceHistory: generatePerformanceHistory()},
-    { id: '111', name: 'Volkan Kılıç', title: 'Planlama Asistanı', department: 'Üretim Planlama', email: 'volkan.kilic@e-kimo.com', phone: '555-555-5679', birthDate: '1998-01-08', annualLeave: { total: 14, used: 1, remaining: 13 }, equipment: [], performanceHistory: generatePerformanceHistory()},
   ],
   'Üretim': [
     { id: '27', name: 'Mehmet Ali Yılmaz', title: 'Üretim Müdürü', department: 'Üretim', email: 'mayilmaz@e-kimo.com', phone: '555-777-1234', birthDate: '1982-11-10', annualLeave: { total: 25, used: 15, remaining: 10 }, equipment: [{type: 'Notebook', model: 'Dell Latitude', serialNumber: 'SN27272'}], performanceHistory: generatePerformanceHistory()},
     { id: '28', name: 'Zeynep Kaya', title: 'Vardiya Amiri', department: 'Üretim', email: 'zeynep.kaya@e-kimo.com', phone: '555-777-5678', birthDate: '1990-09-05', annualLeave: { total: 18, used: 8, remaining: 10 }, equipment: [], performanceHistory: generatePerformanceHistory()},
-    { id: '112', name: 'Murat Demir', title: 'Üretim Operatörü', department: 'Üretim', email: 'murat.demir@e-kimo.com', phone: '555-777-5679', birthDate: '1994-06-25', annualLeave: { total: 14, used: 10, remaining: 4 }, equipment: [], performanceHistory: generatePerformanceHistory()},
-    { id: '113', name: 'Fatma Uslu', title: 'Paketleme Sorumlusu', department: 'Üretim', email: 'fatma.uslu@e-kimo.com', phone: '555-777-5680', birthDate: '1992-02-14', annualLeave: { total: 15, used: 15, remaining: 0 }, equipment: [], performanceHistory: generatePerformanceHistory()},
-    { id: '114', name: 'İsmail Gündüz', title: 'Makine Operatörü', department: 'Üretim', email: 'ismail.gunduz@e-kimo.com', phone: '555-777-5681', birthDate: '1987-11-18', annualLeave: { total: 20, used: 20, remaining: 0 }, equipment: [], performanceHistory: generatePerformanceHistory()},
   ],
   'Kalite ve Güvence': [
     { id: '19', name: 'Fatih Polat', title: 'Kalite Güvence Müdürü', department: 'Kalite ve Güvence', email: 'fatih.polat@e-kimo.com', phone: '555-999-1122', birthDate: '1983-04-19', annualLeave: { total: 24, used: 14, remaining: 10 }, equipment: [{ type: 'Notebook', model: 'Lenovo ThinkPad', serialNumber: 'SN19191'}], performanceHistory: generatePerformanceHistory() },
-    { id: '115', name: 'Aslıhan Doğru', title: 'Kalite Kontrol Uzmanı', department: 'Kalite ve Güvence', email: 'aslihan.dogru@e-kimo.com', phone: '555-999-1123', birthDate: '1996-08-08', annualLeave: { total: 14, used: 3, remaining: 11 }, equipment: [], performanceHistory: generatePerformanceHistory() },
   ],
   'Sosyal Uygunluk': [
     { id: '116', name: 'Leyla Erdem', title: 'Sosyal Uygunluk Sorumlusu', department: 'Sosyal Uygunluk', email: 'leyla.erdem@e-kimo.com', phone: '555-998-1122', birthDate: '1991-09-09', annualLeave: { total: 16, used: 10, remaining: 6 }, equipment: [], performanceHistory: generatePerformanceHistory() },
   ],
   'Mali İşler': [
     { id: '34', name: 'Hasan Çelik', title: 'Finans Müdürü', department: 'Mali İşler', email: 'hasan.celik@e-kimo.com', phone: '555-121-3141', birthDate: '1980-08-08', annualLeave: { total: 28, used: 20, remaining: 8 }, equipment: [{ type: 'Notebook', model: 'MacBook Air', serialNumber: 'SN34343'}], performanceHistory: generatePerformanceHistory() },
-    { id: '117', name: 'Zeynep Aktaş', title: 'Muhasebe Uzmanı', department: 'Mali İşler', email: 'zeynep.aktas@e-kimo.com', phone: '555-121-3142', birthDate: '1993-10-25', annualLeave: { total: 14, used: 14, remaining: 0 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '118', name: 'Ali Vural', title: 'Finansal Analist', department: 'Mali İşler', email: 'ali.vural@e-kimo.com', phone: '555-121-3143', birthDate: '1996-04-04', annualLeave: { total: 14, used: 8, remaining: 6 }, equipment: [], performanceHistory: generatePerformanceHistory() },
   ],
   'Modelhane': [
     { id: '15', name: 'Selin Uzun', title: 'Modelist Şefi', department: 'Modelhane', email: 'selin.uzun@e-kimo.com', phone: '555-333-8899', birthDate: '1994-12-12', annualLeave: { total: 14, used: 14, remaining: 0 }, equipment: [], performanceHistory: generatePerformanceHistory() },
-    { id: '119', name: 'Ebru Yaşar', title: 'Modelist', department: 'Modelhane', email: 'ebru.yasar@e-kimo.com', phone: '555-333-8898', birthDate: '1997-03-16', annualLeave: { total: 14, used: 6, remaining: 8 }, equipment: [], performanceHistory: generatePerformanceHistory() },
   ],
   'Depolar': [
     { id: '39', name: 'Cemalettin Sezer', title: 'Depo Sorumlusu', department: 'Depolar', email: 'cemalettin.sezer@e-kimo.com', phone: '555-888-1122', birthDate: '1987-06-07', annualLeave: { total: 20, used: 15, remaining: 5 }, equipment: [], performanceHistory: generatePerformanceHistory() },
@@ -210,7 +191,6 @@ export const departmentMembers: { [key: string]: Employee[] } = {
   'İnsan Kaynakları': [
     { id: 'izlem-manduz-id', name: 'İzlem Manduz', title: 'İK Müdürü', department: 'İnsan Kaynakları', email: 'izlem.manduz@e-kimo.com', phone: '555-999-8877', birthDate: '1986-09-23', annualLeave: { total: 20, used: 5, remaining: 15 }, equipment: [{ type: 'Notebook', model: 'HP Spectre x360', serialNumber: 'SN99999'}], performanceHistory: generatePerformanceHistory() },
     { id: '52', name: 'Rana Kaplan', title: 'İK Uzmanı', department: 'İnsan Kaynakları', email: 'rana.kaplan@e-kimo.com', phone: '555-999-8878', birthDate: '1996-03-03', annualLeave: { total: 14, used: 0, remaining: 14 }, equipment: [{ type: 'Notebook', model: 'HP Spectre x360', serialNumber: 'SN52525'}], performanceHistory: generatePerformanceHistory() },
-    { id: '121', name: 'Berk Can', title: 'İşe Alım Uzmanı', department: 'İnsan Kaynakları', email: 'berk.can@e-kimo.com', phone: '555-999-8879', birthDate: '1994-08-15', annualLeave: { total: 14, used: 8, remaining: 6 }, equipment: [], performanceHistory: generatePerformanceHistory() },
   ],
   'İdari İşler': [
     { id: '122', name: 'Füsun Güngör', title: 'İdari İşler Sorumlusu', department: 'İdari İşler', email: 'fusun.gungor@e-kimo.com', phone: '555-997-8877', birthDate: '1984-07-07', annualLeave: { total: 23, used: 20, remaining: 3 }, equipment: [], performanceHistory: generatePerformanceHistory() },
@@ -218,8 +198,6 @@ export const departmentMembers: { [key: string]: Employee[] } = {
   'BT': [
     { id: 'abdullah-elveren-id', name: 'Abdullah Elveren', title: 'BT Yöneticisi', department: 'BT', email: 'abdullah.elveren@e-kimo.com', phone: '555-101-2020', birthDate: '1990-06-18', annualLeave: { total: 14, used: 7, remaining: 7 }, equipment: [{ type: 'Notebook', model: 'MacBook Pro 16"', serialNumber: 'SN10101'}], performanceHistory: generatePerformanceHistory() },
     { id: '123', name: 'Serkan Öztürk', title: 'Sistem ve Ağ Uzmanı', department: 'BT', email: 'serkan.ozturk@e-kimo.com', phone: '555-101-2021', birthDate: '1988-12-24', annualLeave: { total: 20, used: 10, remaining: 10 }, equipment: [{ type: 'Notebook', model: 'Dell PowerEdge Server', serialNumber: 'SN12321'}], performanceHistory: generatePerformanceHistory() },
-    { id: '124', name: 'Tuğçe Bilgin', title: 'Yazılım Geliştirici', department: 'BT', email: 'tugce.bilgin@e-kimo.com', phone: '555-101-2022', birthDate: '1995-11-05', annualLeave: { total: 14, used: 5, remaining: 9 }, equipment: [{ type: 'Notebook', model: 'MacBook Pro 14"', serialNumber: 'SN12421'}], performanceHistory: generatePerformanceHistory() },
-    { id: '125', name: 'Hakan Kurtuluş', title: 'BT Destek Uzmanı', department: 'BT', email: 'hakan.kurtulus@e-kimo.com', phone: '555-101-2023', birthDate: '1997-02-28', annualLeave: { total: 14, used: 11, remaining: 3 }, equipment: [], performanceHistory: generatePerformanceHistory() },
   ],
 };
 
@@ -426,4 +404,5 @@ export const airportsByCity: { [key: string]: string[] } = {
   "Zonguldak": ["Zonguldak Çaycuma Havalimanı (ONQ)"]
 };
 
+    
     

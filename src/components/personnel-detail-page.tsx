@@ -15,35 +15,104 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 
-function getAge(birthDateString: string) {
-    const birthDate = new Date(birthDateString);
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-    }
-    return age;
-}
+const PersonnelDetailSkeleton = () => (
+    <div className="space-y-8">
+        <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+                <Skeleton className="h-24 w-24 rounded-full" />
+                <div>
+                    <Skeleton className="h-8 w-48 mb-2" />
+                    <Skeleton className="h-6 w-64 mb-2" />
+                    <Skeleton className="h-5 w-32" />
+                </div>
+            </div>
+        </header>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-8">
+                <Card>
+                    <CardHeader>
+                        <CardTitle><Skeleton className="h-6 w-40" /></CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <Skeleton className="h-5 w-full" />
+                        </div>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <CardTitle><Skeleton className="h-6 w-48" /></CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                           <Skeleton className="h-5 w-full" />
+                           <Skeleton className="h-5 w-full" />
+                        </div>
+                    </CardContent>
+                </Card>
+                 <Card>
+                    <CardHeader>
+                        <CardTitle><Skeleton className="h-6 w-52" /></CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-3">
+                            <Skeleton className="h-12 w-full" />
+                            <Skeleton className="h-12 w-full" />
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
+            <div className="space-y-8">
+                <Card>
+                    <CardHeader>
+                        <CardTitle><Skeleton className="h-6 w-44" /></CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4 text-center">
+                        <Skeleton className="h-10 w-16 mx-auto" />
+                        <Skeleton className="h-4 w-24 mx-auto" />
+                        <Separator />
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="text-center"><Skeleton className="h-5 w-8 mx-auto" /><Skeleton className="h-4 w-16 mx-auto mt-1" /></div>
+                            <div className="text-center"><Skeleton className="h-5 w-8 mx-auto" /><Skeleton className="h-4 w-16 mx-auto mt-1" /></div>
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
+        </div>
+        <Card>
+            <CardHeader><CardTitle><Skeleton className="h-6 w-64" /></CardTitle></CardHeader>
+            <CardContent>
+                <Skeleton className="h-40 w-full" />
+            </CardContent>
+        </Card>
+    </div>
+);
 
 export function PersonnelDetailPageContent({ employee }: { employee: Employee }) {
-  const availableYears = employee.performanceHistory.map(p => p.year).sort((a, b) => b - a);
-  const [selectedYear, setSelectedYear] = useState<number>(availableYears[0]);
-  const [clientSideData, setClientSideData] = useState<{ age: number; formattedBirthDate: string } | null>(null);
+  const [age, setAge] = useState<number | null>(null);
+  const [formattedBirthDate, setFormattedBirthDate] = useState<string | null>(null);
 
   useEffect(() => {
-    if (employee) {
-      const age = getAge(employee.birthDate);
-      const birthDate = new Date(employee.birthDate);
-      const formattedBirthDate = birthDate.toLocaleDateString('tr-TR', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      });
-      setClientSideData({ age, formattedBirthDate });
+    // Perform date calculations only on the client side after hydration
+    const birthDateObj = new Date(employee.birthDate);
+    const today = new Date();
+    let calculatedAge = today.getFullYear() - birthDateObj.getFullYear();
+    const m = today.getMonth() - birthDateObj.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDateObj.getDate())) {
+        calculatedAge--;
     }
-  }, [employee]);
+    setAge(calculatedAge);
 
+    setFormattedBirthDate(birthDateObj.toLocaleDateString('tr-TR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    }));
+  }, [employee.birthDate]);
+
+  const availableYears = employee.performanceHistory.map(p => p.year).sort((a, b) => b - a);
+  const [selectedYear, setSelectedYear] = useState<number>(availableYears[0]);
+  
   const performanceDataForYear = employee.performanceHistory.find(p => p.year === selectedYear)?.monthlyScores || [];
 
   const chartConfig = {
@@ -53,6 +122,10 @@ export function PersonnelDetailPageContent({ employee }: { employee: Employee })
     average: { label: "Ortalama", color: "hsl(var(--foreground))" },
     target: { label: "Hedef", color: "hsl(var(--primary))" },
   };
+  
+  if (age === null || formattedBirthDate === null) {
+    return <PersonnelDetailSkeleton />;
+  }
 
   return (
     <div className="space-y-8">
@@ -83,11 +156,7 @@ export function PersonnelDetailPageContent({ employee }: { employee: Employee })
                     <div className="flex items-center gap-3">
                         <Cake className="h-4 w-4 text-muted-foreground" />
                         <strong>Doğum Tarihi:</strong>
-                        {clientSideData ? (
-                          <span>{clientSideData.formattedBirthDate} ({clientSideData.age} yaşında)</span>
-                        ) : (
-                          <Skeleton className="h-5 w-40" />
-                        )}
+                        <span>{formattedBirthDate} ({age} yaşında)</span>
                     </div>
                  </div>
               </CardContent>

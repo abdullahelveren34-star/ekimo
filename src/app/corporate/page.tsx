@@ -2,8 +2,9 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Landmark, Target, Eye, Building2, GitBranch } from 'lucide-react';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { departmentMembers } from '@/lib/data';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const getPersonByTitle = (title: string) => {
     const allEmployees = Object.values(departmentMembers).flat();
@@ -15,7 +16,6 @@ const getDirectorForDepartment = (departmentName: string) => {
     if (!employeesInDept) {
         return null;
     }
-    // Define a priority order for titles
     const titlePriority = ['Direktörü', 'Müdürü', 'Sorumlusu'];
 
     for (const priorityTitle of titlePriority) {
@@ -28,22 +28,6 @@ const getDirectorForDepartment = (departmentName: string) => {
     return null;
 }
 
-const orgChartData = {
-  title: 'Yönetim Kurulu',
-  children: [
-    {
-      title: 'Yönetim Kurulu Başkanı',
-      person: getPersonByTitle('Yönetim Kurulu Başkanı'),
-      children: [
-        { title: 'Satış & Pazarlama', person: getDirectorForDepartment('Satış') },
-        { title: 'Üretim', person: getDirectorForDepartment('Üretim') },
-        { title: 'Tasarım', person: getDirectorForDepartment('Tasarım') },
-        { title: 'Mali İşler', person: getDirectorForDepartment('Mali İşler') },
-      ],
-    },
-  ],
-};
-
 
 const OrgChartNode = ({ node }: { node: { title: string; person?: string | null; children?: any[] }}) => (
     <div className="relative flex flex-col items-center p-2">
@@ -55,16 +39,12 @@ const OrgChartNode = ({ node }: { node: { title: string; person?: string | null;
         </div>
         {node.children && node.children.length > 0 && (
             <div className="flex pt-5 mt-5 relative">
-                {/* Vertical line from parent */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 h-5 w-px bg-border"></div>
                 {node.children.map((child, index) => (
                     <div key={child.title} className="relative px-2 flex flex-col items-center">
-                         {/* Horizontal line */}
-                        <div className="absolute top-0 left-0 w-full h-px bg-border"></div>
-                        {/* Hide ends for single child */}
+                         <div className="absolute top-0 left-0 w-full h-px bg-border"></div>
                         {node.children && node.children.length > 1 && index === 0 && <div className="absolute top-0 left-1/2 w-1/2 h-px bg-background"></div>}
                         {node.children && node.children.length > 1 && index === node.children.length - 1 && <div className="absolute top-0 left-0 w-1/2 h-px bg-background"></div>}
-                        {/* Vertical line to child */}
                         <div className="absolute -top-5 left-1/2 -translate-x-1/2 h-5 w-px bg-border"></div>
                         <OrgChartNode node={child} />
                     </div>
@@ -74,8 +54,55 @@ const OrgChartNode = ({ node }: { node: { title: string; person?: string | null;
     </div>
 );
 
+const CorporatePageSkeleton = () => (
+    <div className="space-y-8">
+        <header>
+            <div className="flex items-center gap-3">
+                <Skeleton className="h-8 w-8 rounded-full" />
+                <div>
+                    <Skeleton className="h-8 w-48 mb-2" />
+                    <Skeleton className="h-5 w-64" />
+                </div>
+            </div>
+        </header>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <Card><CardHeader><Skeleton className="h-6 w-32" /></CardHeader><CardContent><Skeleton className="h-20 w-full" /></CardContent></Card>
+            <Card><CardHeader><Skeleton className="h-6 w-32" /></CardHeader><CardContent><Skeleton className="h-20 w-full" /></CardContent></Card>
+            <Card className="lg:col-span-2"><CardHeader><Skeleton className="h-6 w-32" /></CardHeader><CardContent><Skeleton className="h-16 w-full" /></CardContent></Card>
+            <Card className="lg:col-span-2"><CardHeader><Skeleton className="h-6 w-48" /></CardHeader><CardContent><Skeleton className="h-48 w-full" /></CardContent></Card>
+        </div>
+    </div>
+);
+
 
 export default function CorporatePage() {
+  const [orgChartData, setOrgChartData] = useState<any | null>(null);
+
+  useEffect(() => {
+    // Build the data structure on the client side after hydration
+    // to prevent server-client mismatch.
+    const data = {
+      title: 'Yönetim Kurulu',
+      children: [
+        {
+          title: 'Yönetim Kurulu Başkanı',
+          person: getPersonByTitle('Yönetim Kurulu Başkanı'),
+          children: [
+            { title: 'Satış & Pazarlama', person: getDirectorForDepartment('Satış') },
+            { title: 'Üretim', person: getDirectorForDepartment('Üretim') },
+            { title: 'Tasarım', person: getDirectorForDepartment('Tasarım') },
+            { title: 'Mali İşler', person: getDirectorForDepartment('Mali İşler') },
+          ],
+        },
+      ],
+    };
+    setOrgChartData(data);
+  }, []);
+
+  if (!orgChartData) {
+    return <CorporatePageSkeleton />;
+  }
+
   return (
     <div className="space-y-8">
       <header>

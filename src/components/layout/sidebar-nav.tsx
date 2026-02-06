@@ -4,57 +4,36 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 import {
-  Sidebar,
   SidebarContent,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarTrigger,
-  SidebarFooter,
   SidebarMenuBadge,
 } from '@/components/ui/sidebar';
-import {
-  Bot,
-  LayoutDashboard,
-  Settings,
-  LogOut,
-  Home,
-  Building2,
-  ClipboardList,
-  FileText,
-  Briefcase,
-  Server,
-  Users,
-  Shield,
-  Landmark,
-  Plane,
-  Leaf,
-  FileChart,
-} from 'lucide-react';
 import { useFirebase, useCollection } from '@/firebase';
 import { collection, query, where } from 'firebase/firestore';
-import { approverUser } from '@/lib/data';
 import { Logo } from '../logo';
 
 const navItems = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, color: 'text-sky-500' },
-  { href: '/', label: 'Ana Sayfa', icon: Home, color: 'text-green-500' },
-  { href: '/departments', label: 'Departmanlar', icon: Users, color: 'text-yellow-500' },
-  { href: '/personnel', label: 'Personel', icon: Users, color: 'text-orange-500' },
-  { href: '/jobs', label: 'İş İlanları', icon: Briefcase, color: 'text-blue-500' },
-  { href: '/requests', label: 'Talepler', icon: ClipboardList, color: 'text-cyan-500' },
-  { href: '/bt-requests', label: 'BT Talepleri', icon: Server, color: 'text-gray-500' },
-  { href: '/documents', label: 'Eğitim & Dokümanlar', icon: FileText, color: 'text-indigo-500' },
-  { href: '/corporate', label: 'Kurumsal', icon: Landmark, color: 'text-purple-500' },
-  { href: '/sustainability', label: 'Sürdürülebilirlik', icon: Leaf, color: 'text-green-600' },
-  { href: '/work-calendar', label: 'Görevlendirme', icon: Plane, color: 'text-rose-500' },
-  { href: '/management', label: 'Yönetim', icon: Shield, id: 'management', color: 'text-red-500' },
-  { href: '/reporting', label: 'Raporlama', icon: FileChart, color: 'text-teal-500' },
+  { href: '/dashboard', label: 'Dashboard' },
+  { href: '/', label: 'Ana Sayfa' },
+  { href: '/departments', label: 'Departmanlar' },
+  { href: '/personnel', label: 'Personel' },
+  { href: '/jobs', label: 'İş İlanları' },
+  { href: '/requests', label: 'Talepler' },
+  { href: '/bt-requests', label: 'BT Talepleri' },
+  { href: '/documents', label: 'Eğitim & Dokümanlar' },
+  { href: '/corporate', label: 'Kurumsal' },
+  { href: '/sustainability', label: 'Sürdürülebilirlik' },
+  { href: '/work-calendar', label: 'Görevlendirme' },
+  { href: '/management', label: 'Yönetim', id: 'management' },
+  { href: '/reporting', label: 'Raporlama' },
 ];
 
 const bottomNavItems = [
-    { href: '/ai-screener', label: 'AI Tarama', icon: Bot, color: 'text-teal-500' },
+    { href: '/ai-screener', label: 'AI Tarama' },
 ]
 
 export function SidebarNav() {
@@ -90,7 +69,6 @@ export function SidebarNav() {
                   isActive={pathname.startsWith(item.href) && (item.href !== '/' || pathname === '/')}
                   tooltip={item.label}
                 >
-                  <item.icon className={item.color} />
                   <span>{item.label}</span>
                   {item.id === 'management' && pendingRequests && pendingRequests.length > 0 && (
                     <SidebarMenuBadge>{pendingRequests.length}</SidebarMenuBadge>
@@ -109,7 +87,6 @@ export function SidebarNav() {
                     isActive={pathname === item.href}
                     tooltip={item.label}
                     >
-                    <item.icon className={item.color} />
                     <span>{item.label}</span>
                     </SidebarMenuButton>
                 </Link>
@@ -117,27 +94,6 @@ export function SidebarNav() {
           ))}
         </SidebarMenu>
       </SidebarContent>
-      {/* 
-      This is commented out as per the new implementation where the logout and settings are in a dropdown menu in the user profile.
-      <SidebarFooter>
-        <div className="flex flex-col gap-2 p-2">
-            <SidebarMenu>
-                <SidebarMenuItem>
-                    <SidebarMenuButton tooltip="Ayarlar">
-                        <Settings />
-                        <span>Ayarlar</span>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
-                 <SidebarMenuItem>
-                    <SidebarMenuButton tooltip="Çıkış Yap">
-                        <LogOut />
-                        <span>Çıkış Yap</span>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
-            </SidebarMenu>
-        </div>
-      </SidebarFooter> 
-      */}
     </>
   );
 }

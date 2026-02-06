@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -26,6 +24,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
 
 
 const trainingDocuments = [
@@ -451,6 +450,36 @@ const surveyRatingDescriptions: { [key: number]: string } = {
   5: "Kesinlikle Katılıyorum"
 };
 
+const DocumentsPageSkeleton = () => (
+    <div className="space-y-8">
+        <header>
+            <div className="flex items-center gap-3">
+                <Skeleton className="h-8 w-8 rounded-full" />
+                <div>
+                    <Skeleton className="h-8 w-64 mb-2" />
+                    <Skeleton className="h-5 w-80" />
+                </div>
+            </div>
+        </header>
+        <Tabs defaultValue="training" className="w-full">
+            <TabsList className="grid w-full grid-cols-5">
+                <Skeleton className="h-8 w-full" />
+                <Skeleton className="h-8 w-full" />
+                <Skeleton className="h-8 w-full" />
+                <Skeleton className="h-8 w-full" />
+                <Skeleton className="h-8 w-full" />
+            </TabsList>
+            <TabsContent value="training">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+                    {Array.from({ length: 6 }).map((_, i) => (
+                        <Card key={i}><CardHeader><Skeleton className="h-5 w-3/4" /></CardHeader><CardContent><Skeleton className="h-10 w-full" /></CardContent><CardFooter><Skeleton className="h-8 w-24" /></CardFooter></Card>
+                    ))}
+                </div>
+            </TabsContent>
+        </Tabs>
+    </div>
+);
+
 
 export default function DocumentsPage() {
     const { toast } = useToast();
@@ -458,7 +487,9 @@ export default function DocumentsPage() {
     const hrManager = allEmployees.find(emp => emp.title === 'İK Müdürü');
     const [evaluationPeriod, setEvaluationPeriod] = useState('');
 
+    const [isClient, setIsClient] = useState(false);
     useEffect(() => {
+        setIsClient(true);
         setEvaluationPeriod(new Date().toISOString().substring(0, 7));
     }, []);
 
@@ -491,6 +522,10 @@ export default function DocumentsPage() {
             description: 'Değerli geri bildirimleriniz için teşekkür ederiz. Anketiniz anonim olarak kaydedilmiştir.',
         });
     };
+
+    if (!isClient) {
+      return <DocumentsPageSkeleton />;
+    }
     
   return (
     <div className="space-y-8">
