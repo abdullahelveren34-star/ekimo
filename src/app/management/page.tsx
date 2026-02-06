@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import type { ApprovalRequest, RequestDetails } from '@/lib/actions';
 import { updateDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { allEmployees } from '@/lib/data';
 import {
   Dialog,

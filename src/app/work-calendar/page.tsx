@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { allEmployees } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 
 
@@ -211,7 +211,6 @@ export default function AssignmentPage() {
                            <TableCell>
                              <div className="flex items-center gap-3">
                                <Avatar className="h-9 w-9">
-                                 <AvatarImage src={employee?.avatarUrl} alt={employee?.name} />
                                  <AvatarFallback>{employee?.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
                                </Avatar>
                                <div>

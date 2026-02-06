@@ -11,13 +11,15 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Cake, Gift, Star, Send } from 'lucide-react';
 import { CandyCrushGame } from '@/components/game/candy-crush-game';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function HomePage() {
   const chairman = boardMembers.find(member => member.title === 'Yönetim Kurulu Başkanı');
-  const [birthdayPersonnel, setBirthdayPersonnel] = useState<Employee[]>([]);
+  const [birthdayPersonnel, setBirthdayPersonnel] = useState<Employee[] | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
+    // This effect runs only on the client side, after hydration.
     const today = new Date();
     const todayMonth = today.getMonth() + 1;
     const todayDay = today.getDate();
@@ -173,7 +175,17 @@ export default function HomePage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {birthdayPersonnel.length > 0 ? (
+            {birthdayPersonnel === null ? (
+              <div className="space-y-6 py-8">
+                <div className="flex items-center gap-4">
+                  <Skeleton className="h-10 w-10 rounded-full" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-[150px]" />
+                    <Skeleton className="h-3 w-[100px]" />
+                  </div>
+                </div>
+              </div>
+            ) : birthdayPersonnel.length > 0 ? (
               <ul className="space-y-6">
                 {birthdayPersonnel.map((person) => (
                   <li key={person.id} className="flex flex-col items-start gap-4">
@@ -202,5 +214,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-    

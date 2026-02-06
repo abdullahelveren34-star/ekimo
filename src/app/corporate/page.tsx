@@ -11,10 +11,21 @@ const getPersonByTitle = (title: string) => {
 }
 
 const getDirectorForDepartment = (departmentName: string) => {
-    const directorsAndManagers = Object.values(departmentMembers).flat().filter(
-        emp => emp.title.includes('Müdürü') || emp.title.includes('Direktörü') || emp.title.includes('Sorumlusu')
-    );
-    return directorsAndManagers.find(dir => dir.department === departmentName)?.name || null;
+    const employeesInDept = departmentMembers[departmentName as keyof typeof departmentMembers];
+    if (!employeesInDept) {
+        return null;
+    }
+    // Define a priority order for titles
+    const titlePriority = ['Direktörü', 'Müdürü', 'Sorumlusu'];
+
+    for (const priorityTitle of titlePriority) {
+        const found = employeesInDept.find(emp => emp.title.includes(priorityTitle));
+        if (found) {
+            return found.name;
+        }
+    }
+    
+    return null;
 }
 
 const orgChartData = {
@@ -47,7 +58,7 @@ const OrgChartNode = ({ node }: { node: { title: string; person?: string | null;
                 {/* Vertical line from parent */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 h-5 w-px bg-border"></div>
                 {node.children.map((child, index) => (
-                    <div key={index} className="relative px-2 flex flex-col items-center">
+                    <div key={child.title} className="relative px-2 flex flex-col items-center">
                          {/* Horizontal line */}
                         <div className="absolute top-0 left-0 w-full h-px bg-border"></div>
                         {/* Hide ends for single child */}
