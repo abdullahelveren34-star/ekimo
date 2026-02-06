@@ -16,7 +16,6 @@ export function UserProfile() {
                         <p className="text-xs text-muted-foreground">{currentUser.title}</p>
                     </div>
                     <Avatar>
-                        <AvatarImage src={currentUser.avatarUrl} alt={currentUser.name} />
                         <AvatarFallback>{currentUser.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
                     </Avatar>
                 </Button>
@@ -44,3 +43,5 @@ export function UserProfile() {
         </DropdownMenu>
     );
 }
+
+    

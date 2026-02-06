@@ -60,7 +60,6 @@ export function PersonnelDetailPageContent({ employee }: { employee: Employee })
        <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <Avatar className="h-24 w-24">
-            <AvatarImage src={employee.avatarUrl} alt={employee.name} />
             <AvatarFallback>{employee.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
           </Avatar>
           <div>
@@ -282,3 +281,5 @@ export function PersonnelDetailPageContent({ employee }: { employee: Employee })
     </div>
   );
 }
+
+    

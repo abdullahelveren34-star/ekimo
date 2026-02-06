@@ -197,7 +197,6 @@ export default function ManagementPage() {
                           <TableCell>
                             <div className="flex items-center gap-3">
                               <Avatar>
-                                <AvatarImage src={employee?.avatarUrl} alt={employee?.name} />
                                 <AvatarFallback>{employee?.name ? employee.name.split(' ').map((n: string) => n[0]).join('') : '?'}</AvatarFallback>
                               </Avatar>
                               <div>
@@ -266,3 +265,5 @@ export default function ManagementPage() {
     </div>
   );
 }
+
+    

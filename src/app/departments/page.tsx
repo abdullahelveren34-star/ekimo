@@ -120,7 +120,6 @@ export default function DepartmentsPage() {
                             <li key={member.id}>
                             <Link href={`/personnel/${member.id}`} className="flex items-center gap-4 p-2 rounded-md hover:bg-muted transition-colors" onClick={handleCloseDialog}>
                                 <Avatar className="h-12 w-12">
-                                <AvatarImage src={member.avatarUrl} alt={member.name} />
                                 <AvatarFallback>{member.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
                                 </Avatar>
                                 <div>
@@ -141,3 +140,5 @@ export default function DepartmentsPage() {
     </div>
   );
 }
+
+    

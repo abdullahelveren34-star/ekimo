@@ -15,7 +15,6 @@ export default function Dashboard() {
           <div className="md:flex">
             <div className="md:flex-shrink-0">
               <Avatar className="h-full w-full md:w-48 rounded-none">
-                <AvatarImage src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="İzlem Manduz" className="object-cover h-full w-full" />
                 <AvatarFallback>İM</AvatarFallback>
               </Avatar>
             </div>
@@ -100,3 +99,5 @@ export default function Dashboard() {
     </div>
   );
 }
+
+    

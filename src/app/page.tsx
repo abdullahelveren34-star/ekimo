@@ -53,8 +53,7 @@ export default function HomePage() {
             <div className="md:flex">
               <div className="md:flex-shrink-0">
                 <Avatar className="h-full w-full md:w-48 rounded-none">
-                  <AvatarImage src={chairman.avatarUrl} alt={chairman.name} className="object-cover h-full w-full" />
-                  <AvatarFallback>{chairman.name.charAt(0)}</AvatarFallback>
+                  <AvatarFallback>{chairman.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
                 </Avatar>
               </div>
               <div className="p-8">
@@ -152,7 +151,6 @@ export default function HomePage() {
           <CardContent className="flex flex-col gap-4">
             <div className="flex items-center gap-6">
               <Avatar className="h-24 w-24 border-2 border-primary">
-                <AvatarImage src={employeeOfTheMonth.avatarUrl} alt={employeeOfTheMonth.name} />
                 <AvatarFallback>{employeeOfTheMonth.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
               </Avatar>
               <div className="space-y-2">
@@ -181,7 +179,6 @@ export default function HomePage() {
                   <li key={person.name} className="flex flex-col items-start gap-4">
                     <div className="flex items-center gap-4">
                       <Avatar>
-                        <AvatarImage src={person.avatarUrl} alt={person.name} />
                         <AvatarFallback>{person.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
                       </Avatar>
                       <div>
@@ -205,3 +202,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+    
