@@ -30,6 +30,7 @@ import {
   Landmark,
   Plane,
   Leaf,
+  FileChart,
 } from 'lucide-react';
 import { useFirebase, useCollection } from '@/firebase';
 import { collection, query, where } from 'firebase/firestore';
@@ -49,6 +50,7 @@ const navItems = [
   { href: '/sustainability', label: 'Sürdürülebilirlik', icon: Leaf, color: 'text-green-600' },
   { href: '/work-calendar', label: 'Görevlendirme', icon: Plane, color: 'text-rose-500' },
   { href: '/management', label: 'Yönetim', icon: Shield, id: 'management', color: 'text-red-500' },
+  { href: '/reporting', label: 'Raporlama', icon: FileChart, color: 'text-teal-500' },
 ];
 
 const bottomNavItems = [

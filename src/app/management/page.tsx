@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Shield, FileText, CalendarPlus, HandCoins, Car, Plane, Wrench, Briefcase, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -46,6 +46,23 @@ const requestTypeColors: { [key: string]: string } = {
 };
 
 const getEmployeeById = (id: string) => allEmployees.find(e => e.id === id);
+
+const ClientFormattedDate = ({ dateString, options, placeholderWidth = "w-[90px]" }: { dateString: string | undefined | null, options?: Intl.DateTimeFormatOptions, placeholderWidth?: string }) => {
+    const [formattedDate, setFormattedDate] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (!dateString) {
+            setFormattedDate('-');
+            return;
+        }
+        setFormattedDate(new Date(dateString).toLocaleString('tr-TR', options));
+    }, [dateString, options]);
+
+    if (formattedDate === null) {
+        return <Skeleton className={`h-4 ${placeholderWidth} inline-block`} />;
+    }
+    return <>{formattedDate}</>;
+};
 
 export default function ManagementPage() {
   const { firestore, user } = useFirebase();
@@ -113,8 +130,8 @@ export default function ManagementPage() {
       case 'İzin':
         return <>
           {renderDetail('İzin Türü', details.leaveType)}
-          {renderDetail('Başlangıç Tarihi', details.startDate ? new Date(details.startDate).toLocaleDateString('tr-TR') : null)}
-          {renderDetail('Bitiş Tarihi', details.endDate ? new Date(details.endDate).toLocaleDateString('tr-TR') : null)}
+          {renderDetail('Başlangıç Tarihi', details.startDate ? <ClientFormattedDate dateString={details.startDate} options={{ year: 'numeric', month: '2-digit', day: '2-digit' }} /> : null)}
+          {renderDetail('Bitiş Tarihi', details.endDate ? <ClientFormattedDate dateString={details.endDate} options={{ year: 'numeric', month: '2-digit', day: '2-digit' }} /> : null)}
           {details.leaveType === 'Fazla Mesai' && renderDetail('Başlangıç Saati', details.startTime)}
           {details.leaveType === 'Fazla Mesai' && renderDetail('Bitiş Saati', details.endTime)}
           {commonDetails}
@@ -132,8 +149,8 @@ export default function ManagementPage() {
           {details.travelRequestType === 'accommodation' && renderDetail('Otel', details.hotel)}
           {details.travelRequestType === 'flight' && renderDetail('Kalkış', `${details.departureCity} - ${details.departureAirport}`)}
           {details.travelRequestType === 'flight' && renderDetail('Varış', `${details.arrivalCity} - ${details.arrivalAirport}`)}
-          {renderDetail('Gidiş Tarihi', details.startDate ? new Date(details.startDate).toLocaleDateString('tr-TR') : null)}
-          {renderDetail('Dönüş Tarihi', details.endDate ? new Date(details.endDate).toLocaleDateString('tr-TR') : null)}
+          {renderDetail('Gidiş Tarihi', details.startDate ? <ClientFormattedDate dateString={details.startDate} options={{ year: 'numeric', month: '2-digit', day: '2-digit' }} /> : null)}
+          {renderDetail('Dönüş Tarihi', details.endDate ? <ClientFormattedDate dateString={details.endDate} options={{ year: 'numeric', month: '2-digit', day: '2-digit' }} /> : null)}
           {renderDetail('İkinci Yolcu', details.secondPassenger)}
           {commonDetails}
         </>;
@@ -141,8 +158,8 @@ export default function ManagementPage() {
         return <>
           {renderDetail('Araç Plakası', details.vehiclePlate)}
           {renderDetail('Gidilecek Yer', details.destination)}
-          {renderDetail('Gidiş Tarihi', details.startDate ? new Date(details.startDate).toLocaleDateString('tr-TR') : null)}
-          {renderDetail('Dönüş Tarihi', details.endDate ? new Date(details.endDate).toLocaleDateString('tr-TR') : null)}
+          {renderDetail('Gidiş Tarihi', details.startDate ? <ClientFormattedDate dateString={details.startDate} options={{ year: 'numeric', month: '2-digit', day: '2-digit' }} /> : null)}
+          {renderDetail('Dönüş Tarihi', details.endDate ? <ClientFormattedDate dateString={details.endDate} options={{ year: 'numeric', month: '2-digit', day: '2-digit' }} /> : null)}
           {commonDetails}
         </>;
       default:
@@ -158,7 +175,7 @@ export default function ManagementPage() {
           <div>
             <h1 className="text-3xl font-bold text-primary">Yönetim Onay Paneli</h1>
             <p className="text-muted-foreground mt-1">
-              {isLoading ? 'Bekleyen talepler yükleniyor...' : `Onayınızı bekleyen ${requests?.length || 0} talep bulunuyor.`}
+              {isLoading ? 'Bekleyen talepler yükleniyor...' : `Onayınızı bekleyen ${displayData?.length || 0} talep bulunuyor.`}
             </p>
           </div>
         </div>
@@ -224,7 +241,7 @@ export default function ManagementPage() {
                             </DialogTrigger>
                           </TableCell>
                           <TableCell>
-                            {new Date(request.requestDate).toLocaleDateString('tr-TR')}
+                             <ClientFormattedDate dateString={request.requestDate} options={{ year: 'numeric', month: '2-digit', day: '2-digit' }} />
                           </TableCell>
                           <TableCell className="text-right">
                             <div className="flex items-center justify-end gap-2">
@@ -246,7 +263,7 @@ export default function ManagementPage() {
                                 {request.requestType} Talep Detayları
                             </DialogTitle>
                             <DialogDescription>
-                              {new Date(request.requestDate).toLocaleString('tr-TR', { dateStyle: 'long', timeStyle: 'short' })} tarihinde oluşturuldu.
+                              <ClientFormattedDate dateString={request.requestDate} options={{ dateStyle: 'long', timeStyle: 'short' }} placeholderWidth="w-[200px]" /> tarihinde oluşturuldu.
                             </DialogDescription>
                           </DialogHeader>
                           <div className="space-y-1 pt-4">

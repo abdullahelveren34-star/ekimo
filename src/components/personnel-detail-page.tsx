@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import type { Employee } from '@/lib/data';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Cake, CalendarDays, Contact, HardDrive, Mail, Phone, User, TrendingUp } from 'lucide-react';
@@ -27,7 +27,8 @@ function getAge(birthDateString: string) {
 }
 
 export function PersonnelDetailPageContent({ employee }: { employee: Employee }) {
-  const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
+  const availableYears = employee.performanceHistory.map(p => p.year).sort((a, b) => b - a);
+  const [selectedYear, setSelectedYear] = useState<number>(availableYears[0]);
   const [clientSideData, setClientSideData] = useState<{ age: number; formattedBirthDate: string } | null>(null);
 
   useEffect(() => {
@@ -52,8 +53,6 @@ export function PersonnelDetailPageContent({ employee }: { employee: Employee })
     average: { label: "Ortalama", color: "hsl(var(--foreground))" },
     target: { label: "Hedef", color: "hsl(var(--primary))" },
   };
-
-  const availableYears = employee.performanceHistory.map(p => p.year).sort((a, b) => b - a);
 
   return (
     <div className="space-y-8">
@@ -281,5 +280,3 @@ export function PersonnelDetailPageContent({ employee }: { employee: Employee })
     </div>
   );
 }
-
-    

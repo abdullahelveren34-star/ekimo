@@ -4,6 +4,7 @@ import { Gem, Star, Heart, Apple, Cherry, Sun, Moon, Play, Pause } from 'lucide-
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
+import { Skeleton } from '../ui/skeleton';
 
 const width = 8;
 const itemTypes = [
@@ -124,12 +125,17 @@ const DecorativeItems = () => (
 
 
 export const CandyCrushGame = () => {
+    const [isClient, setIsClient] = useState(false);
     const [board, setBoard] = useState<any[]>([]);
     const [score, setScore] = useState(0);
     const [scoreUpdated, setScoreUpdated] = useState(false);
     const [draggedItemIndex, setDraggedItemIndex] = useState<number | null>(null);
     const [replacedItemIndex, setReplacedItemIndex] = useState<number | null>(null);
     const [matchedIndices, setMatchedIndices] = useState<Set<number>>(new Set());
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     const createBoard = useCallback(() => {
         const newBoard = Array.from({ length: width * width }, () => itemTypes[Math.floor(Math.random() * itemTypes.length)]);
@@ -139,8 +145,10 @@ export const CandyCrushGame = () => {
     }, []);
     
     useEffect(() => {
-        createBoard();
-    }, [createBoard]);
+        if (isClient) {
+            createBoard();
+        }
+    }, [isClient, createBoard]);
 
     useEffect(() => {
         if (score > 0) {
@@ -240,6 +248,8 @@ export const CandyCrushGame = () => {
     }, []);
 
     useEffect(() => {
+        if (!isClient || board.length === 0) return;
+
         const gameLoop = setInterval(() => {
             const newBoard = [...board];
             checkForRowOfFour(newBoard);
@@ -250,7 +260,7 @@ export const CandyCrushGame = () => {
             setBoard(newBoard);
         }, 150);
         return () => clearInterval(gameLoop);
-    }, [board, checkForColumnOfFour, checkForRowOfFour, checkForColumnOfThree, checkForRowOfThree, moveIntoSquareBelow]);
+    }, [board, isClient, checkForColumnOfFour, checkForRowOfFour, checkForColumnOfThree, checkForRowOfThree, moveIntoSquareBelow]);
 
     const dragStart = (e: React.DragEvent<HTMLDivElement>) => {
         setDraggedItemIndex(parseInt(e.currentTarget.dataset.id || '-1'));
@@ -312,40 +322,48 @@ export const CandyCrushGame = () => {
                     </div>
                     
                     <div className="grid grid-cols-8 gap-1 p-2 bg-muted rounded-lg candy-crush-board relative">
-                        {board.map((item, index) => {
-                            const Icon = item.component;
-                            const isMatched = matchedIndices.has(index);
-                            return (
-                                <div
-                                    key={index}
-                                    className={cn(
-                                        "w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-md cursor-grab transition-all duration-300 ease-in-out",
-                                        "bg-muted/30 shadow-lg hover:scale-110 active:scale-95 active:cursor-grabbing",
-                                        "border-2 border-primary/50",
-                                        "relative" // For positioning the effect
-                                    )}
-                                    data-id={index}
-                                    draggable={true}
-                                    onDragStart={dragStart}
-                                    onDragOver={(e) => e.preventDefault()}
-                                    onDragEnter={(e) => e.preventDefault()}
-                                    onDragLeave={(e) => e.preventDefault()}
-                                    onDrop={dragDrop}
-                                    onDragEnd={dragEnd}
-                                >
-                                    {Icon && <Icon className={cn("w-7 h-7 sm:w-9 sm:h-9 pointer-events-none", item.color)} />}
-                                    {isMatched && (
-                                        <Star className="absolute w-8 h-8 text-yellow-300 animate-star-pop" />
-                                    )}
+                        {!isClient ? (
+                            Array.from({ length: width * width }).map((_, index) => (
+                                <div key={index} className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-md bg-muted/30 shadow-inner">
+                                    <Skeleton className="w-8 h-8 sm:w-10 sm:h-10 rounded-md" />
                                 </div>
-                            );
-                        })}
+                            ))
+                        ) : (
+                            board.map((item, index) => {
+                                const Icon = item.component;
+                                const isMatched = matchedIndices.has(index);
+                                return (
+                                    <div
+                                        key={index}
+                                        className={cn(
+                                            "w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-md cursor-grab transition-all duration-300 ease-in-out",
+                                            "bg-muted/30 shadow-lg hover:scale-110 active:scale-95 active:cursor-grabbing",
+                                            "border-2 border-primary/50",
+                                            "relative" // For positioning the effect
+                                        )}
+                                        data-id={index}
+                                        draggable={true}
+                                        onDragStart={dragStart}
+                                        onDragOver={(e) => e.preventDefault()}
+                                        onDragEnter={(e) => e.preventDefault()}
+                                        onDragLeave={(e) => e.preventDefault()}
+                                        onDrop={dragDrop}
+                                        onDragEnd={dragEnd}
+                                    >
+                                        {Icon && <Icon className={cn("w-7 h-7 sm:w-9 sm:h-9 pointer-events-none", item.color)} />}
+                                        {isMatched && (
+                                            <Star className="absolute w-8 h-8 text-yellow-300 animate-star-pop" />
+                                        )}
+                                    </div>
+                                );
+                            })
+                        )}
                     </div>
                 </div>
 
                 <div className="flex flex-col items-center space-y-4 w-full max-w-2xl pt-4 border-t border-border z-10">
                     <div className="flex gap-4">
-                        <Button onClick={createBoard}>Yeni Oyun</Button>
+                        <Button onClick={createBoard} disabled={!isClient}>Yeni Oyun</Button>
                     </div>
                     <div className="p-4 bg-muted/50 rounded-lg text-xs text-muted-foreground space-y-1.5 w-full text-center">
                          <h4 className="font-semibold text-foreground text-sm">Nasıl Oynanır?</h4>
