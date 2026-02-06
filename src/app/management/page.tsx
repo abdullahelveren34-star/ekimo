@@ -21,6 +21,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Skeleton } from '@/components/ui/skeleton';
+import { mockApprovalRequests } from '@/lib/mock-requests';
 
 const requestTypeIcons = {
   'İK Evrak': <FileText className="h-4 w-4" />,
@@ -60,6 +61,9 @@ export default function ManagementPage() {
   }, [firestore]);
 
   const { data: requests, isLoading } = useCollection<ApprovalRequest>(pendingRequestsQuery);
+
+  const isMockData = !isLoading && (!requests || requests.length === 0);
+  const displayData = isMockData ? mockApprovalRequests : requests;
 
   const handleRequestStatusUpdate = (requestId: string, newStatus: 'Onaylandı' | 'Reddedildi') => {
     if (!firestore) {
@@ -165,6 +169,12 @@ export default function ManagementPage() {
           <CardTitle>Onay Bekleyen Talepler</CardTitle>
           <CardDescription>
             Aşağıdaki talepleri onaylayabilir veya reddedebilirsiniz. Detayları görmek için talep türü üzerine tıklayın.
+            {isMockData && (
+              <p className="mt-2 text-sm text-amber-600 dark:text-amber-400 p-3 bg-amber-500/10 border border-amber-500/20 rounded-md">
+                <strong>Not:</strong> Henüz veritabanında gerçek bir talep bulunamadı. Bu nedenle aşağıda **örnek veriler** gösterilmektedir. 
+                <code className="mx-1 p-1 bg-muted rounded-sm text-xs">/requests</code> sayfasından yeni bir talep oluşturduğunuzda, gerçek talepler burada listelenecektir.
+              </p>
+            )}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -188,8 +198,8 @@ export default function ManagementPage() {
                       <TableCell><Skeleton className="h-10 w-full" /></TableCell>
                     </TableRow>
                   ))
-                ) : requests && requests.length > 0 ? (
-                  requests.map((request) => {
+                ) : displayData && displayData.length > 0 ? (
+                  displayData.map((request) => {
                     const employee = getEmployeeById(request.employeeId);
                     return (
                       <Dialog key={request.id}>
@@ -218,10 +228,10 @@ export default function ManagementPage() {
                           </TableCell>
                           <TableCell className="text-right">
                             <div className="flex items-center justify-end gap-2">
-                              <Button variant="outline" size="sm" onClick={() => handleRequestStatusUpdate(request.id, 'Onaylandı')}>
+                              <Button variant="outline" size="sm" onClick={() => handleRequestStatusUpdate(request.id, 'Onaylandı')} disabled={isMockData}>
                                 Onayla
                               </Button>
-                              <Button variant="destructive" size="sm" onClick={() => handleRequestStatusUpdate(request.id, 'Reddedildi')}>
+                              <Button variant="destructive" size="sm" onClick={() => handleRequestStatusUpdate(request.id, 'Reddedildi')} disabled={isMockData}>
                                 Reddet
                               </Button>
                             </div>
@@ -265,5 +275,3 @@ export default function ManagementPage() {
     </div>
   );
 }
-
-    
