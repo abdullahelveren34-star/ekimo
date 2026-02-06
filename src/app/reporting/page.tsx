@@ -10,6 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from '@/components/ui/badge';
 import { allEmployees } from '@/lib/data';
 import { Skeleton } from '@/components/ui/skeleton';
+import { mockApprovalRequests } from '@/lib/mock-requests';
 
 const statusIcons = {
     'Onaylandı': <CheckCircle className="h-4 w-4 text-green-500" />,
@@ -52,17 +53,43 @@ export default function ReportingPage() {
 
   const { data: requests, isLoading } = useCollection<ApprovalRequest>(allRequestsQuery);
 
+  const isMockData = !isLoading && (!requests || requests.length === 0);
+
+  const processedData = useMemo(() => {
+    if (isLoading) return []; 
+    
+    const sourceData = isMockData ? mockApprovalRequests : requests;
+
+    if (isMockData) {
+      return sourceData.map((req, index) => {
+        const newReq = { ...req }; 
+        if (index < 4) {
+          newReq.status = 'Onaylandı';
+          newReq.approvalDate = new Date(Date.now() - (index + 2) * 24 * 3600 * 1000).toISOString();
+        } else if (index < 6) {
+          newReq.status = 'Reddedildi';
+          newReq.approvalDate = new Date(Date.now() - (index + 2) * 24 * 3600 * 1000).toISOString();
+        } else {
+          newReq.status = 'Beklemede';
+          newReq.approvalDate = undefined;
+        }
+        return newReq;
+      });
+    }
+    return sourceData;
+  }, [requests, isLoading, isMockData]);
+  
   const reportStats = useMemo(() => {
-    if (!requests) {
+    if (isLoading || !processedData) {
       return { total: 0, approved: 0, rejected: 0, pending: 0 };
     }
     return {
-      total: requests.length,
-      approved: requests.filter(r => r.status === 'Onaylandı').length,
-      rejected: requests.filter(r => r.status === 'Reddedildi').length,
-      pending: requests.filter(r => r.status === 'Beklemede').length,
+      total: processedData.length,
+      approved: processedData.filter(r => r.status === 'Onaylandı').length,
+      rejected: processedData.filter(r => r.status === 'Reddedildi').length,
+      pending: processedData.filter(r => r.status === 'Beklemede').length,
     };
-  }, [requests]);
+  }, [processedData, isLoading]);
 
   return (
     <div className="space-y-8">
@@ -118,7 +145,15 @@ export default function ReportingPage() {
       <Card>
         <CardHeader>
             <CardTitle>Tüm Taleplerin Geçmişi</CardTitle>
-            <CardDescription>Oluşturulan tüm taleplerin listesi ve mevcut durumları.</CardDescription>
+            <CardDescription>
+                Oluşturulan tüm taleplerin listesi ve mevcut durumları.
+                {isMockData && (
+                    <p className="mt-2 text-sm text-amber-600 dark:text-amber-400 p-3 bg-amber-500/10 border border-amber-500/20 rounded-md">
+                        <strong>Not:</strong> Henüz veritabanında gerçek bir talep bulunamadı. Bu nedenle aşağıda **örnek veriler** gösterilmektedir. 
+                        <code className="mx-1 p-1 bg-muted rounded-sm text-xs">/requests</code> sayfasından yeni bir talep oluşturduğunuzda, gerçek talepler burada listelenecektir.
+                    </p>
+                )}
+            </CardDescription>
         </CardHeader>
         <CardContent>
              <div className="border rounded-lg">
@@ -139,8 +174,8 @@ export default function ReportingPage() {
                                     <TableCell colSpan={5}><Skeleton className="h-10 w-full" /></TableCell>
                                 </TableRow>
                             ))
-                        ) : requests && requests.length > 0 ? (
-                            requests.map((request) => {
+                        ) : processedData && processedData.length > 0 ? (
+                            processedData.map((request) => {
                                 const employee = getEmployeeById(request.employeeId);
                                 return (
                                     <TableRow key={request.id}>
