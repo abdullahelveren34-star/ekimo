@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo, useState, useEffect } from 'react';
-import { FileChart, CheckCircle, XCircle, Clock, Briefcase } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useFirebase, useCollection } from '@/firebase';
 import { collection, query } from 'firebase/firestore';
@@ -11,12 +10,6 @@ import { Badge } from '@/components/ui/badge';
 import { allEmployees } from '@/lib/data';
 import { Skeleton } from '@/components/ui/skeleton';
 import { mockApprovalRequests } from '@/lib/mock-requests';
-
-const statusIcons = {
-    'Onaylandı': <CheckCircle className="h-4 w-4 text-green-500" />,
-    'Reddedildi': <XCircle className="h-4 w-4 text-red-500" />,
-    'Beklemede': <Clock className="h-4 w-4 text-yellow-500" />,
-};
 
 const statusColors: { [key: string]: string } = {
   'Onaylandı': 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300',
@@ -95,7 +88,6 @@ export default function ReportingPage() {
     <div className="space-y-8">
       <header>
         <div className="flex items-center gap-3">
-          <FileChart className="h-8 w-8 text-primary" />
           <div>
             <h1 className="text-3xl font-bold text-primary">Talep Raporlama</h1>
             <p className="text-muted-foreground mt-1">Tüm personel taleplerinin özetini ve geçmişini görüntüleyin.</p>
@@ -107,7 +99,6 @@ export default function ReportingPage() {
         <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Toplam Talep</CardTitle>
-                <Briefcase className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
                 {isLoading ? <Skeleton className="h-8 w-1/4" /> : <div className="text-2xl font-bold">{reportStats.total}</div>}
@@ -116,7 +107,6 @@ export default function ReportingPage() {
         <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Onaylanan Talepler</CardTitle>
-                <CheckCircle className="h-4 w-4 text-green-500" />
             </CardHeader>
             <CardContent>
                 {isLoading ? <Skeleton className="h-8 w-1/4" /> : <div className="text-2xl font-bold">{reportStats.approved}</div>}
@@ -125,7 +115,6 @@ export default function ReportingPage() {
         <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Reddedilen Talepler</CardTitle>
-                <XCircle className="h-4 w-4 text-red-500" />
             </CardHeader>
             <CardContent>
                 {isLoading ? <Skeleton className="h-8 w-1/4" /> : <div className="text-2xl font-bold">{reportStats.rejected}</div>}
@@ -134,7 +123,6 @@ export default function ReportingPage() {
         <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Bekleyen Talepler</CardTitle>
-                <Clock className="h-4 w-4 text-yellow-500" />
             </CardHeader>
             <CardContent>
                 {isLoading ? <Skeleton className="h-8 w-1/4" /> : <div className="text-2xl font-bold">{reportStats.pending}</div>}
@@ -185,8 +173,7 @@ export default function ReportingPage() {
                                         <TableCell><ClientFormattedDate dateString={request.approvalDate} /></TableCell>
                                         <TableCell className="text-right">
                                             <Badge variant="outline" className={`${statusColors[request.status]}`}>
-                                                {statusIcons[request.status as keyof typeof statusIcons]}
-                                                <span className="ml-2">{request.status}</span>
+                                                <span>{request.status}</span>
                                             </Badge>
                                         </TableCell>
                                     </TableRow>
