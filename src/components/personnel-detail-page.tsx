@@ -126,8 +126,8 @@ export function PersonnelDetailPageContent({ employee }: { employee: Employee })
               <CardContent>
                 {employee.equipment.length > 0 ? (
                   <ul className="space-y-3">
-                    {employee.equipment.map((item, index) => (
-                      <li key={index} className="text-sm p-3 bg-muted/50 rounded-md">
+                    {employee.equipment.map((item) => (
+                      <li key={item.serialNumber} className="text-sm p-3 bg-muted/50 rounded-md">
                         <strong className="font-semibold">{item.type}:</strong> {item.model}
                         <span className="text-muted-foreground text-xs block mt-1">Seri No: {item.serialNumber}</span>
                       </li>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { boardMembers, textileNews, companyNews, departmentMembers, employeeOfTheMonth, type Employee } from '@/lib/data';
 import Image from 'next/image';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
@@ -176,7 +176,7 @@ export default function HomePage() {
             {birthdayPersonnel.length > 0 ? (
               <ul className="space-y-6">
                 {birthdayPersonnel.map((person) => (
-                  <li key={person.name} className="flex flex-col items-start gap-4">
+                  <li key={person.id} className="flex flex-col items-start gap-4">
                     <div className="flex items-center gap-4">
                       <Avatar>
                         <AvatarFallback>{person.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>

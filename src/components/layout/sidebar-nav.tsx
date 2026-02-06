@@ -20,7 +20,7 @@ import {
   Settings,
   LogOut,
   Home,
-  Building,
+  Building2,
   ClipboardList,
   FileText,
   Briefcase,
@@ -40,7 +40,7 @@ import { Logo } from '../logo';
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, color: 'text-sky-500' },
   { href: '/', label: 'Ana Sayfa', icon: Home, color: 'text-green-500' },
-  { href: '/departments', label: 'Departmanlar', icon: Building, color: 'text-yellow-500' },
+  { href: '/departments', label: 'Departmanlar', icon: Building2, color: 'text-yellow-500' },
   { href: '/personnel', label: 'Personel', icon: Users, color: 'text-orange-500' },
   { href: '/jobs', label: 'İş İlanları', icon: Briefcase, color: 'text-blue-500' },
   { href: '/requests', label: 'Talepler', icon: ClipboardList, color: 'text-cyan-500' },

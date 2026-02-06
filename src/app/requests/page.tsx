@@ -13,11 +13,12 @@ import { Briefcase, Car, FileText, HandCoins, Plane, Wrench, BedDouble, PlaneTak
 import { hotelsByCity, allCities, airportsByCity, currentUser, approverUser } from "@/lib/data"
 import { useFirebase } from "@/firebase"
 import { createApprovalRequest } from "@/lib/actions"
-import { toast } from "@/hooks/use-toast"
+import { useToast } from "@/hooks/use-toast"
 
 
 export default function RequestsPage() {
   const { firestore } = useFirebase();
+  const { toast } = useToast();
 
   // Common state - Using IDs from data.ts
   const [employeeId] = useState(currentUser.id); 
@@ -114,8 +115,10 @@ export default function RequestsPage() {
       details
     }).then(() => {
         resetForms();
-        // Optionally, show a more subtle confirmation or just reset the form.
-        // For example, you could change a button text to "Sent!" for a short duration.
+        toast({
+            title: "Talep Gönderildi!",
+            description: "Talebiniz başarıyla yönetici onayına gönderilmiştir.",
+        });
     }).catch(error => {
         console.error("Talep oluşturulurken hata:", error);
         toast({ variant: "destructive", title: "Hata!", description: error.message || "Talep oluşturulurken bir sorun oluştu." });

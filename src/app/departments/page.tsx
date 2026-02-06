@@ -1,7 +1,6 @@
 'use client';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Dialog,
@@ -9,7 +8,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import {
   Users,
@@ -29,6 +27,7 @@ import {
   BookUser,
   DraftingCompass,
   Server,
+  Building2,
 } from 'lucide-react';
 import React, { useState } from 'react';
 import { departmentMembers } from '@/lib/data';
@@ -82,24 +81,21 @@ export default function DepartmentsPage() {
         {departments.map((dept) => {
           const deptMembers = departmentMembers[dept.name as keyof typeof departmentMembers] || [];
           return (
-            <Dialog key={dept.name} onOpenChange={(isOpen) => !isOpen && handleCloseDialog()}>
-              <DialogTrigger asChild>
-                <Card 
-                  onClick={() => handleOpenDialog(dept)}
-                  className="group flex flex-col items-center justify-center p-6 text-center cursor-pointer hover:shadow-lg hover:border-primary transition-all"
-                >
-                  <CardHeader className="p-0">
-                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-muted group-hover:bg-primary transition-colors">
-                      <dept.icon className={`h-8 w-8 ${dept.color} group-hover:text-primary-foreground transition-colors`} />
-                    </div>
-                  </CardHeader>
-                  <CardContent className="p-0 mt-4">
-                    <CardTitle className="text-lg">{dept.name}</CardTitle>
-                     <p className="text-sm text-muted-foreground mt-1">{deptMembers.length} Çalışan</p>
-                  </CardContent>
-                </Card>
-              </DialogTrigger>
-            </Dialog>
+            <Card
+              key={dept.name}
+              onClick={() => handleOpenDialog(dept)}
+              className="group flex flex-col items-center justify-center p-6 text-center cursor-pointer hover:shadow-lg hover:border-primary transition-all"
+            >
+              <CardHeader className="p-0">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-muted group-hover:bg-primary transition-colors">
+                  <dept.icon className={`h-8 w-8 ${dept.color} group-hover:text-primary-foreground transition-colors`} />
+                </div>
+              </CardHeader>
+              <CardContent className="p-0 mt-4">
+                <CardTitle className="text-lg">{dept.name}</CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">{deptMembers.length} Çalışan</p>
+              </CardContent>
+            </Card>
           );
         })}
       </div>
@@ -140,5 +136,3 @@ export default function DepartmentsPage() {
     </div>
   );
 }
-
-    
