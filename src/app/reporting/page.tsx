@@ -32,6 +32,10 @@ const statusColors: { [key: string]: string } = {
 
 const requestTypes = ['Tümü', 'İzin', 'Masraf', 'Seyahat', 'Araç', 'İK Evrak'];
 
+// E-Kimo logo Base64 data URL (PNG format)
+const logoBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAJRSURBVHgB7Zu/S1RRHMe/s4wWgo2gCEZBCNZBixsEGxsbG1v9Bf4BLQRhRRCsLLQIiigIgmghgoj/QkcEENHYCAqlKJRiMvfe4XUj3Nz73Lt35x58D5y5e+893zd3z73nwkYmNv7XATwBTgLdwEfgK3AGvAI+gXvAJfAq+AX8A/YC9r+Aq/8U0ApkAefAXeAocAecN1s3AbqBy8AbcBlYCcyD/k/AK+A6sEzI/wB5YBrYBn4Bw8Am8Dtwzqh/BmgG5oD3wFngMvCAUW8eGAYGgR/AfeAhsA+sAX3fM9BDiG/AKvAVeAvcAX5P6P8G6ATagHXAfeBAf3O2bQHegC3gJHAQOAI+T+i/BmgD9gD7wAvgP/B5s3UD6Ad2AA/AI+AmsA1sZfR/AP2A3cAzYAL4BTwBVrL67wP0AbeA98A88BqYyeg3AXqAG8A74DlgHpjI6HcD9AHXgffAM+A5MJPRbwvQA5wA3gNPgWlgJqPvFqAHOAPeA0+Bh8BMvP/3gB5gA7gDvAOGgfF2l3cDeoDjwBvgHbAMjLd7vZtAD/AcOAa8A5aB8XaPdwd6gOPAW+A9MAyMt7s8DNBjjBvgfTCPg/cEulV5oYd4GfxaF1gD3gO+kUuGg21APzCezvPewDjgY/JiA/QDc2I+H9+BZuBNQv8dUA2sB4b9nAGngWfAbeAsMAssB7b9nIHOgI3AnpDPgW5gKjD7+wEAAAAAAAAAAADwyz0H0WJp77RkhzIAAAAASUVORK5CYII=';
+
+
 const getEmployeeById = (id: string) => allEmployees.find(e => e.id === id);
 
 const ClientFormattedDate = ({ dateString }: { dateString: string | undefined | null }) => {
@@ -155,6 +159,18 @@ export default function ReportingPage() {
     
     const doc = new jsPDF();
     
+    // Add Logo and Main Title
+    doc.addImage(logoBase64, 'PNG', 14, 10, 15, 15);
+    doc.setFontSize(16);
+    doc.setFont('helvetica', 'bold');
+    doc.text('E-Kimo Raporu', 32, 18);
+    
+    // Add Report Specific Title
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`${activeTab} Talepleri`, 14, 30);
+
+
     const tableColumn = ["Çalışan", "Talep Türü", "Talep Tarihi", "Onay Tarihi", "Durum"];
     const tableRows: (string|undefined)[][] = [];
 
@@ -173,13 +189,12 @@ export default function ReportingPage() {
     autoTable(doc, {
         head: [tableColumn],
         body: tableRows,
-        startY: 20,
+        startY: 35,
         theme: 'grid',
-        headStyles: { fillColor: [34, 113, 76] },
+        headStyles: { fillColor: [24, 6, 95] }, // Example color: Dark Blue
         styles: { font: 'Helvetica', fontStyle: 'normal' },
     });
 
-    doc.text(`${activeTab} Raporu`, 14, 15);
     doc.save(`${activeTab}_Raporu.pdf`);
 
     toast({
