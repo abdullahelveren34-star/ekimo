@@ -22,9 +22,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { jsPDF } from 'jspdf';
-import 'jspdf-autotable';
-import * as XLSX from 'xlsx';
 
 
 const statusColors: { [key: string]: string } = {
@@ -128,7 +125,8 @@ export default function ReportingPage() {
   };
   const PIE_COLORS = ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40"];
 
-  const handleExportToExcel = () => {
+  const handleExportToExcel = async () => {
+    const XLSX = await import('xlsx');
     const dataToExport = filteredData.map(req => {
         const employee = getEmployeeById(req.employeeId);
         return {
@@ -151,7 +149,10 @@ export default function ReportingPage() {
     });
   };
 
-  const handleExportToPdf = () => {
+  const handleExportToPdf = async () => {
+    const { jsPDF } = await import('jspdf');
+    const autoTable = (await import('jspdf-autotable')).default;
+    
     const doc = new jsPDF();
     
     const tableColumn = ["Çalışan", "Talep Türü", "Talep Tarihi", "Onay Tarihi", "Durum"];
@@ -169,8 +170,7 @@ export default function ReportingPage() {
         tableRows.push(reqData);
     });
 
-    // @ts-ignore
-    doc.autoTable({
+    autoTable(doc, {
         head: [tableColumn],
         body: tableRows,
         startY: 20,
