@@ -1,0 +1,354 @@
+{
+  "entities": {
+    "UserProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserProfile",
+      "type": "object",
+      "description": "Represents an employee's profile information.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user profile."
+        },
+        "firstName": {
+          "type": "string",
+          "description": "The first name of the employee."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "The last name of the employee."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email address of the employee.",
+          "format": "email"
+        },
+        "phone": {
+          "type": "string",
+          "description": "The phone number of the employee."
+        },
+        "title": {
+          "type": "string",
+          "description": "The employee's job title."
+        },
+        "department": {
+          "type": "string",
+          "description": "The department the employee belongs to."
+        },
+        "photoUrl": {
+          "type": "string",
+          "description": "URL to the employee's profile photo.",
+          "format": "uri"
+        },
+        "skills": {
+          "type": "array",
+          "description": "List of skills the employee possesses.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "experience": {
+          "type": "string",
+          "description": "Summary of the employee's work experience."
+        },
+        "birthDate": {
+          "type": "string",
+          "description": "The employee's date of birth.",
+          "format": "date"
+        },
+        "startDate": {
+          "type": "string",
+          "description": "The date the employee started their employment.",
+          "format": "date"
+        }
+      },
+      "required": [
+        "firstName",
+        "lastName",
+        "email",
+        "title",
+        "department"
+      ]
+    },
+    "JobPosting": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "JobPosting",
+      "type": "object",
+      "description": "Represents a job opening posted by HR.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the job posting."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the job."
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description of the job responsibilities."
+        },
+        "requirements": {
+          "type": "string",
+          "description": "Requirements for the job."
+        },
+        "department": {
+          "type": "string",
+          "description": "The department to which the job belongs."
+        },
+        "location": {
+          "type": "string",
+          "description": "The location of the job."
+        },
+        "postedDate": {
+          "type": "string",
+          "description": "The date the job was posted.",
+          "format": "date-time"
+        },
+        "type": {
+            "type": "string",
+            "description": "The type of employment (e.g., 'Tam Zamanlı', 'Stajyer').",
+            "enum": ["Tam Zamanlı", "Yarı Zamanlı", "Stajyer", "Proje Bazlı"]
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "description",
+        "requirements",
+        "type"
+      ]
+    },
+    "Application": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Application",
+      "type": "object",
+      "description": "Represents a job application submitted by a candidate.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the job application."
+        },
+        "jobPostingId": {
+          "type": "string",
+          "description": "Reference to JobPosting. (Relationship: JobPosting 1:N Application)"
+        },
+        "candidateId": {
+          "type": "string",
+          "description": "Reference to UserProfile. (Relationship: UserProfile 1:N Application)"
+        },
+        "resumeUrl": {
+          "type": "string",
+          "description": "URL to the candidate's resume.",
+          "format": "uri"
+        },
+        "applicationDate": {
+          "type": "string",
+          "description": "The date the application was submitted.",
+          "format": "date-time"
+        },
+        "status": {
+          "type": "string",
+          "description": "The status of the application (e.g., 'Submitted', 'Reviewed', 'Interviewing', 'Offered', 'Hired', 'Rejected')."
+        }
+      },
+      "required": [
+        "id",
+        "jobPostingId",
+        "candidateId",
+        "resumeUrl",
+        "applicationDate",
+        "status"
+      ]
+    },
+    "EmployeeDocument": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "EmployeeDocument",
+      "type": "object",
+      "description": "Represents an employee document.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the employee document."
+        },
+        "employeeId": {
+          "type": "string",
+          "description": "Reference to UserProfile. (Relationship: UserProfile 1:N EmployeeDocument)"
+        },
+        "documentName": {
+          "type": "string",
+          "description": "The name of the document."
+        },
+        "documentType": {
+          "type": "string",
+          "description": "The type of document (e.g., 'Contract', 'Performance Review', 'Training Record')."
+        },
+        "fileUrl": {
+          "type": "string",
+          "description": "URL to the document file.",
+          "format": "uri"
+        },
+        "uploadDate": {
+          "type": "string",
+          "description": "The date the document was uploaded.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "employeeId",
+        "documentName",
+        "documentType",
+        "fileUrl",
+        "uploadDate"
+      ]
+    },
+    "ApprovalRequest": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ApprovalRequest",
+      "type": "object",
+      "description": "Represents an approval request for various employee actions like expense reports, leave requests, or travel requests.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the approval request."
+        },
+        "employeeId": {
+          "type": "string",
+          "description": "Reference to UserProfile. The employee who initiated the request. (Relationship: UserProfile 1:N ApprovalRequest)"
+        },
+        "requestType": {
+          "type": "string",
+          "description": "Type of request (e.g., 'Expense Report', 'Leave Request', 'Travel Request')."
+        },
+        "requestDate": {
+          "type": "string",
+          "description": "Date when the request was created.",
+          "format": "date-time"
+        },
+        "details": {
+          "type": "object",
+          "description": "Detailed information about the request (e.g., expense details, leave dates, travel itinerary). This is a flexible object to accommodate different request types."
+        },
+        "status": {
+          "type": "string",
+          "description": "Current status of the request (e.g., 'Beklemede', 'Onaylandı', 'Reddedildi').",
+          "enum": ["Beklemede", "Onaylandı", "Reddedildi"]
+        },
+        "approverId": {
+          "type": "string",
+          "description": "Reference to UserProfile. The employee who is responsible for approving the request. (Relationship: UserProfile 1:N ApprovalRequest)"
+        },
+        "approvalDate": {
+          "type": "string",
+          "description": "Date when the request was approved or rejected.",
+          "format": "date-time"
+        },
+        "comments": {
+          "type": "string",
+          "description": "Comments or notes added during the approval process."
+        }
+      },
+      "required": [
+        "id",
+        "employeeId",
+        "requestType",
+        "requestDate",
+        "details",
+        "status",
+        "approverId"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/userProfiles/{userProfileId}",
+        "definition": {
+          "entityName": "UserProfile",
+          "schema": {
+            "$ref": "#/backend/entities/UserProfile"
+          },
+          "description": "Stores employee profile information. Uses path-based ownership for private data. Includes the 'userProfileId' as the document ID.",
+          "params": [
+            {
+              "name": "userProfileId",
+              "description": "The unique identifier for the user profile."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/jobPostings/{jobPostingId}",
+        "definition": {
+          "entityName": "JobPosting",
+          "schema": {
+            "$ref": "#/backend/entities/JobPosting"
+          },
+          "description": "Stores job postings created by HR.",
+          "params": [
+            {
+              "name": "jobPostingId",
+              "description": "The unique identifier for the job posting."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/applications/{applicationId}",
+        "definition": {
+          "entityName": "Application",
+          "schema": {
+            "$ref": "#/backend/entities/Application"
+          },
+          "description": "Stores job applications submitted by candidates.",
+          "params": [
+            {
+              "name": "applicationId",
+              "description": "The unique identifier for the job application."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/employeeDocuments/{employeeDocumentId}",
+        "definition": {
+          "entityName": "EmployeeDocument",
+          "schema": {
+            "$ref": "#/backend/entities/EmployeeDocument"
+          },
+          "description": "Stores employee documents. Uses path-based ownership, accessible to HR and the employee.",
+          "params": [
+            {
+              "name": "employeeDocumentId",
+              "description": "The unique identifier for the employee document."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/approvalRequests/{approvalRequestId}",
+        "definition": {
+          "entityName": "ApprovalRequest",
+          "schema": {
+            "$ref": "#/backend/entities/ApprovalRequest"
+          },
+          "description": "Stores approval requests for expense reports, leave requests, and travel requests. Includes denormalized approverId for authorization independence.",
+          "params": [
+            {
+              "name": "approvalRequestId",
+              "description": "The unique identifier for the approval request."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to manage employee profiles, job postings, applications, employee documents, and approval requests related to various employee actions. The structure prioritizes authorization independence by denormalizing approver information into the ApprovalRequest documents. This avoids the need for `get()` calls in security rules, allowing for atomic operations and improved debuggability. The design incorporates structural segregation by dedicating separate collections for user profiles, job postings, applications, employee documents and approval requests based on request type, ensuring a homogeneous security posture within each collection.\n\nTo support the required QAPs, the structure ensures that list operations can be secured effectively. For example, access to approval requests is governed by the approverId and employeeId fields within the ApprovalRequest documents. Segregation of data based on request type allows for more targeted security rules. Role-Based Access Control is implicitly implemented via the approverId field in ApprovalRequest documents.\n\nThe paths are structured to provide clear ownership and relationships between entities, making security rules straightforward and maintainable. This design ensures data clarity, predictability, and consistency, adhering to the core design principles and strategy mandates."
+  }
+}

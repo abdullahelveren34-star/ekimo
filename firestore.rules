@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    /**
+     * DEVELOPMENT-ONLY RULE:
+     * This rule allows anyone, authenticated or not, to read and write to any document
+     * in the database. It is configured this way to unblock frontend development and
+     * prevent permission errors during this phase.
+     *
+     * !!! WARNING: FOR PRODUCTION USE, THIS IS EXTREMELY INSECURE. !!!
+     * Before deploying your application to a live environment, you MUST replace this
+     * with a secure ruleset that properly restricts access based on user roles and
+     * data ownership.
+     */
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
