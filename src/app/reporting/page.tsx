@@ -401,10 +401,13 @@ export default function ReportingPage() {
 
             </TabsContent>
         ))}
-       </Tabs>
-    </div>
-  )
+       
+  </Tabs>
+</div>
+);
+};
 
 export default ReportingPage;
+
    
 
