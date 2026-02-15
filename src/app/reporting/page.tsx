@@ -404,7 +404,6 @@ export default function ReportingPage() {
        </Tabs>
     </div>
   )
-}
 
 export default ReportingPage;
    
